@@ -2,7 +2,6 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
-import java.awt.Window;
 import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
@@ -10,19 +9,15 @@ import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
 import java.awt.event.KeyListener;
-import javax.swing.JFrame;
-
 /*
  * User interface form for Kiwi Island.
  * 
  * @author AS
  * @version July 2011
  */
-
 public class KiwiCountUI
         extends javax.swing.JFrame
         implements GameEventListener {
- 
 
     /**
      * Creates a GUI for the KiwiIsland game.
@@ -32,14 +27,10 @@ public class KiwiCountUI
     public KiwiCountUI(Game game) {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
-      
-               initComponents();
-        initIslandGrid();
         setAsGameListener();
-        //initComponents();
-        //initIslandGrid();
+        initComponents();
+        initIslandGrid();
         update();
-        
     }
 
     /**
@@ -73,49 +64,42 @@ public class KiwiCountUI
 
     private void setAsGameListener() {
         game.addGameEventListener(this);
-        
-        
-       // JFrame guiFrame = new JFrame();
-       pnlIsland.getParent().addKeyListener(new KeyListener()
-        {
-              //When any key is pressed and released then the 
-              //keyPressed and keyReleased methods are called respectively.
-              //The keyTyped method is called when a valid character is typed.p
-              //The getKeyChar returns the character for the key used. If the key
-              //is a modifier key (e.g., SHIFT, CTRL) or action key (e.g., DELETE, ENTER)
-              //then the character will be a undefined symbol.
-              @Override 
-              public void keyPressed(KeyEvent e)
-              {
-                  int keyCode = e.getKeyCode();
-                  if(keyCode==KeyEvent.VK_LEFT){
-                      game.playerMove(MoveDirection.WEST);
-                  }
-                  if(keyCode==KeyEvent.VK_RIGHT){
-                      game.playerMove(MoveDirection.EAST);
-                  }
-                  if(keyCode==KeyEvent.VK_UP){
-                      game.playerMove(MoveDirection.NORTH);
-                  }
-                  if(keyCode==KeyEvent.VK_DOWN){
-                      game.playerMove(MoveDirection.SOUTH);
-                  }
-              }
-              @Override
-              public void keyReleased(KeyEvent e)
-              {
-              }
-              
-              @Override
-              public void keyTyped(KeyEvent e)
-              {
-                 
-              }
+        //Added keyListener so that user can use arrow keys to move. 
+        this.addKeyListener(new KeyListener() {
+            //When any key is pressed and released then the 
+            //keyPressed and keyReleased methods are called respectively.
+            //The keyTyped method is called when a valid character is typed.p
+            //The getKeyChar returns the character for the key used. If the key
+            //is a modifier key (e.g., SHIFT, CTRL) or action key (e.g., DELETE, ENTER)
+            //then the character will be a undefined symbol.
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+                if (keyCode == KeyEvent.VK_LEFT) {
+                    game.playerMove(MoveDirection.WEST);
+                }
+                if (keyCode == KeyEvent.VK_RIGHT) {
+                    game.playerMove(MoveDirection.EAST);
+                }
+                if (keyCode == KeyEvent.VK_UP) {
+                    game.playerMove(MoveDirection.NORTH);
+                }
+                if (keyCode == KeyEvent.VK_DOWN) {
+                    game.playerMove(MoveDirection.SOUTH);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
         });
-       
-     // guiFrame.setVisible(true);
-       
-     
+        //Set the frame visible (Must do)
+        this.setVisible(true);
     }
 
     /**
@@ -164,7 +148,7 @@ public class KiwiCountUI
         btnMoveEast.setEnabled(game.isPlayerMovePossible(MoveDirection.EAST));
         btnMoveSouth.setEnabled(game.isPlayerMovePossible(MoveDirection.SOUTH));
         btnMoveWest.setEnabled(game.isPlayerMovePossible(MoveDirection.WEST));
-        
+
     }
 
     /**
@@ -214,6 +198,14 @@ public class KiwiCountUI
         setTitle("Kiwi Count");
 
         pnlContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        pnlContent.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                pnlContentKeyPressed(evt);
+            }
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                pnlContentKeyTyped(evt);
+            }
+        });
         pnlContent.setLayout(new java.awt.BorderLayout(10, 0));
 
         javax.swing.GroupLayout pnlIslandLayout = new javax.swing.GroupLayout(pnlIsland);
@@ -621,6 +613,14 @@ public class KiwiCountUI
         game.countKiwi();
     }//GEN-LAST:event_btnCountActionPerformed
 
+    private void pnlContentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlContentKeyPressed
+
+    }//GEN-LAST:event_pnlContentKeyPressed
+
+    private void pnlContentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlContentKeyTyped
+        // TODO add your handling code here:
+    }//GEN-LAST:event_pnlContentKeyTyped
+
     /**
      * Creates and initialises the island grid.
      */
@@ -638,6 +638,7 @@ public class KiwiCountUI
                 pnlIsland.add(new GridSquarePanel(game, row, col));
             }
         }
+
     }
 
 
