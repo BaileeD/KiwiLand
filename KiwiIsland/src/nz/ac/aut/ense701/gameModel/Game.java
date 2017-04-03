@@ -527,6 +527,10 @@ public class Game
     {
         eventListeners.add(listener);
     }
+    public void addKeyListener(GameEventListener listener)
+    {
+        eventListeners.add(listener);
+    }
     
     
     /**

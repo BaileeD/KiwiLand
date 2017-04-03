@@ -522,9 +522,11 @@ public class KiwiCountUI
 
         pnlContent.add(pnlControls, java.awt.BorderLayout.EAST);
 
+        
         getContentPane().add(pnlContent, java.awt.BorderLayout.CENTER);
 
         pack();
+        return pnlContent;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnMoveEastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveEastActionPerformed
