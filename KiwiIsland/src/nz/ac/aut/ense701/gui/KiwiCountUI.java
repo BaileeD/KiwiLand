@@ -9,6 +9,7 @@ import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
 import java.awt.event.KeyListener;
+
 /*
  * User interface form for Kiwi Island.
  * 
@@ -28,6 +29,7 @@ public class KiwiCountUI
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
         setAsGameListener();
+        initialKey();
         initComponents();
         initIslandGrid();
         update();
@@ -62,9 +64,7 @@ public class KiwiCountUI
         }
     }
 
-    private void setAsGameListener() {
-        game.addGameEventListener(this);
-        //Added keyListener so that user can use arrow keys to move. 
+    private void initialKey() {//Added keyListener so that user can use arrow keys to move. 
         this.addKeyListener(new KeyListener() {
             //When any key is pressed and released then the 
             //keyPressed and keyReleased methods are called respectively.
@@ -97,9 +97,19 @@ public class KiwiCountUI
             public void keyTyped(KeyEvent e) {
 
             }
+            
         });
         //Set the frame visible (Must do)
+        //Set focus on the frame
+        this.setFocusable(true);
         this.setVisible(true);
+        
+
+    }
+
+    private void setAsGameListener() {
+        game.addGameEventListener(this);
+
     }
 
     /**
@@ -148,6 +158,7 @@ public class KiwiCountUI
         btnMoveEast.setEnabled(game.isPlayerMovePossible(MoveDirection.EAST));
         btnMoveSouth.setEnabled(game.isPlayerMovePossible(MoveDirection.SOUTH));
         btnMoveWest.setEnabled(game.isPlayerMovePossible(MoveDirection.WEST));
+        
 
     }
 
