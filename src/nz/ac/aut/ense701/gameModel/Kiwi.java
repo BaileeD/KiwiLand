@@ -9,6 +9,7 @@ package nz.ac.aut.ense701.gameModel;
 public class Kiwi  extends Fauna
 {
     private boolean counted;
+    Facts fact = new Facts();
     /**
      * Constructor for objects of class Kiwi
      * @param pos the position of the kiwi object
@@ -26,6 +27,7 @@ public class Kiwi  extends Fauna
     */
     public void count() {
         counted = true;
+        fact.getFact("Kiwi");
     }
  
    /**

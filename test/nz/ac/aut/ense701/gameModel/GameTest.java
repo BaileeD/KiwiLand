@@ -306,7 +306,20 @@ public class GameTest extends junit.framework.TestCase
         assertTrue("Player should still have trap",player.hasItem(trap));
         assertFalse("Predator should be gone.", island.hasPredator(playerPosition));
     }
-    
+     
+    /**
+     * Testing if a pop up box displays when a predator is trapped.
+     */
+    @Test
+    public void testPredatorTrapMessage () {
+        Item trap = new Tool(playerPosition,"Trap", "Rat trap",1.0, 1.0);
+        player.collect(trap);
+        Predator predator = new Predator(playerPosition,"Rat", "Norway rat");
+        island.addOccupant(playerPosition, predator);
+        game.useItem(trap);
+        game.showMessage("Predator fact test!!!!!!!", "Predator test");
+        assertEquals("Predator trap test", game.getPredatorsRemaining(), 6);
+    }
     @Test
     public void testUseItemTrapFinalPredator(){
         
@@ -424,6 +437,17 @@ public class GameTest extends junit.framework.TestCase
         assertTrue (" This move valid", playerMoveEast(5));
         game.countKiwi();
         assertEquals("Wrong count", game.getKiwiCount(), 1);
+    }
+    
+     /**
+     * Testing if a pop up box displays when a kiwi is counted.
+     */
+    @Test
+    public void testKiwiFact () {
+        assertTrue (" This move valid", playerMoveEast(5));
+        game.countKiwi();
+        game.showMessage("Kiwi fact test!!!!!!!", "Kiwi test");
+        assertEquals("Kiwi count test", game.getKiwiCount(), 1);
     }
 
 /**

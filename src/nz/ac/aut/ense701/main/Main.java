@@ -1,5 +1,7 @@
 package nz.ac.aut.ense701.main;
 
+import java.util.ArrayList;
+import nz.ac.aut.ense701.gameModel.Facts;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gui.KiwiCountUI;
 
@@ -18,6 +20,7 @@ public class Main
      */
     public static void main(String[] args) 
     {
+
         // create the game object
         final Game game = new Game();
         // create the GUI for the game
