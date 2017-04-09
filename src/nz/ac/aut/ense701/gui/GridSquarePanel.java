@@ -3,17 +3,23 @@ package nz.ac.aut.ense701.gui;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.Terrain;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
-import java.io.File;
 
 public class GridSquarePanel extends JPanel
 {
 	private static final Border normalBorder = new LineBorder(Color.BLACK, 1);
 	private static final Border activeBorder = new LineBorder(Color.RED, 3);
+
+	private final String SAND_IMAGE       = "resources/Sand_Tile.jpg";
+	private final String FOREST_IMAGE     = "resources/Forest_Tile.jpg";
+	private final String WETLAND_IMAGE    = "resources/Wetland_Tile.jpg";
+	private final String SCRUB_IMAGE      = "resources/Scrub_Tile.jpg";
+	private final String WATER_IMAGE      = "resources/Water_Tile.jpg";
+	private final String UNEXPLORED_IMAGE = "resources/Unexplored_Tile.jpg";
+
 	private JLabel lblText;
 	private Game   game;
 	private int    row;
@@ -47,22 +53,22 @@ public class GridSquarePanel extends JPanel
 		switch (terrain)
 		{
 			case SAND:
-				lblText.setIcon(new ImageIcon("resources/Sand_Tile.jpg"));
+				lblText.setIcon(new ImageIcon(SAND_IMAGE));
 				break;
 			case FOREST:
-				lblText.setIcon(new ImageIcon("resources/Forest_Tile.jpg"));
+				lblText.setIcon(new ImageIcon(FOREST_IMAGE));
 				break;
 			case WETLAND:
-				lblText.setIcon(new ImageIcon("resources/Wetland_Tile.jpg"));
+				lblText.setIcon(new ImageIcon(WETLAND_IMAGE));
 				break;
 			case SCRUB:
-				lblText.setIcon(new ImageIcon("resources/Scrub_Tile.jpg"));
+				lblText.setIcon(new ImageIcon(SCRUB_IMAGE));
 				break;
 			case WATER:
-				lblText.setIcon(new ImageIcon("resources/Water_Tile.jpg"));
+				lblText.setIcon(new ImageIcon(WATER_IMAGE));
 				break;
 			default:
-				lblText.setIcon(new ImageIcon("resources/Unexplored_Tile_T.png"));
+				lblText.setIcon(new ImageIcon(UNEXPLORED_IMAGE));
 				break;
 		}
 
@@ -76,7 +82,7 @@ public class GridSquarePanel extends JPanel
 		else
 		{
 			lblText.setText("");
-			lblText.setIcon(new ImageIcon("resources/Unexplored_Tile_T.png"));
+			lblText.setIcon(new ImageIcon(UNEXPLORED_IMAGE));
 			setBorder(normalBorder);
 		}
 	}
@@ -100,6 +106,5 @@ public class GridSquarePanel extends JPanel
 		lblText.setOpaque(true);
 		add(lblText, BorderLayout.CENTER);
 	}
-
 
 }

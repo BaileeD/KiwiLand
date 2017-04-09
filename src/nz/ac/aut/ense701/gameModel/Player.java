@@ -85,9 +85,9 @@ public class Player
 	 * 
 	 * @return maximum stamina
 	 */
-	public double getMaximumStaminaLevel()
+	public int getMaximumStaminaLevel()
 	{
-		return this.maxStamina;
+		return (int)this.maxStamina;
 	}
 
 	/**
@@ -95,9 +95,9 @@ public class Player
 	 * 
 	 * @return current stamina of the player
 	 */
-	public double getStaminaLevel()
+	public int getStaminaLevel()
 	{
-		return this.stamina;
+		return (int)this.stamina;
 	}
 
 	/**
@@ -343,7 +343,7 @@ public class Player
 	/**
 	 * Moves the player over terrain to a new position.
 	 * 
-	 * @param position the new position of the player
+	 * @param newPosition the new position of the player
 	 * @param terrain the terrain to move over
 	 */
 	public void moveToPosition(Position newPosition, Terrain terrain)
