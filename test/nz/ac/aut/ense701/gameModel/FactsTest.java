@@ -42,7 +42,7 @@ public class FactsTest {
     public void getDiscoveredFacts() {
         Facts facts = new Facts();
         facts.getFact("Rat");
-        ArrayList<String> discoveredFacts = facts.getDiscoveredFacts("Rat");
+        ArrayList<String> discoveredFacts = facts.getDiscoveredFacts();
        
         assertThat(discoveredFacts.get(0).trim(), anyOf(
                 containsString("These rats are food for the kiwis predators, keeping the population of predators high."), 
