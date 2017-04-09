@@ -87,7 +87,7 @@ public class Player
 	 */
 	public int getMaximumStaminaLevel()
 	{
-		return (int)this.maxStamina;
+		return (int) this.maxStamina;
 	}
 
 	/**

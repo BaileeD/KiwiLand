@@ -104,6 +104,7 @@ public class GridSquarePanel extends JPanel
 		lblText.setHorizontalAlignment(SwingConstants.CENTER);
 		lblText.setText("content");
 		lblText.setOpaque(true);
+		lblText.setHorizontalTextPosition(JLabel.CENTER);
 		add(lblText, BorderLayout.CENTER);
 	}
 
