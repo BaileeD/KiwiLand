@@ -3,6 +3,7 @@ package nz.ac.aut.ense701.gameModel;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
 import java.util.Scanner;
@@ -26,11 +27,11 @@ public class Game {
     public static final int WEIGHT_INDEX = 3;
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
-    
-    
+
     //Instantiate the facts class so that the respective facts will be displayed when kiwis are counted or
     //predators are trapped.
     Facts fact = new Facts();
+    ArrayList<String> discoveredFacts = fact.getDiscoveredFacts();
 
     /**
      * A new instance of Kiwi island that reads data from "IslandData.txt".
@@ -61,7 +62,7 @@ public class Game {
     /**
      * *********************************************************************************************************************
      * Accessor methods for game data
-    ***********************************************************************************************************************
+     * **********************************************************************************************************************
      */
     /**
      * Get number of rows on island
@@ -370,7 +371,7 @@ public class Game {
     /**
      * *************************************************************************************************************
      * Mutator Methods
-    ***************************************************************************************************************
+     * **************************************************************************************************************
      */
     /**
      * Picks up an item at the current position of the player Ignores any
@@ -446,14 +447,16 @@ public class Game {
         updateGameState();
         return success;
     }
+
     /**
-     * ShowMessage is a pop up window which will display a fact about either a kiwi or predator
-     * depending on where it is called.
+     * ShowMessage is a pop up window which will display a fact about either a
+     * kiwi or predator depending on where it is called.
+     *
      * @param message
-     * @param title 
+     * @param title
      */
     public void showMessage(String message, String title) {
-       JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
     }
 
     /**
@@ -473,7 +476,12 @@ public class Game {
         //Get a fact about a kiwi and display it in a pop up window.
         showMessage(fact.getFact("Kiwi"), "Kiwi Fact");
         updateGameState();
-
+    }
+    
+    public void examineFauna(){
+        Position current = player.getPosition();
+        Occupant[] occ = island.getOccupants(current);
+        showMessage(fact.getFact(occ[0].getName()), "Fauna Fact");
     }
 
     /**
@@ -523,7 +531,7 @@ public class Game {
     /**
      * *******************************************************************************************************************************
      * Private methods
-     ********************************************************************************************************************************
+     * *******************************************************************************************************************************
      */
     /**
      * Used after player actions to update game state. Applies the Win/Lose
