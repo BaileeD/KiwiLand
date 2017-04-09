@@ -10,8 +10,10 @@ import java.util.HashMap;
 import java.util.Random;
 
 /**
- *
- * @author KCV
+ * This class represents facts of Kiwi or Predators
+ *  
+ * @author Chaitanya Varma
+ * @version April 2017
  */
 public class Facts {
      
@@ -21,6 +23,9 @@ public class Facts {
      private HashMap<String, Boolean> isAllFactsDiscovered;
      private Database db = new Database();
      
+     /**
+     * Constructor for populating facts for Kiwi or Predator
+     */
      public Facts()
      {
          facts = new HashMap<String, ArrayList<String>>();
@@ -36,6 +41,10 @@ public class Facts {
          db.closeConnection();
      }
      
+     /**
+     * Populates facts 
+     * @param occupant occupant type like Kiwi or Rat etc
+     */
      private void populateFacts(String occupant)
      {
          facts.put(occupant, db.getFacts(occupant));
@@ -44,6 +53,10 @@ public class Facts {
          isAllFactsDiscovered.put(occupant, false);
      }
      
+     /**
+     * Gets a random fact from the list
+     * @param occupant occupant type like Kiwi or Rat etc
+     */
      public String getFact(String occupant)
      {
          //Get a random fact from the list
@@ -70,8 +83,18 @@ public class Facts {
          return fact;
      }
      
-     public ArrayList<String> getDiscoveredFacts(String occupant)
+     /**
+     * Gets all facts that are already shown to user
+     * 
+     */
+     public ArrayList<String> getDiscoveredFacts()
      {
-         return discoveredFacts.get(occupant);
+         ArrayList<String> allDiscoveredFacts = new ArrayList<String>();
+         for (String key: discoveredFacts.keySet()) {
+            ArrayList<String> facts = discoveredFacts.get(key);
+            for(String fact : facts)
+                allDiscoveredFacts.add(fact);
+        }
+        return allDiscoveredFacts;
      }
 }
