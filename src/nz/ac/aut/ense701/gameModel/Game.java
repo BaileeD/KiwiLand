@@ -477,11 +477,27 @@ public class Game {
         showMessage(fact.getFact("Kiwi"), "Kiwi Fact");
         updateGameState();
     }
-    
-    public void examineFauna(){
+
+    /**
+     * The examineFauna method gets the current fauna type and displays a
+     * message with a fact about that fauna. This function will be called with a
+     * button.
+     */
+    public void examineFauna() {
         Position current = player.getPosition();
         Occupant[] occ = island.getOccupants(current);
         showMessage(fact.getFact(occ[0].getName()), "Fauna Fact");
+    }
+
+    /**
+     * The getDiscoveredFacts method will get all the discovered facts within
+     * all the levels and display them for the user to see.
+     */
+    public void getDiscoveredFacts() {
+        ArrayList<String> discoveredFacts = fact.getDiscoveredFacts();
+        for (int i = 0; i < discoveredFacts.size(); i++) {
+            System.out.println("Fact " + i + ": " + discoveredFacts.get(i));
+        }
     }
 
     /**
