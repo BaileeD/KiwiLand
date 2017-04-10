@@ -13,7 +13,7 @@ import java.awt.event.KeyListener;
 /*
  * User interface form for Kiwi Island.
  * 
- * @author AS
+ * @author TAO LI
  * @version July 2011
  */
 public class KiwiCountUI
@@ -63,6 +63,12 @@ public class KiwiCountUI
                     JOptionPane.INFORMATION_MESSAGE);
         }
     }
+    /**
+    * This funtion is used to initial the arrow key
+    * @author TAO LI
+    * @param void
+    * @return void
+    */
 
     private void initialKey() {//Added keyListener so that user can use arrow keys to move. 
         this.addKeyListener(new KeyListener() {
