@@ -28,6 +28,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 	private JButton      btnCount;
 	private JButton      btnDrop;
 	private JButton      btnUse;
+	private JButton      btnExamine;
 	private JLabel       lblPredators;
 	private JList        listInventory;
 	private JList        listObjects;
@@ -298,7 +299,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		});
 
 		// Examine Button
-		JButton btnExamine = new JButton("Examine");
+		btnExamine = new JButton("Examine");
 		btnExamine.setFocusable(false);
 		btnExamine.setToolTipText("");
 		btnExamine.setMaximumSize(new Dimension(100, 23));
@@ -385,6 +386,15 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		listObjects.setToolTipText(null);
 		btnCollect.setEnabled(false);
 		btnCount.setEnabled(false);
+
+		if (game.getIsland().getOccupantStringRepresentation(game.getPlayer().getPosition()).equals("F"))
+		{
+			btnExamine.setEnabled(true);
+		}
+		else
+		{
+			btnExamine.setEnabled(false);
+		}
 
 		setFocusable(true);
 		repaint();
