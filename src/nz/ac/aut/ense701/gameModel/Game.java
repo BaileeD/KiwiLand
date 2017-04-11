@@ -27,6 +27,14 @@ public class Game {
     public static final int WEIGHT_INDEX = 3;
     public static final int MAXSIZE_INDEX = 4;
     public static final int SIZE_INDEX = 5;
+    private final String LEVEL_1 = "IslandDataLvl1.txt";
+    private final String LEVEL_2 = "IslandDataLvl2.txt";
+    private final String LEVEL_3 = "IslandDataLvl3.txt";
+    private final int LEVEL_MAX = 3;
+
+    private int currentLevelNumber = 1;
+
+    private String currentLevelName = LEVEL_1;
 
     //Instantiate the facts class so that the respective facts will be displayed when kiwis are counted or
     //predators are trapped.
@@ -50,13 +58,32 @@ public class Game {
         totalKiwis = 0;
         predatorsTrapped = 0;
         kiwiCount = 0;
-        initialiseIslandFromFile("IslandData.txt");
+        initialiseIslandFromFile(currentLevelName);
         drawIsland();
         state = GameState.PLAYING;
         winMessage = "";
         loseMessage = "";
         playerMessage = "";
         notifyGameEventListeners();
+    }
+
+    public void nextLevel() {
+        currentLevelNumber++;
+        if (currentLevelNumber > LEVEL_MAX) {
+            currentLevelNumber = 1;
+        }
+
+        switch (currentLevelNumber) {
+            case 1:
+                currentLevelName = LEVEL_1;
+                break;
+            case 2:
+                currentLevelName = LEVEL_2;
+                break;
+            case 3:
+                currentLevelName = LEVEL_3;
+                break;
+        }
     }
 
     /**
@@ -427,7 +454,7 @@ public class Game {
         {
             Food food = (Food) item;
             // player gets energy boost from food
-            player.increaseStamina(food.getEnergy());
+            player.adjustStamina(food.getEnergy());
             // player has consumed the food: remove from inventory
             player.drop(food);
             // use successful: everybody has to know that
@@ -493,11 +520,14 @@ public class Game {
      * The getDiscoveredFacts method will get all the discovered facts within
      * all the levels and display them for the user to see.
      */
-    public void getDiscoveredFacts() {
+    public String getDiscoveredFacts() {
         ArrayList<String> discoveredFacts = fact.getDiscoveredFacts();
+        String f = "";
         for (int i = 0; i < discoveredFacts.size(); i++) {
-            System.out.println("Fact " + i + ": " + discoveredFacts.get(i));
+            f += ("Fact "+(i+1)+": "+discoveredFacts.get(i)+"\n");
         }
+        showMessage(f, "All facts!");
+        return "";
     }
 
     /**
