@@ -233,7 +233,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		{
 			public void valueChanged(javax.swing.event.ListSelectionEvent evt)
 			{
-				listObjectsValueChanged(evt);
+				listObjectsValueChanged();
 			}
 		});
 		listObjects.setFocusable(false);
