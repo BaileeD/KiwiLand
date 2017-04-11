@@ -278,9 +278,9 @@ public class Player
 	 * 
 	 * @param increase the amount of stamina increase
 	 */
-	public void increaseStamina(double increase)
+	public void adjustStamina(double increase)
 	{
-		if (increase > 0 && isAlive())
+		if (isAlive())
 		{
 			this.stamina += increase;
 		}

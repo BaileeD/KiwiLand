@@ -183,7 +183,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		pnlInventory.add(lblInventory);
 		pnlInventory.add(scrollInventory);
 		pnlInventory.add(pnlInventoryButtons);
-		pnlInventory.setBackground(backgrondColor);
+		pnlInventory.setOpaque(false);
 		pnlInventory.setSize(panelxSize, panelySize);
 		pnlInventory.setLocation(panelInvxPosition, panelyPosition);
 		pnlInventory.setFocusable(false);
@@ -236,7 +236,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		pnlObjects.add(objectLabel);
 		pnlObjects.add(scrollObjects);
 		pnlObjects.add(pnlObjectButtons);
-		pnlObjects.setBackground(backgrondColor);
+		pnlObjects.setOpaque(false);
 		pnlObjects.setSize(panelxSize, panelySize);
 		pnlObjects.setLocation(panelObjxPosition, panelyPosition);
 		pnlObjects.setFocusable(false);
@@ -245,6 +245,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		// -----------------------
 		// ---- Other Buttons ----
 		// -----------------------
+		// View Facts Button
 		JButton btnViewFacts = new JButton("View Facts");
 		btnViewFacts.setFocusable(false);
 		btnViewFacts.setToolTipText("");
@@ -253,6 +254,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		btnViewFacts.setPreferredSize(new Dimension(100, 23));
 		btnViewFacts.addActionListener(evt -> btnViewFactActionPerformed());
 
+		// Examine Button
 		JButton btnExamine = new JButton("Examine");
 		btnExamine.setFocusable(false);
 		btnExamine.setToolTipText("");
@@ -261,43 +263,35 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		btnExamine.setPreferredSize(new Dimension(100, 23));
 		btnExamine.addActionListener(evt -> btnExamineActionPerformed());
 
+		// Panel for View Facts and Examine Buttons
 		JPanel pnlFacts = new JPanel();
 		pnlFacts.add(btnViewFacts);
 		pnlFacts.add(btnExamine);
-		pnlFacts.setBackground(backgrondColor);
+		pnlFacts.setOpaque(false);
 		pnlFacts.setSize(100, 90);
 		pnlFacts.setLocation(400, 570);
 		pnlFacts.setFocusable(false);
 		add(pnlFacts);
 
-/*
-		// Player Name
-		lblPlayerName = new JLabel();
-		JPanel playerNamePanel = new JPanel(); // This dosent work
-		playerNamePanel.add(lblPlayerName);
-		add(playerNamePanel);
-		playerNamePanel.setLocation(20, 20);
+		// Options button (Invisible)
+		JButton btnOptions = new JButton("");
+		btnOptions.setFocusable(false);
+		btnOptions.setOpaque(false);
+		btnOptions.setContentAreaFilled(false);
+		btnOptions.setBorderPainted(false);
+		btnOptions.setToolTipText("Options");
+		btnOptions.setMaximumSize(new Dimension(25, 25));
+		btnOptions.setMinimumSize(new Dimension(25, 25));
+		btnOptions.setPreferredSize(new Dimension(25, 25));
+		btnOptions.addActionListener(evt -> btnOpenOptionsActionPerformed());
 
-		// Player Stamina
-		progPlayerStamina = new JProgressBar();
-		progPlayerStamina.setStringPainted(true);
-
-		// Player Backpack Size
-		progBackpackWeight = new JProgressBar();
-		progBackpackWeight.setStringPainted(true);
-
-		// Player Backpack Weight
-		progBackpackSize = new JProgressBar();
-		progBackpackSize.setStringPainted(true);
-
-		// Predators Caught
-		lblPredators = new JLabel();
-		lblPredators.setText("Predators Left:");
-
-		// Kiwis Counted
-		lblKiwisCounted = new JLabel();
-		lblKiwisCounted.setText("Kiwis Counted: ");
-*/
+		JPanel pnlOptions = new JPanel();
+		pnlOptions.add(btnOptions);
+		pnlOptions.setOpaque(false);
+		pnlOptions.setSize(30, 30);
+		pnlOptions.setLocation(824, 1);
+		pnlOptions.setFocusable(false);
+		add(pnlOptions);
 	}
 
 	private void setButtonListProperties(JButton button)
@@ -322,22 +316,7 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 			GridSquarePanel gsp = (GridSquarePanel) c;
 			gsp.update();
 		}
-/*
-		// update player information
-		int[] playerValues = game.getPlayerValues();
-		lblPlayerName.setText("Player Name: " + game.getPlayerName());
-		progPlayerStamina.setMaximum(playerValues[Game.MAXSTAMINA_INDEX]);
-		// Sets maximum each time so the max can be changed while playing, and still never go over the max??
-		progPlayerStamina.setValue(playerValues[Game.STAMINA_INDEX]);
-		progBackpackWeight.setMaximum(playerValues[Game.MAXWEIGHT_INDEX]);
-		progBackpackWeight.setValue(playerValues[Game.WEIGHT_INDEX]);
-		progBackpackSize.setMaximum(playerValues[Game.MAXSIZE_INDEX]);
-		progBackpackSize.setValue(playerValues[Game.SIZE_INDEX]);
 
-		// Update Kiwi and Predator information
-		lblKiwisCounted.setText(Integer.toString(game.getKiwiCount()));
-		lblPredatorsLeft.setText(Integer.toString(game.getPredatorsRemaining()));
-*/
 		// update inventory list
 		listInventory.setListData(game.getPlayerInventory());
 		listInventory.clearSelection();
@@ -368,12 +347,15 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		if (game.getState() == GameState.LOST)
 		{
 			JOptionPane.showMessageDialog(this, game.getLoseMessage(), "Game over!", JOptionPane.INFORMATION_MESSAGE);
+
 			game.createNewGame();
 		}
 		else if (game.getState() == GameState.WON)
 		{
 			JOptionPane.showMessageDialog(this, game.getWinMessage(), "Well Done!", JOptionPane.INFORMATION_MESSAGE);
+			game.nextLevel();
 			game.createNewGame();
+			update();
 		}
 		else if (game.messageForPlayer())
 		{
@@ -417,12 +399,22 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 					game.playerMove(MoveDirection.EAST);
 				}
 				break;
+			case KeyEvent.VK_1:
+				game.nextLevel();
+				game.createNewGame();
+				update();
+				break;
 		}
 	}
 
 	@Override public void keyReleased(KeyEvent e)
 	{
 
+	}
+
+	public void btnOpenOptionsActionPerformed()
+	{
+		System.out.println("You did it!");
 	}
 
 	private void btnCollectActionPerformed()

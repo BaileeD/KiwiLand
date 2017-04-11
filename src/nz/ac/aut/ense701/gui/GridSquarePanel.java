@@ -72,19 +72,19 @@ public class GridSquarePanel extends JPanel
 				break;
 		}
 
-		if (squareExplored || squareVisible)
-		{
+		//if (squareExplored || squareVisible)
+		//{
 			// Set the text of the JLabel according to the occupant
-			lblText.setText(game.getOccupantStringRepresentation(row, column));
+			lblText.setText("<html><font color='white'>" + game.getOccupantStringRepresentation(row, column) + "</font></html>");
 			// set border colour according to playerBorder of not
 			setBorder(game.hasPlayer(row, column) ? activeBorder : normalBorder);
-		}
+		/*}
 		else
 		{
 			lblText.setText("");
 			lblText.setIcon(new ImageIcon(UNEXPLORED_IMAGE));
 			setBorder(normalBorder);
-		}
+		}*/
 	}
 
 	/**
@@ -102,7 +102,7 @@ public class GridSquarePanel extends JPanel
 
 		lblText.setFont(new java.awt.Font("Tahoma", 0, 18));
 		lblText.setHorizontalAlignment(SwingConstants.CENTER);
-		lblText.setText("content");
+		lblText.setText("");
 		lblText.setOpaque(true);
 		lblText.setHorizontalTextPosition(JLabel.CENTER);
 		add(lblText, BorderLayout.CENTER);
