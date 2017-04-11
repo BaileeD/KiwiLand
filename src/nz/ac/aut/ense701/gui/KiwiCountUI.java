@@ -2,11 +2,13 @@ package nz.ac.aut.ense701.gui;
 
 import java.awt.Component;
 import java.awt.GridLayout;
+import java.awt.event.KeyEvent;
 import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
+import java.awt.event.KeyListener;
 
 /*
  * User interface form for Kiwi Island.
@@ -14,81 +16,122 @@ import nz.ac.aut.ense701.gameModel.MoveDirection;
  * @author AS
  * @version July 2011
  */
-
-public class KiwiCountUI 
-    extends javax.swing.JFrame 
-    implements GameEventListener
-{
+public class KiwiCountUI
+        extends javax.swing.JFrame
+        implements GameEventListener {
 
     /**
      * Creates a GUI for the KiwiIsland game.
+     *
      * @param game the game object to represent with this GUI.
      */
-    public KiwiCountUI(Game game) 
-    {
+    public KiwiCountUI(Game game) {
         assert game != null : "Make sure game object is created before UI";
         this.game = game;
         setAsGameListener();
+        initialKey();
         initComponents();
         initIslandGrid();
         update();
+        this.setFocusable(true);
+        this.setVisible(true);
     }
-    
+
     /**
      * This method is called by the game model every time something changes.
      * Trigger an update.
      */
     @Override
-    public void gameStateChanged()
-    {
+    public void gameStateChanged() {
         update();
-        
+
         // check for "game over" or "game won"
-        if ( game.getState() == GameState.LOST )
-        {
+        if (game.getState() == GameState.LOST) {
             JOptionPane.showMessageDialog(
-                    this, 
+                    this,
                     game.getLoseMessage(), "Game over!",
                     JOptionPane.INFORMATION_MESSAGE);
             game.createNewGame();
-        }
-        else if ( game.getState() == GameState.WON )
-        {
+        } else if (game.getState() == GameState.WON) {
             JOptionPane.showMessageDialog(
-                    this, 
+                    this,
                     game.getWinMessage(), "Well Done!",
                     JOptionPane.INFORMATION_MESSAGE);
             game.createNewGame();
-        }
-        else if (game.messageForPlayer())
-        {
+        } else if (game.messageForPlayer()) {
             JOptionPane.showMessageDialog(
-                    this, 
+                    this,
                     game.getPlayerMessage(), "Important Information",
-                    JOptionPane.INFORMATION_MESSAGE);   
+                    JOptionPane.INFORMATION_MESSAGE);
         }
     }
-    
-     private void setAsGameListener()
-    {
-       game.addGameEventListener(this); 
+
+    /**
+     * This funtion is used to initial the arrow key
+     *
+     * @author TAO LI
+     * @param void
+     * @return void
+     */
+    private void initialKey() {//Added keyListener so that user can use arrow keys to move. 
+        this.addKeyListener(new KeyListener() {
+            //When any key is pressed and released then the 
+            //keyPressed and keyReleased methods are called respectively.
+            //The keyTyped method is called when a valid character is typed.p
+            //The getKeyChar returns the character for the key used. If the key
+            //is a modifier key (e.g., SHIFT, CTRL) or action key (e.g., DELETE, ENTER)
+            //then the character will be a undefined symbol.
+            @Override
+            public void keyPressed(KeyEvent e) {
+                int keyCode = e.getKeyCode();
+                if (keyCode == KeyEvent.VK_LEFT) {
+                    game.playerMove(MoveDirection.WEST);
+                }
+                if (keyCode == KeyEvent.VK_RIGHT) {
+                    game.playerMove(MoveDirection.EAST);
+                }
+                if (keyCode == KeyEvent.VK_UP) {
+                    game.playerMove(MoveDirection.NORTH);
+                }
+                if (keyCode == KeyEvent.VK_DOWN) {
+                    game.playerMove(MoveDirection.SOUTH);
+                }
+            }
+
+            @Override
+            public void keyReleased(KeyEvent e) {
+            }
+
+            @Override
+            public void keyTyped(KeyEvent e) {
+
+            }
+
+        });
+        //Set the frame visible (Must do)
+        //Set focus on the frame
+        this.setFocusable(true);
+        this.setVisible(true);
+
     }
-     
+
+    private void setAsGameListener() {
+        game.addGameEventListener(this);
+    }
+
     /**
      * Updates the state of the UI based on the state of the game.
      */
-    private void update()
-    {
+    private void update() {
         // update the grid square panels
         Component[] components = pnlIsland.getComponents();
-        for ( Component c : components )
-        {
+        for (Component c : components) {
             // all components in the panel are GridSquarePanels,
             // so we can safely cast
             GridSquarePanel gsp = (GridSquarePanel) c;
             gsp.update();
         }
-        
+
         // update player information
         int[] playerValues = game.getPlayerValues();
         txtPlayerName.setText(game.getPlayerName());
@@ -98,36 +141,43 @@ public class KiwiCountUI
         progBackpackWeight.setValue(playerValues[Game.WEIGHT_INDEX]);
         progBackpackSize.setMaximum(playerValues[Game.MAXSIZE_INDEX]);
         progBackpackSize.setValue(playerValues[Game.SIZE_INDEX]);
-        
+        this.setFocusable(true);
+        this.setVisible(true);
+
         //Update Kiwi and Predator information
-        txtKiwisCounted.setText(Integer.toString(game.getKiwiCount()) );
+        txtKiwisCounted.setText(Integer.toString(game.getKiwiCount()));
         txtPredatorsLeft.setText(Integer.toString(game.getPredatorsRemaining()));
-        
+
         // update inventory list
         listInventory.setListData(game.getPlayerInventory());
         listInventory.clearSelection();
         listInventory.setToolTipText(null);
         btnUse.setEnabled(false);
         btnDrop.setEnabled(false);
-        
+
         // update list of visible objects
         listObjects.setListData(game.getOccupantsPlayerPosition());
         listObjects.clearSelection();
         listObjects.setToolTipText(null);
         btnCollect.setEnabled(false);
         btnCount.setEnabled(false);
-        
+
         // update movement buttons
         btnMoveNorth.setEnabled(game.isPlayerMovePossible(MoveDirection.NORTH));
-        btnMoveEast.setEnabled( game.isPlayerMovePossible(MoveDirection.EAST));
+        btnMoveEast.setEnabled(game.isPlayerMovePossible(MoveDirection.EAST));
         btnMoveSouth.setEnabled(game.isPlayerMovePossible(MoveDirection.SOUTH));
-        btnMoveWest.setEnabled( game.isPlayerMovePossible(MoveDirection.WEST));
+        btnMoveWest.setEnabled(game.isPlayerMovePossible(MoveDirection.WEST));
+        listInventory.setFocusable(false);
+        listObjects.setFocusable(false);
+        pnlIsland.setFocusable(false);
+        btnUse.setFocusable(false);
+
     }
-    
-    /** This method is called from within the constructor to
-     * initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is
-     * always regenerated by the Form Editor.
+
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
      */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -546,62 +596,76 @@ public class KiwiCountUI
     private void btnCollectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCollectActionPerformed
         Object obj = listObjects.getSelectedValue();
         game.collectItem(obj);
+        this.setFocusable(true);
+        this.setVisible(true);
     }//GEN-LAST:event_btnCollectActionPerformed
 
     private void btnDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropActionPerformed
         game.dropItem(listInventory.getSelectedValue());
+        this.setFocusable(true);
+        this.setVisible(true);
     }//GEN-LAST:event_btnDropActionPerformed
 
     private void listObjectsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listObjectsValueChanged
         Object occ = listObjects.getSelectedValue();
-        if ( occ != null )
-        {
+        if (occ != null) {
             btnCollect.setEnabled(game.canCollect(occ));
             btnCount.setEnabled(game.canCount(occ));
             listObjects.setToolTipText(game.getOccupantDescription(occ));
         }
+        this.setFocusable(true);
+        this.setVisible(true);
     }//GEN-LAST:event_listObjectsValueChanged
 
     private void btnUseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseActionPerformed
-        game.useItem( listInventory.getSelectedValue());
+        game.useItem(listInventory.getSelectedValue());
+        this.setFocusable(true);
+        this.setVisible(true);
     }//GEN-LAST:event_btnUseActionPerformed
 
     private void listInventoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listInventoryValueChanged
-        Object item =  listInventory.getSelectedValue();
+        Object item = listInventory.getSelectedValue();
         btnDrop.setEnabled(true);
-        if ( item != null )
-        {
+        if (item != null) {
             btnUse.setEnabled(game.canUse(item));
             listInventory.setToolTipText(game.getOccupantDescription(item));
         }
+        this.setFocusable(true);
+        this.setVisible(true);
     }//GEN-LAST:event_listInventoryValueChanged
 
     private void btnCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCountActionPerformed
         game.countKiwi();
+        this.setFocusable(true);
+        this.setVisible(true);
     }//GEN-LAST:event_btnCountActionPerformed
-    
+    private void pnlContentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlContentKeyPressed
+    }//GEN-LAST:event_pnlContentKeyPressed
+
+    private void pnlContentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlContentKeyTyped
+    }//GEN-LAST:event_pnlContentKeyTyped
+
     /**
      * Creates and initialises the island grid.
      */
-    private void initIslandGrid()
-    {
+    private void initIslandGrid() {
         // Add the grid
-        int rows    = game.getNumRows();
+        int rows = game.getNumRows();
         int columns = game.getNumColumns();
         // set up the layout manager for the island grid panel
         pnlIsland.setLayout(new GridLayout(rows, columns));
         // create all the grid square panels and add them to the panel
         // the layout manager of the panel takes care of assigning them to the
         // the right position
-        for ( int row = 0 ; row < rows ; row++ )
-        {
-            for ( int col = 0 ; col < columns ; col++ )
-            {
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
                 pnlIsland.add(new GridSquarePanel(game, row, col));
             }
         }
+        this.setFocusable(true);
+        this.setVisible(true);
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCollect;
     private javax.swing.JButton btnCount;
