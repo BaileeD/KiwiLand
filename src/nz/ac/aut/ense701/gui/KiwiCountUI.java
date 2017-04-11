@@ -7,6 +7,7 @@ import nz.ac.aut.ense701.gameModel.MoveDirection;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionListener;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
@@ -158,7 +159,13 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 
 		listInventory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listInventory.setVisibleRowCount(listRows);
-		listInventory.addListSelectionListener(evt -> listInventoryValueChanged());
+		listInventory.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+		{
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+			{
+				listInventoryValueChanged();
+			}
+		});
 		listInventory.setFocusable(false);
 		listInventory.setFixedCellWidth(listWidth);
 		scrollInventory.setViewportView(listInventory);
@@ -166,10 +173,22 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		// Buttons
 		btnUse = new JButton("Use");
 		setButtonListProperties(btnUse);
-		btnUse.addActionListener(evt -> btnUseActionPerformed());
+		btnUse.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnUseActionPerformed();
+			}
+		});
 		btnDrop = new JButton("Drop");
 		setButtonListProperties(btnDrop);
-		btnDrop.addActionListener(evt -> btnDropActionPerformed());
+		btnDrop.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnDropActionPerformed();
+			}
+		});
 		JPanel pnlInventoryButtons = new JPanel(new FlowLayout());
 		pnlInventoryButtons.add(btnUse);
 		pnlInventoryButtons.add(btnDrop);
@@ -210,7 +229,13 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		});
 		listObjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
 		listObjects.setVisibleRowCount(listRows);
-		listObjects.addListSelectionListener(evt -> listObjectsValueChanged());
+		listObjects.addListSelectionListener(new javax.swing.event.ListSelectionListener()
+		{
+			public void valueChanged(javax.swing.event.ListSelectionEvent evt)
+			{
+				listObjectsValueChanged(evt);
+			}
+		});
 		listObjects.setFocusable(false);
 		listObjects.setFixedCellWidth(listWidth);
 		scrollObjects.setViewportView(listObjects);
@@ -218,12 +243,24 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		// Buttons
 		btnCollect = new JButton("Collect");
 		setButtonListProperties(btnCollect);
-		btnCollect.addActionListener(evt -> btnCollectActionPerformed());
+		btnCollect.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnCollectActionPerformed();
+			}
+		});
 		btnCount = new JButton("Count");
 		setButtonListProperties(btnCount);
-		btnCount.addActionListener(evt -> btnCountActionPerformed());
-		JPanel pnlObjectButtons = new JPanel(new FlowLayout());
+		btnCount.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnCountActionPerformed();
+			}
+		});
 
+		JPanel pnlObjectButtons = new JPanel(new FlowLayout());
 		pnlObjectButtons.add(btnCollect);
 		pnlObjectButtons.add(btnCount);
 		pnlObjectButtons.setBackground(backgrondColor);
@@ -252,7 +289,13 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		btnViewFacts.setMaximumSize(new Dimension(100, 23));
 		btnViewFacts.setMinimumSize(new Dimension(100, 23));
 		btnViewFacts.setPreferredSize(new Dimension(100, 23));
-		btnViewFacts.addActionListener(evt -> btnViewFactActionPerformed());
+		btnViewFacts.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnViewFactActionPerformed();
+			}
+		});
 
 		// Examine Button
 		JButton btnExamine = new JButton("Examine");
@@ -261,7 +304,13 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		btnExamine.setMaximumSize(new Dimension(100, 23));
 		btnExamine.setMinimumSize(new Dimension(100, 23));
 		btnExamine.setPreferredSize(new Dimension(100, 23));
-		btnExamine.addActionListener(evt -> btnExamineActionPerformed());
+		btnExamine.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnExamineActionPerformed();
+			}
+		});
 
 		// Panel for View Facts and Examine Buttons
 		JPanel pnlFacts = new JPanel();
@@ -283,7 +332,13 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 		btnOptions.setMaximumSize(new Dimension(25, 25));
 		btnOptions.setMinimumSize(new Dimension(25, 25));
 		btnOptions.setPreferredSize(new Dimension(25, 25));
-		btnOptions.addActionListener(evt -> btnOpenOptionsActionPerformed());
+		btnOptions.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				btnOpenOptionsActionPerformed();
+			}
+		});
 
 		JPanel pnlOptions = new JPanel();
 		pnlOptions.add(btnOptions);
@@ -470,75 +525,5 @@ public class KiwiCountUI extends JFrame implements GameEventListener, KeyListene
 	private void btnExamineActionPerformed()
 	{
 
-	}
-
-	/**
-	 * This method is called from within the constructor to
-	 * initialize the form.
-	 * WARNING: Do NOT modify this code. The content of this method is
-	 * always regenerated by the Form Editor.
-	 */
-	private void initComponents()
-	{
-		JScrollPane scrlInventory = new JScrollPane();
-		JScrollPane scrlObjects = new JScrollPane();
-
-		listInventory.setModel(new AbstractListModel()
-		{
-			String[] strings = { "Item 1", "Item 2", "Item 3" };
-
-			public int getSize()
-			{
-				return strings.length;
-			}
-
-			public Object getElementAt(int i)
-			{
-				return strings[i];
-			}
-		});
-
-		listInventory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listInventory.setVisibleRowCount(3);
-		listInventory.addListSelectionListener(evt -> listInventoryValueChanged());
-
-		scrlInventory.setViewportView(listInventory);
-
-		listObjects.setModel(new AbstractListModel()
-		{
-			String[] strings = { "Item 1", "Item 2", "Item 3" };
-
-			public int getSize()
-			{
-				return strings.length;
-			}
-
-			public Object getElementAt(int i)
-			{
-				return strings[i];
-			}
-		});
-
-		listObjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		listObjects.setVisibleRowCount(3);
-		listObjects.addListSelectionListener(evt -> listObjectsValueChanged());
-
-		scrlObjects.setViewportView(listObjects);
-
-		btnDrop.setText("Drop");
-		btnDrop.addActionListener(evt -> btnDropActionPerformed());
-
-		btnUse.setText("Use");
-		btnUse.addActionListener(evt -> btnUseActionPerformed());
-
-		btnCollect.setText("Collect");
-		btnCollect.setToolTipText("");
-		btnCollect.setMaximumSize(new Dimension(61, 23));
-		btnCollect.setMinimumSize(new Dimension(61, 23));
-		btnCollect.setPreferredSize(new Dimension(61, 23));
-		btnCollect.addActionListener(evt -> btnCollectActionPerformed());
-
-		btnCount.setText("Count");
-		btnCount.addActionListener(evt -> btnCountActionPerformed());
 	}
 }
