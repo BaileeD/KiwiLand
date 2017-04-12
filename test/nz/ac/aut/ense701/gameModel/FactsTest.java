@@ -7,8 +7,9 @@ package nz.ac.aut.ense701.gameModel;
 
 import java.util.ArrayList;
 import static org.hamcrest.CoreMatchers.anyOf;
-import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
+import static org.junit.matchers.JUnitMatchers.containsString;
+
 import org.junit.Test;
 
 /**
