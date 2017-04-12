@@ -324,6 +324,18 @@ public class GameTest extends junit.framework.TestCase
         assertEquals("Predator trap test", game.getPredatorsRemaining(), 6);
     }
     
+    /**
+     * Testing if a pop up box displays when a predator is trapped.
+     */
+    @Test
+    public void testUndefinedPredatorTrapMessage () {
+        Facts facts = new Facts();
+        Predator predator = new Predator(playerPosition,"Crow", "A scary looking crow");
+        String fact = facts.getFact(predator.getName());
+        game.showMessage(fact, "Testing undefined animal");
+        assertThat(fact, containsString(""));
+    }
+    
      /**
      * Testing if a pop up box displays when a player examines a fauna occupant.
      */

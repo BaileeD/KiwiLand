@@ -483,7 +483,9 @@ public class Game {
      * @param title
      */
     public void showMessage(String message, String title) {
-        JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+        if (message != ""){
+            JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
+        }
     }
 
     /**
