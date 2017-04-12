@@ -6,10 +6,10 @@
 package nz.ac.aut.ense701.gameModel;
 
 import java.util.ArrayList;
+import static junit.framework.TestCase.assertEquals;
 import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.containsString;
 import static org.junit.Assert.assertThat;
-import static org.junit.matchers.JUnitMatchers.containsString;
-
 import org.junit.Test;
 
 /**
@@ -34,6 +34,14 @@ public class FactsTest {
             containsString("Norway rats are large enough to kill nesting adult seabirds."),
             containsString("Norway rats prey on animals that live, roost or nest close to the ground.")
         ));
+    }
+    
+    @Test
+    public void testGetFactsForUndefinedAnimal() {
+        Facts facts = new Facts();
+        String fact = facts.getFact("Crow");
+        
+        assertEquals(fact, "");
     }
     
      /**
