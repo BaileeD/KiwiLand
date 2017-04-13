@@ -483,7 +483,7 @@ public class Game {
      * @param title
      */
     public void showMessage(String message, String title) {
-        if (message != ""){
+        if (message != "") {
             JOptionPane.showMessageDialog(null, message, title, JOptionPane.INFORMATION_MESSAGE);
         }
     }
@@ -526,7 +526,7 @@ public class Game {
         ArrayList<String> discoveredFacts = fact.getDiscoveredFacts();
         String f = "";
         for (int i = 0; i < discoveredFacts.size(); i++) {
-            f += ("Fact "+(i+1)+": "+discoveredFacts.get(i)+"\n");
+            f += ("Fact " + (i + 1) + ": " + discoveredFacts.get(i) + "\n");
         }
         showMessage(f, "All facts!");
         return "";
