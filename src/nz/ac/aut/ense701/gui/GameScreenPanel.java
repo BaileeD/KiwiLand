@@ -8,7 +8,7 @@ import javax.swing.border.Border;
 import javax.swing.border.LineBorder;
 import java.awt.*;
 
-public class GridSquarePanel extends JPanel {
+public class GameScreenPanel extends JPanel {
 
     private static final Border normalBorder = new LineBorder(Color.BLACK, 1);
     private static final Border activeBorder = new LineBorder(Color.RED, 3);
@@ -26,13 +26,13 @@ public class GridSquarePanel extends JPanel {
     private int column;
 
     /**
-     * Creates new GridSquarePanel.
+     * Creates new GameScreenPanel.
      *
      * @param game the game to represent
      * @param row the row to represent
      * @param column the column to represent
      */
-    public GridSquarePanel(Game game, int row, int column) {
+    public GameScreenPanel(Game game, int row, int column) {
         this.game = game;
         this.row = row;
         this.column = column;

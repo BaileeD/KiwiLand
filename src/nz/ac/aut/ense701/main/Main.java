@@ -1,9 +1,8 @@
 package nz.ac.aut.ense701.main;
 
-import java.util.ArrayList;
-import nz.ac.aut.ense701.gameModel.Facts;
 import nz.ac.aut.ense701.gameModel.Game;
-import nz.ac.aut.ense701.gui.KiwiCountUI;
+import nz.ac.aut.ense701.gui.GameScreenFrame;
+import nz.ac.aut.ense701.gui.MainMenuFrame;
 
 /**
  * Kiwi Count Project
@@ -24,14 +23,15 @@ public class Main
         // create the game object
         final Game game = new Game();
         // create the GUI for the game
-        final KiwiCountUI  gui  = new KiwiCountUI(game);
+        //final GameScreenFrame gui  = new GameScreenFrame(game);
+        final MainMenuFrame mainMenu = new MainMenuFrame(game);
         // make the GUI visible
         java.awt.EventQueue.invokeLater(new Runnable() 
         {
             @Override
             public void run() 
             {
-                gui.setVisible(true);
+               // gui.setVisible(true);
             }
         });
     }
