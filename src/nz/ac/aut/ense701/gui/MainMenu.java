@@ -5,4 +5,6 @@ package nz.ac.aut.ense701.gui;
  */
 public class MainMenu
 {
+
+	//Test
 }
