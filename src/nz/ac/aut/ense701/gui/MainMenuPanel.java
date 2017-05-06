@@ -1,6 +1,7 @@
 package nz.ac.aut.ense701.gui;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
@@ -49,7 +50,9 @@ public class MainMenuPanel extends JPanel
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
+				theFrame.setVisible(false);
 
+				theFrame.createGame();
 			}
 		});
 

@@ -13,16 +13,18 @@ public class MainMenuFrame extends JFrame
 	private final int    FRAME_WIDTH      = 900;
 	private final int    FRAME_HEIGHT     = 720;
 	private final String BACKGROUND_IMAGE = "resources/Game_UI.jpg";
+	private Game game;
 
 	private CardLayout cardLayout;
 
-	private JPanel pnlContents;
-	private MainMenuPanel pnlMainMenu;
-	private LoadGamePanel pnlLoadGame;
+	private JPanel         pnlContents;
+	private MainMenuPanel  pnlMainMenu;
+	private LoadGamePanel  pnlLoadGame;
 	private HowToPlayPanel pnlHowToPlay;
 
-	public MainMenuFrame(Game game)
+	public MainMenuFrame(Game aGame)
 	{
+		game = aGame;
 		initPanel();
 		initFrame();
 	}
@@ -65,5 +67,20 @@ public class MainMenuFrame extends JFrame
 	public CardLayout getCardLayout()
 	{
 		return cardLayout;
+	}
+
+	public void createGame()
+	{
+		final GameScreenFrame gui = new GameScreenFrame(game);
+
+		// make the GUI visible
+		java.awt.EventQueue.invokeLater(new Runnable()
+		{
+			@Override
+			public void run()
+			{
+				gui.setVisible(true);
+			}
+		});
 	}
 }

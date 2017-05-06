@@ -19,21 +19,10 @@ public class Main
      */
     public static void main(String[] args) 
     {
-
         // create the game object
         final Game game = new Game();
         // create the GUI for the game
-        //final GameScreenFrame gui  = new GameScreenFrame(game);
         final MainMenuFrame mainMenu = new MainMenuFrame(game);
-        // make the GUI visible
-        java.awt.EventQueue.invokeLater(new Runnable() 
-        {
-            @Override
-            public void run() 
-            {
-               // gui.setVisible(true);
-            }
-        });
     }
 
 }
