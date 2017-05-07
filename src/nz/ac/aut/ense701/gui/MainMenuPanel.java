@@ -10,7 +10,6 @@ import java.awt.event.ActionListener;
 public class MainMenuPanel extends JPanel
 {
 	private MainMenuFrame theFrame;
-	private JPanel thePanel;
 
 	private JPanel  pnlButtons;
 	private JButton btnNewGame;
@@ -18,10 +17,9 @@ public class MainMenuPanel extends JPanel
 	private JButton btnHowToPlay;
 	private JButton btnExit;
 
-	public MainMenuPanel(MainMenuFrame frame, JPanel panel)
+	public MainMenuPanel(MainMenuFrame frame)
 	{
 		theFrame = frame;
-		thePanel = panel;
 
 		initPanel();
 		initButtons();
@@ -50,9 +48,7 @@ public class MainMenuPanel extends JPanel
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				theFrame.setVisible(false);
-
-				theFrame.createGame();
+				theFrame.openNewGameMenu();
 			}
 		});
 
@@ -60,7 +56,7 @@ public class MainMenuPanel extends JPanel
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				theFrame.getCardLayout().show(thePanel, "2");
+				theFrame.openLoadMenu();
 			}
 		});
 
@@ -68,7 +64,7 @@ public class MainMenuPanel extends JPanel
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				theFrame.getCardLayout().show(thePanel, "2");
+				theFrame.openHowToPlayMenu();
 			}
 		});
 
@@ -76,7 +72,7 @@ public class MainMenuPanel extends JPanel
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				System.exit(1);
+				theFrame.exitGame();
 			}
 		});
 	}
