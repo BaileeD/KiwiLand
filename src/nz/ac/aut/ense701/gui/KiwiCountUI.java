@@ -1,24 +1,45 @@
 package nz.ac.aut.ense701.gui;
 
-import java.awt.Component;
-import java.awt.GridLayout;
-import java.awt.event.KeyEvent;
-import javax.swing.JOptionPane;
 import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameEventListener;
 import nz.ac.aut.ense701.gameModel.GameState;
 import nz.ac.aut.ense701.gameModel.MoveDirection;
+
+import javax.swing.*;
+import java.awt.*;
+import java.awt.event.ActionListener;
+import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 /*
  * User interface form for Kiwi Island.
  * 
- * @author TAO LI
+ * @author AS
+ * 
  * @version July 2011
  */
-public class KiwiCountUI
-        extends javax.swing.JFrame
-        implements GameEventListener {
+public class KiwiCountUI extends JFrame implements GameEventListener, KeyListener {
+
+    private final int FRAME_WIDTH = 900;
+    private final int FRAME_HEIGHT = 720;
+    private final String BACKGROUND_IMAGE = "resources/Game_UI.jpg";
+
+    private JButton btnCollect;
+    private JButton btnCount;
+    private JButton btnDrop;
+    private JButton btnUse;
+    private JButton btnExamine;
+    private JLabel lblPredators;
+    private JList listInventory;
+    private JList listObjects;
+    private JPanel gameTilesPanel;
+    private JProgressBar progBackpackSize;
+    private JProgressBar progBackpackWeight;
+    private JProgressBar progPlayerStamina;
+    private JLabel lblKiwisCounted;
+    private JLabel lblPlayerName;
+    private JLabel lblPredatorsLeft;
+    private Game game;
 
     /**
      * Creates a GUI for the KiwiIsland game.
@@ -27,95 +48,285 @@ public class KiwiCountUI
      */
     public KiwiCountUI(Game game) {
         assert game != null : "Make sure game object is created before UI";
+
         this.game = game;
-        setAsGameListener();
-        initialKey();
-        initComponents();
-        initIslandGrid();
-        update();
-    }
-
-    /**
-     * This method is called by the game model every time something changes.
-     * Trigger an update.
-     */
-    @Override
-    public void gameStateChanged() {
-        update();
-
-        // check for "game over" or "game won"
-        if (game.getState() == GameState.LOST) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    game.getLoseMessage(), "Game over!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            game.createNewGame();
-        } else if (game.getState() == GameState.WON) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    game.getWinMessage(), "Well Done!",
-                    JOptionPane.INFORMATION_MESSAGE);
-            game.createNewGame();
-        } else if (game.messageForPlayer()) {
-            JOptionPane.showMessageDialog(
-                    this,
-                    game.getPlayerMessage(), "Important Information",
-                    JOptionPane.INFORMATION_MESSAGE);
-        }
-    }
-    /**
-    * This funtion is used to initial the arrow key
-    * @author TAO LI
-    * @param void
-    * @return void
-    */
-
-    private void initialKey() {//Added keyListener so that user can use arrow keys to move. 
-        this.addKeyListener(new KeyListener() {
-            //When any key is pressed and released then the 
-            //keyPressed and keyReleased methods are called respectively.
-            //The keyTyped method is called when a valid character is typed.p
-            //The getKeyChar returns the character for the key used. If the key
-            //is a modifier key (e.g., SHIFT, CTRL) or action key (e.g., DELETE, ENTER)
-            //then the character will be a undefined symbol.
-            @Override
-            public void keyPressed(KeyEvent e) {
-                int keyCode = e.getKeyCode();
-                if (keyCode == KeyEvent.VK_LEFT) {
-                    game.playerMove(MoveDirection.WEST);
-                }
-                if (keyCode == KeyEvent.VK_RIGHT) {
-                    game.playerMove(MoveDirection.EAST);
-                }
-                if (keyCode == KeyEvent.VK_UP) {
-                    game.playerMove(MoveDirection.NORTH);
-                }
-                if (keyCode == KeyEvent.VK_DOWN) {
-                    game.playerMove(MoveDirection.SOUTH);
-                }
-            }
-
-            @Override
-            public void keyReleased(KeyEvent e) {
-            }
-
-            @Override
-            public void keyTyped(KeyEvent e) {
-
-            }
-            
-        });
-        //Set the frame visible (Must do)
-        //Set focus on the frame
-        this.setFocusable(true);
-        this.setVisible(true);
-        
-
-    }
-
-    private void setAsGameListener() {
         game.addGameEventListener(this);
 
+        initFrame();
+        initIslandGrid();
+        initPlayerInterface();
+
+        update();
+    }
+
+    /**
+     * Initializes the frame
+     */
+    private void initFrame() {
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Kiwi Land");
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        setLocationRelativeTo(null); // centers it in the screen
+        addKeyListener(this); // makes keyboard input work
+        setResizable(false); // so the screen size cant be changed
+        setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+
+        pack(); // so the screen is as tight as it can be
+    }
+
+    /**
+     * Creates and initialises the island grid.
+     */
+    private void initIslandGrid() {
+        int panelWidth = 820;
+        int panelHeight = 420;
+        int panelxLocation = 40;
+        int panelyLocation = 80;
+
+        gameTilesPanel = new JPanel();
+        gameTilesPanel.setSize(panelWidth, panelHeight);
+        add(gameTilesPanel);
+        gameTilesPanel.setLocation(panelxLocation, panelyLocation);
+
+        // Add the grid
+        int rows = game.getNumRows();
+        int columns = game.getNumColumns();
+        gameTilesPanel.setLayout(new GridLayout(rows, columns));
+
+        // Creates all the grid square panels and adds them to the panel
+        for (int row = 0; row < rows; row++) {
+            for (int col = 0; col < columns; col++) {
+                gameTilesPanel.add(new GridSquarePanel(game, row, col));
+            }
+        }
+    }
+
+    @Override
+    public void paint(Graphics g) {
+        super.paint(g);
+        int yPosition = 40;
+        g.setColor(new Color(255, 255, 255));
+
+        g.drawString("Name: " + game.getPlayerName(), 75, yPosition);
+        g.drawString("Stamina: " + game.getPlayer().getStaminaLevel() + "/" + game.getPlayer().getMaximumStaminaLevel(),
+                250, yPosition);
+        g.drawString("Backpack Size: " + game.getPlayer().getCurrentBackpackSize() + "/" + game.getPlayer()
+                .getMaximumBackpackSize(), 425, yPosition);
+        g.drawString("Backpack Weight: " + game.getPlayer().getCurrentBackpackWeight() + "/" + game.getPlayer()
+                .getMaximumBackpackWeight(), 425, yPosition + 17);
+        g.drawString("Predators Remaining: " + game.getPredatorsRemaining(), 675, yPosition);
+        g.drawString("Kiwis Counted: " + game.getKiwiCount(), 675, yPosition + 17);
+
+    }
+
+    /**
+     * Initialises: Player Name, Player Stamina, Backpack Weight/Fullness and
+     * Kiwis/Predators counted/caught
+     */
+    private void initPlayerInterface() {
+        Color backgrondColor = new Color(85, 79, 64);
+        int listRows = 5;
+        int listWidth = 160;
+        int panelxSize = 170;
+        int panelySize = 170;
+        int panelInvxPosition = 180;
+        int panelObjxPosition = 550;
+        int panelyPosition = 550;
+
+        // -------------------
+        // ---- Inventory ----
+        // -------------------
+        JScrollPane scrollInventory = new JScrollPane();
+        listInventory = new JList();
+        listInventory.setModel(new AbstractListModel() {
+            String[] strings = {"Item 1", "Item 2", "Item 3"};
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public Object getElementAt(int i) {
+                return strings[i];
+            }
+        });
+
+        listInventory.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listInventory.setVisibleRowCount(listRows);
+        listInventory.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listInventoryValueChanged();
+            }
+        });
+        listInventory.setFocusable(false);
+        listInventory.setFixedCellWidth(listWidth);
+        scrollInventory.setViewportView(listInventory);
+
+        // Buttons
+        btnUse = new JButton("Use");
+        setButtonListProperties(btnUse);
+        btnUse.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnUseActionPerformed();
+            }
+        });
+        btnDrop = new JButton("Drop");
+        setButtonListProperties(btnDrop);
+        btnDrop.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnDropActionPerformed();
+            }
+        });
+        JPanel pnlInventoryButtons = new JPanel(new FlowLayout());
+        pnlInventoryButtons.add(btnUse);
+        pnlInventoryButtons.add(btnDrop);
+        pnlInventoryButtons.setBackground(backgrondColor);
+
+        // Label
+        JLabel lblInventory = new JLabel("<html> <font color='white'>Inventory</font></html>");
+
+        // Panel Setup
+        JPanel pnlInventory = new JPanel();
+        pnlInventory.add(lblInventory);
+        pnlInventory.add(scrollInventory);
+        pnlInventory.add(pnlInventoryButtons);
+        pnlInventory.setOpaque(false);
+        pnlInventory.setSize(panelxSize, panelySize);
+        pnlInventory.setLocation(panelInvxPosition, panelyPosition);
+        pnlInventory.setFocusable(false);
+        add(pnlInventory);
+
+        // --------------------
+        // --- Object Panel ---
+        // --------------------
+        JScrollPane scrollObjects = new JScrollPane();
+        listObjects = new JList();
+        listObjects.setModel(new AbstractListModel() {
+            String[] strings = {"Item 1", "Item 2", "Item 3"};
+
+            public int getSize() {
+                return strings.length;
+            }
+
+            public Object getElementAt(int i) {
+                return strings[i];
+            }
+        });
+        listObjects.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        listObjects.setVisibleRowCount(listRows);
+        listObjects.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
+            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
+                listObjectsValueChanged();
+            }
+        });
+        listObjects.setFocusable(false);
+        listObjects.setFixedCellWidth(listWidth);
+        scrollObjects.setViewportView(listObjects);
+
+        // Buttons
+        btnCollect = new JButton("Collect");
+        setButtonListProperties(btnCollect);
+        btnCollect.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCollectActionPerformed();
+            }
+        });
+        btnCount = new JButton("Count");
+        setButtonListProperties(btnCount);
+        btnCount.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnCountActionPerformed();
+            }
+        });
+
+        JPanel pnlObjectButtons = new JPanel(new FlowLayout());
+        pnlObjectButtons.add(btnCollect);
+        pnlObjectButtons.add(btnCount);
+        pnlObjectButtons.setBackground(backgrondColor);
+
+        // Label
+        JLabel objectLabel = new JLabel("<html> <font color='white'>Objects</font></html>");
+
+        // Panel Setup
+        JPanel pnlObjects = new JPanel();
+        pnlObjects.add(objectLabel);
+        pnlObjects.add(scrollObjects);
+        pnlObjects.add(pnlObjectButtons);
+        pnlObjects.setOpaque(false);
+        pnlObjects.setSize(panelxSize, panelySize);
+        pnlObjects.setLocation(panelObjxPosition, panelyPosition);
+        pnlObjects.setFocusable(false);
+        add(pnlObjects);
+
+        // -----------------------
+        // ---- Other Buttons ----
+        // -----------------------
+        // View Facts Button
+        JButton btnViewFacts = new JButton("View Facts");
+        btnViewFacts.setFocusable(false);
+        btnViewFacts.setToolTipText("");
+        btnViewFacts.setMaximumSize(new Dimension(100, 23));
+        btnViewFacts.setMinimumSize(new Dimension(100, 23));
+        btnViewFacts.setPreferredSize(new Dimension(100, 23));
+        btnViewFacts.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnViewFactActionPerformed();
+            }
+        });
+
+        // Examine Button
+        btnExamine = new JButton("Examine");
+        btnExamine.setFocusable(false);
+        btnExamine.setToolTipText("");
+        btnExamine.setMaximumSize(new Dimension(100, 23));
+        btnExamine.setMinimumSize(new Dimension(100, 23));
+        btnExamine.setPreferredSize(new Dimension(100, 23));
+        btnExamine.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnExamineActionPerformed();
+            }
+        });
+
+        // Panel for View Facts and Examine Buttons
+        JPanel pnlFacts = new JPanel();
+        pnlFacts.add(btnViewFacts);
+        pnlFacts.add(btnExamine);
+        pnlFacts.setOpaque(false);
+        pnlFacts.setSize(100, 90);
+        pnlFacts.setLocation(400, 570);
+        pnlFacts.setFocusable(false);
+        add(pnlFacts);
+
+        // Options button (Invisible)
+        JButton btnOptions = new JButton("");
+        btnOptions.setFocusable(false);
+        btnOptions.setOpaque(false);
+        btnOptions.setContentAreaFilled(false);
+        btnOptions.setBorderPainted(false);
+        btnOptions.setToolTipText("Options");
+        btnOptions.setMaximumSize(new Dimension(25, 25));
+        btnOptions.setMinimumSize(new Dimension(25, 25));
+        btnOptions.setPreferredSize(new Dimension(25, 25));
+        btnOptions.addActionListener(new ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnOpenOptionsActionPerformed();
+            }
+        });
+
+        JPanel pnlOptions = new JPanel();
+        pnlOptions.add(btnOptions);
+        pnlOptions.setOpaque(false);
+        pnlOptions.setSize(30, 30);
+        pnlOptions.setLocation(824, 1);
+        pnlOptions.setFocusable(false);
+        add(pnlOptions);
+    }
+
+    private void setButtonListProperties(JButton button) {
+        button.setFocusable(false);
+        button.setToolTipText("");
+        button.setMaximumSize(new Dimension(75, 23));
+        button.setMinimumSize(new Dimension(75, 23));
+        button.setPreferredSize(new Dimension(75, 23));
     }
 
     /**
@@ -123,27 +334,12 @@ public class KiwiCountUI
      */
     private void update() {
         // update the grid square panels
-        Component[] components = pnlIsland.getComponents();
+        Component[] components = gameTilesPanel.getComponents();
         for (Component c : components) {
-            // all components in the panel are GridSquarePanels,
-            // so we can safely cast
+            // all components in the panel are GridSquarePanels so we can safely cast
             GridSquarePanel gsp = (GridSquarePanel) c;
             gsp.update();
         }
-
-        // update player information
-        int[] playerValues = game.getPlayerValues();
-        txtPlayerName.setText(game.getPlayerName());
-        progPlayerStamina.setMaximum(playerValues[Game.MAXSTAMINA_INDEX]);
-        progPlayerStamina.setValue(playerValues[Game.STAMINA_INDEX]);
-        progBackpackWeight.setMaximum(playerValues[Game.MAXWEIGHT_INDEX]);
-        progBackpackWeight.setValue(playerValues[Game.WEIGHT_INDEX]);
-        progBackpackSize.setMaximum(playerValues[Game.MAXSIZE_INDEX]);
-        progBackpackSize.setValue(playerValues[Game.SIZE_INDEX]);
-
-        //Update Kiwi and Predator information
-        txtKiwisCounted.setText(Integer.toString(game.getKiwiCount()));
-        txtPredatorsLeft.setText(Integer.toString(game.getPredatorsRemaining()));
 
         // update inventory list
         listInventory.setListData(game.getPlayerInventory());
@@ -159,527 +355,129 @@ public class KiwiCountUI
         btnCollect.setEnabled(false);
         btnCount.setEnabled(false);
 
-        // update movement buttons
-        btnMoveNorth.setEnabled(game.isPlayerMovePossible(MoveDirection.NORTH));
-        btnMoveEast.setEnabled(game.isPlayerMovePossible(MoveDirection.EAST));
-        btnMoveSouth.setEnabled(game.isPlayerMovePossible(MoveDirection.SOUTH));
-        btnMoveWest.setEnabled(game.isPlayerMovePossible(MoveDirection.WEST));
-        
+        if (game.getIsland().getOccupantStringRepresentation(game.getPlayer().getPosition()).equals("F")) {
+            btnExamine.setEnabled(true);
+        } else {
+            btnExamine.setEnabled(false);
+        }
 
+        setFocusable(true);
+        repaint();
     }
 
     /**
-     * This method is called from within the constructor to initialize the form.
-     * WARNING: Do NOT modify this code. The content of this method is always
-     * regenerated by the Form Editor.
+     * This method is called by the game model every time something changes.
+     * Trigger an update.
      */
-    @SuppressWarnings("unchecked")
-    // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
-    private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
+    @Override
+    public void gameStateChanged() {
+        update();
 
-        javax.swing.JPanel pnlContent = new javax.swing.JPanel();
-        pnlIsland = new javax.swing.JPanel();
-        javax.swing.JPanel pnlControls = new javax.swing.JPanel();
-        javax.swing.JPanel pnlPlayer = new javax.swing.JPanel();
-        javax.swing.JPanel pnlPlayerData = new javax.swing.JPanel();
-        javax.swing.JLabel lblPlayerName = new javax.swing.JLabel();
-        txtPlayerName = new javax.swing.JLabel();
-        javax.swing.JLabel lblPlayerStamina = new javax.swing.JLabel();
-        progPlayerStamina = new javax.swing.JProgressBar();
-        javax.swing.JLabel lblBackpackWeight = new javax.swing.JLabel();
-        progBackpackWeight = new javax.swing.JProgressBar();
-        javax.swing.JLabel lblBackpackSize = new javax.swing.JLabel();
-        progBackpackSize = new javax.swing.JProgressBar();
-        lblPredators = new javax.swing.JLabel();
-        lblKiwisCounted = new javax.swing.JLabel();
-        txtKiwisCounted = new javax.swing.JLabel();
-        txtPredatorsLeft = new javax.swing.JLabel();
-        javax.swing.JPanel pnlMovement = new javax.swing.JPanel();
-        btnMoveNorth = new javax.swing.JButton();
-        btnMoveSouth = new javax.swing.JButton();
-        btnMoveEast = new javax.swing.JButton();
-        btnMoveWest = new javax.swing.JButton();
-        javax.swing.JPanel pnlInventory = new javax.swing.JPanel();
-        javax.swing.JScrollPane scrlInventory = new javax.swing.JScrollPane();
-        listInventory = new javax.swing.JList();
-        btnDrop = new javax.swing.JButton();
-        btnUse = new javax.swing.JButton();
-        javax.swing.JPanel pnlObjects = new javax.swing.JPanel();
-        javax.swing.JScrollPane scrlObjects = new javax.swing.JScrollPane();
-        listObjects = new javax.swing.JList();
-        btnCollect = new javax.swing.JButton();
-        btnCount = new javax.swing.JButton();
+        // check for "game over" or "game won"
+        if (game.getState() == GameState.LOST) {
+            JOptionPane.showMessageDialog(this, game.getLoseMessage(), "Game over!", JOptionPane.INFORMATION_MESSAGE);
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setTitle("Kiwi Count");
+            game.createNewGame();
+        } else if (game.getState() == GameState.WON) {
+            JOptionPane.showMessageDialog(this, game.getWinMessage(), "Well Done!", JOptionPane.INFORMATION_MESSAGE);
+            game.nextLevel();
+            game.createNewGame();
+            update();
+        } else if (game.messageForPlayer()) {
+            JOptionPane.showMessageDialog(this, game.getPlayerMessage(), "Important Information",
+                    JOptionPane.INFORMATION_MESSAGE);
+        }
+    }
 
-        pnlContent.setBorder(javax.swing.BorderFactory.createEmptyBorder(10, 10, 10, 10));
-        pnlContent.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                pnlContentKeyPressed(evt);
-            }
-            public void keyTyped(java.awt.event.KeyEvent evt) {
-                pnlContentKeyTyped(evt);
-            }
-        });
-        pnlContent.setLayout(new java.awt.BorderLayout(10, 0));
+    @Override
+    public void keyTyped(KeyEvent e) {
 
-        javax.swing.GroupLayout pnlIslandLayout = new javax.swing.GroupLayout(pnlIsland);
-        pnlIsland.setLayout(pnlIslandLayout);
-        pnlIslandLayout.setHorizontalGroup(
-            pnlIslandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
-        );
-        pnlIslandLayout.setVerticalGroup(
-            pnlIslandLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 618, Short.MAX_VALUE)
-        );
+    }
 
-        pnlContent.add(pnlIsland, java.awt.BorderLayout.CENTER);
+    @Override
+    public void keyPressed(KeyEvent e) {
+        int key = e.getKeyCode();
 
-        pnlControls.setLayout(new java.awt.GridBagLayout());
+        switch (key) {
+            case KeyEvent.VK_W: // upwards
+                if (game.isPlayerMovePossible(MoveDirection.NORTH)) {
+                    game.playerMove(MoveDirection.NORTH);
+                }
+                break;
+            case KeyEvent.VK_A: // to the left
+                if (game.isPlayerMovePossible(MoveDirection.WEST)) {
+                    game.playerMove(MoveDirection.WEST);
+                }
+                break;
+            case KeyEvent.VK_S: // downwards
+                if (game.isPlayerMovePossible(MoveDirection.SOUTH)) {
+                    game.playerMove(MoveDirection.SOUTH);
+                }
+                break;
+            case KeyEvent.VK_D: // to the right
+                if (game.isPlayerMovePossible(MoveDirection.EAST)) {
+                    game.playerMove(MoveDirection.EAST);
+                }
+                break;
+            case KeyEvent.VK_1:
+                game.nextLevel();
+                game.createNewGame();
+                update();
+                break;
+        }
+    }
 
-        pnlPlayer.setBorder(javax.swing.BorderFactory.createTitledBorder("Player"));
-        pnlPlayer.setLayout(new java.awt.BorderLayout());
+    @Override
+    public void keyReleased(KeyEvent e) {
 
-        pnlPlayerData.setBorder(javax.swing.BorderFactory.createEmptyBorder(5, 5, 5, 5));
-        pnlPlayerData.setLayout(new java.awt.GridBagLayout());
+    }
 
-        lblPlayerName.setText("Name:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        pnlPlayerData.add(lblPlayerName, gridBagConstraints);
+    public void btnOpenOptionsActionPerformed() {
+        System.out.println("You did it!");
+    }
 
-        txtPlayerName.setText("Player Name");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(0, 10, 0, 0);
-        pnlPlayerData.add(txtPlayerName, gridBagConstraints);
-
-        lblPlayerStamina.setText("Stamina:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        pnlPlayerData.add(lblPlayerStamina, gridBagConstraints);
-
-        progPlayerStamina.setStringPainted(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        pnlPlayerData.add(progPlayerStamina, gridBagConstraints);
-
-        lblBackpackWeight.setText("Backpack Weight:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        pnlPlayerData.add(lblBackpackWeight, gridBagConstraints);
-
-        progBackpackWeight.setStringPainted(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        pnlPlayerData.add(progBackpackWeight, gridBagConstraints);
-
-        lblBackpackSize.setText("Backpack Size:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 0, 0, 0);
-        pnlPlayerData.add(lblBackpackSize, gridBagConstraints);
-
-        progBackpackSize.setStringPainted(true);
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(10, 10, 0, 0);
-        pnlPlayerData.add(progBackpackSize, gridBagConstraints);
-
-        lblPredators.setText("Predators Left:");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        pnlPlayerData.add(lblPredators, gridBagConstraints);
-
-        lblKiwisCounted.setText("Kiwis Counted :");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        pnlPlayerData.add(lblKiwisCounted, gridBagConstraints);
-
-        txtKiwisCounted.setText("0");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 5;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        pnlPlayerData.add(txtKiwisCounted, gridBagConstraints);
-
-        txtPredatorsLeft.setText("P");
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 4;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.WEST;
-        pnlPlayerData.add(txtPredatorsLeft, gridBagConstraints);
-
-        pnlPlayer.add(pnlPlayerData, java.awt.BorderLayout.WEST);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.5;
-        pnlControls.add(pnlPlayer, gridBagConstraints);
-
-        pnlMovement.setBorder(javax.swing.BorderFactory.createTitledBorder("Movement"));
-        pnlMovement.setLayout(new java.awt.GridBagLayout());
-
-        btnMoveNorth.setText("N");
-        btnMoveNorth.setFocusable(false);
-        btnMoveNorth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMoveNorthActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlMovement.add(btnMoveNorth, gridBagConstraints);
-
-        btnMoveSouth.setText("S");
-        btnMoveSouth.setFocusable(false);
-        btnMoveSouth.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMoveSouthActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlMovement.add(btnMoveSouth, gridBagConstraints);
-
-        btnMoveEast.setText("E");
-        btnMoveEast.setFocusable(false);
-        btnMoveEast.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMoveEastActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlMovement.add(btnMoveEast, gridBagConstraints);
-
-        btnMoveWest.setText("W");
-        btnMoveWest.setFocusable(false);
-        btnMoveWest.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnMoveWestActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlMovement.add(btnMoveWest, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 0.5;
-        pnlControls.add(pnlMovement, gridBagConstraints);
-
-        pnlInventory.setBorder(javax.swing.BorderFactory.createTitledBorder("Inventory"));
-        pnlInventory.setLayout(new java.awt.GridBagLayout());
-
-        listInventory.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        listInventory.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listInventory.setVisibleRowCount(3);
-        listInventory.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listInventoryValueChanged(evt);
-            }
-        });
-        scrlInventory.setViewportView(listInventory);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlInventory.add(scrlInventory, gridBagConstraints);
-
-        btnDrop.setText("Drop");
-        btnDrop.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnDropActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 1;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlInventory.add(btnDrop, gridBagConstraints);
-
-        btnUse.setText("Use");
-        btnUse.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnUseActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 1;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlInventory.add(btnUse, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlControls.add(pnlInventory, gridBagConstraints);
-
-        pnlObjects.setBorder(javax.swing.BorderFactory.createTitledBorder("Objects"));
-        java.awt.GridBagLayout pnlObjectsLayout = new java.awt.GridBagLayout();
-        pnlObjectsLayout.columnWidths = new int[] {0, 5, 0};
-        pnlObjectsLayout.rowHeights = new int[] {0, 5, 0};
-        pnlObjects.setLayout(pnlObjectsLayout);
-
-        listObjects.setModel(new javax.swing.AbstractListModel() {
-            String[] strings = { "Item 1", "Item 2", "Item 3" };
-            public int getSize() { return strings.length; }
-            public Object getElementAt(int i) { return strings[i]; }
-        });
-        listObjects.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
-        listObjects.setVisibleRowCount(3);
-        listObjects.addListSelectionListener(new javax.swing.event.ListSelectionListener() {
-            public void valueChanged(javax.swing.event.ListSelectionEvent evt) {
-                listObjectsValueChanged(evt);
-            }
-        });
-        scrlObjects.setViewportView(listObjects);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 0;
-        gridBagConstraints.gridwidth = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlObjects.add(scrlObjects, gridBagConstraints);
-
-        btnCollect.setText("Collect");
-        btnCollect.setToolTipText("");
-        btnCollect.setMaximumSize(new java.awt.Dimension(61, 23));
-        btnCollect.setMinimumSize(new java.awt.Dimension(61, 23));
-        btnCollect.setPreferredSize(new java.awt.Dimension(61, 23));
-        btnCollect.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCollectActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 2;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlObjects.add(btnCollect, gridBagConstraints);
-
-        btnCount.setText("Count");
-        btnCount.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCountActionPerformed(evt);
-            }
-        });
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 2;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.anchor = java.awt.GridBagConstraints.SOUTHWEST;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        gridBagConstraints.insets = new java.awt.Insets(5, 5, 5, 5);
-        pnlObjects.add(btnCount, gridBagConstraints);
-
-        gridBagConstraints = new java.awt.GridBagConstraints();
-        gridBagConstraints.gridx = 0;
-        gridBagConstraints.gridy = 3;
-        gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
-        gridBagConstraints.weightx = 1.0;
-        gridBagConstraints.weighty = 1.0;
-        pnlControls.add(pnlObjects, gridBagConstraints);
-
-        pnlContent.add(pnlControls, java.awt.BorderLayout.EAST);
-
-        getContentPane().add(pnlContent, java.awt.BorderLayout.CENTER);
-
-        pack();
-    }// </editor-fold>//GEN-END:initComponents
-
-    private void btnMoveEastActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveEastActionPerformed
-        game.playerMove(MoveDirection.EAST);
-    }//GEN-LAST:event_btnMoveEastActionPerformed
-
-    private void btnMoveNorthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveNorthActionPerformed
-        game.playerMove(MoveDirection.NORTH);
-    }//GEN-LAST:event_btnMoveNorthActionPerformed
-
-    private void btnMoveSouthActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveSouthActionPerformed
-        game.playerMove(MoveDirection.SOUTH);
-    }//GEN-LAST:event_btnMoveSouthActionPerformed
-
-    private void btnMoveWestActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnMoveWestActionPerformed
-        game.playerMove(MoveDirection.WEST);
-    }//GEN-LAST:event_btnMoveWestActionPerformed
-
-    private void btnCollectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCollectActionPerformed
+    private void btnCollectActionPerformed() {
         Object obj = listObjects.getSelectedValue();
         game.collectItem(obj);
-    }//GEN-LAST:event_btnCollectActionPerformed
+    }
 
-    private void btnDropActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnDropActionPerformed
+    private void btnDropActionPerformed() {
         game.dropItem(listInventory.getSelectedValue());
-    }//GEN-LAST:event_btnDropActionPerformed
+    }
 
-    private void listObjectsValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listObjectsValueChanged
+    private void listObjectsValueChanged() {
         Object occ = listObjects.getSelectedValue();
+
         if (occ != null) {
             btnCollect.setEnabled(game.canCollect(occ));
             btnCount.setEnabled(game.canCount(occ));
             listObjects.setToolTipText(game.getOccupantDescription(occ));
         }
-    }//GEN-LAST:event_listObjectsValueChanged
+    }
 
-    private void btnUseActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnUseActionPerformed
+    private void btnUseActionPerformed() {
         game.useItem(listInventory.getSelectedValue());
-    }//GEN-LAST:event_btnUseActionPerformed
+    }
 
-    private void listInventoryValueChanged(javax.swing.event.ListSelectionEvent evt) {//GEN-FIRST:event_listInventoryValueChanged
+    private void listInventoryValueChanged() {
         Object item = listInventory.getSelectedValue();
         btnDrop.setEnabled(true);
+
         if (item != null) {
             btnUse.setEnabled(game.canUse(item));
             listInventory.setToolTipText(game.getOccupantDescription(item));
         }
-    }//GEN-LAST:event_listInventoryValueChanged
-
-    private void btnCountActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCountActionPerformed
-        game.countKiwi();
-    }//GEN-LAST:event_btnCountActionPerformed
-
-    private void pnlContentKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlContentKeyPressed
-
-    }//GEN-LAST:event_pnlContentKeyPressed
-
-    private void pnlContentKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_pnlContentKeyTyped
-        // TODO add your handling code here:
-    }//GEN-LAST:event_pnlContentKeyTyped
-
-    /**
-     * Creates and initialises the island grid.
-     */
-    private void initIslandGrid() {
-        // Add the grid
-        int rows = game.getNumRows();
-        int columns = game.getNumColumns();
-        // set up the layout manager for the island grid panel
-        pnlIsland.setLayout(new GridLayout(rows, columns));
-        // create all the grid square panels and add them to the panel
-        // the layout manager of the panel takes care of assigning them to the
-        // the right position
-        for (int row = 0; row < rows; row++) {
-            for (int col = 0; col < columns; col++) {
-                pnlIsland.add(new GridSquarePanel(game, row, col));
-            }
-        }
-
     }
 
+    private void btnCountActionPerformed() {
+        game.countKiwi();
+    }
 
-    // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton btnCollect;
-    private javax.swing.JButton btnCount;
-    private javax.swing.JButton btnDrop;
-    private javax.swing.JButton btnMoveEast;
-    private javax.swing.JButton btnMoveNorth;
-    private javax.swing.JButton btnMoveSouth;
-    private javax.swing.JButton btnMoveWest;
-    private javax.swing.JButton btnUse;
-    private javax.swing.JLabel lblKiwisCounted;
-    private javax.swing.JLabel lblPredators;
-    private javax.swing.JList listInventory;
-    private javax.swing.JList listObjects;
-    private javax.swing.JPanel pnlIsland;
-    private javax.swing.JProgressBar progBackpackSize;
-    private javax.swing.JProgressBar progBackpackWeight;
-    private javax.swing.JProgressBar progPlayerStamina;
-    private javax.swing.JLabel txtKiwisCounted;
-    private javax.swing.JLabel txtPlayerName;
-    private javax.swing.JLabel txtPredatorsLeft;
-    // End of variables declaration//GEN-END:variables
+    private void btnViewFactActionPerformed() {
+        game.getDiscoveredFacts();
+    }
 
-    private Game game;
+    private void btnExamineActionPerformed() {
+        game.examineFauna();
+    }
 }

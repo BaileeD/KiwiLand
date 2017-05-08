@@ -1,5 +1,8 @@
 package nz.ac.aut.ense701.gameModel;
 
+import static org.hamcrest.CoreMatchers.anyOf;
+import static org.hamcrest.CoreMatchers.containsString;
+import static org.junit.Assert.assertThat;
 import org.junit.Test;
 
 /**
@@ -104,7 +107,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testGetPlayer(){
         String name = player.getName();
-        String checkName = "River Song";
+        String checkName = "Macaroons";
         assertTrue("Check player name", name.equals(checkName) );
     } 
 
@@ -279,7 +282,7 @@ public class GameTest extends junit.framework.TestCase
         player.reduceStamina(5.0);
         game.useItem(food);
         assertFalse("Player should no longer have food",player.hasItem(food));
-        assertEquals("Wrong stamina level", player.getStaminaLevel(), 96.3);
+        assertEquals("Wrong stamina level", player.getStaminaLevel(), 96);
     }
  
     public void testUseItemFoodNoIncrease(){
@@ -290,7 +293,7 @@ public class GameTest extends junit.framework.TestCase
         // Will only get a stamina increase if player has less than max stamina
         game.useItem(food);
         assertFalse("Player should no longer have food",player.hasItem(food));
-        assertEquals("Wrong stamina level", player.getStaminaLevel(), 100.0);
+        assertEquals("Wrong stamina level", player.getStaminaLevel(), 100);
     }  
     
     @Test
@@ -305,6 +308,49 @@ public class GameTest extends junit.framework.TestCase
         game.useItem(trap);
         assertTrue("Player should still have trap",player.hasItem(trap));
         assertFalse("Predator should be gone.", island.hasPredator(playerPosition));
+    }
+     
+    /**
+     * Testing if a pop up box displays when a predator is trapped.
+     */
+    @Test
+    public void testPredatorTrapMessage () {
+        Item trap = new Tool(playerPosition,"Trap", "Rat trap",1.0, 1.0);
+        player.collect(trap);
+        Predator predator = new Predator(playerPosition,"Rat", "Norway rat");
+        island.addOccupant(playerPosition, predator);
+        game.useItem(trap);
+        game.showMessage("Predator fact test!!!!!!!", "Predator test");
+        assertEquals("Predator trap test", game.getPredatorsRemaining(), 6);
+    }
+    
+    /**
+     * Testing if a pop up box displays when a predator is trapped.
+     */
+    @Test
+    public void testUndefinedPredatorTrapMessage () {
+        Facts facts = new Facts();
+        Predator predator = new Predator(playerPosition,"Crow", "A scary looking crow");
+        String fact = facts.getFact(predator.getName());
+        game.showMessage(fact, "Testing undefined animal");
+        assertThat(fact, containsString(""));
+    }
+    
+     /**
+     * Testing if a pop up box displays when a player examines a fauna occupant.
+     */
+    @Test
+    public void testFaunaMessage () {
+        Facts facts = new Facts();
+        String fact = facts.getFact("Crab").trim();
+        Fauna fauna = new Fauna(playerPosition, "Crab", "A scuttling crab");
+        island.addOccupant(playerPosition, fauna);
+        game.examineFauna();
+        
+        assertThat(fact, anyOf(
+            containsString("Crabs are decapod crustaceans which have a very short tail and are covered with a thick shell, and are armed with one pair of claws."), 
+            containsString("Crabs are invertebrates. Their exoskeleton protects them from predators and provides support for their bodies.")
+        ));
     }
     
     @Test
@@ -351,7 +397,7 @@ public class GameTest extends junit.framework.TestCase
  
     @Test
     public void testPlayerMoveValidNoHazards(){
-        double stamina = player.getStaminaLevel();  
+        int stamina = player.getStaminaLevel();  
 
         assertTrue("Move valid", game.playerMove(MoveDirection.SOUTH));
         //Stamina reduced by move
@@ -381,7 +427,7 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testPlayerMoveNonFatalHazardNotDead(){
-        double stamina = player.getStaminaLevel(); 
+        int stamina = player.getStaminaLevel(); 
         Position hazardPosition = new Position(island, playerPosition.getRow()+1, playerPosition.getColumn());
         Hazard fatal = new Hazard(hazardPosition, "Cliff", "Not so steep cliff", 0.5);
         island.addOccupant(hazardPosition, fatal);
@@ -398,13 +444,13 @@ public class GameTest extends junit.framework.TestCase
         Position hazardPosition = new Position(island, playerPosition.getRow()+1, playerPosition.getColumn());
         Hazard fatal = new Hazard(hazardPosition, "Cliff", "Not so steep cliff", 0.5);
         island.addOccupant(hazardPosition, fatal);
-        player.reduceStamina(47.0);
+        player.reduceStamina(47);
         
         assertTrue("Move valid", game.playerMove(MoveDirection.SOUTH));
         //Non-fatal Hazard should reduce player stamina to less than zero
         assertFalse("Player should not be alive.", player.isAlive());
         assertTrue("Game should be over", game.getState()== GameState.LOST);
-        assertEquals("Wrong stamina", 0.0, player.getStaminaLevel());
+        assertEquals("Wrong stamina", 0, player.getStaminaLevel());
     }
     
     @Test
@@ -424,6 +470,17 @@ public class GameTest extends junit.framework.TestCase
         assertTrue (" This move valid", playerMoveEast(5));
         game.countKiwi();
         assertEquals("Wrong count", game.getKiwiCount(), 1);
+    }
+    
+     /**
+     * Testing if a pop up box displays when a kiwi is counted.
+     */
+    @Test
+    public void testKiwiFact () {
+        assertTrue (" This move valid", playerMoveEast(5));
+        game.countKiwi();
+        game.showMessage("Kiwi fact test!!!!!!!", "Kiwi test");
+        assertEquals("Kiwi count test", game.getKiwiCount(), 1);
     }
 
 /**
