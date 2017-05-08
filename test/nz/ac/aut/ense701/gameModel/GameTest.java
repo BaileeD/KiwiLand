@@ -107,7 +107,7 @@ public class GameTest extends junit.framework.TestCase
     @Test
     public void testGetPlayer(){
         String name = player.getName();
-        String checkName = "River Song";
+        String checkName = "Macaroons";
         assertTrue("Check player name", name.equals(checkName) );
     } 
 
@@ -282,7 +282,7 @@ public class GameTest extends junit.framework.TestCase
         player.reduceStamina(5.0);
         game.useItem(food);
         assertFalse("Player should no longer have food",player.hasItem(food));
-        assertEquals("Wrong stamina level", player.getStaminaLevel(), 96.3);
+        assertEquals("Wrong stamina level", player.getStaminaLevel(), 96);
     }
  
     public void testUseItemFoodNoIncrease(){
@@ -293,7 +293,7 @@ public class GameTest extends junit.framework.TestCase
         // Will only get a stamina increase if player has less than max stamina
         game.useItem(food);
         assertFalse("Player should no longer have food",player.hasItem(food));
-        assertEquals("Wrong stamina level", player.getStaminaLevel(), 100.0);
+        assertEquals("Wrong stamina level", player.getStaminaLevel(), 100);
     }  
     
     @Test
@@ -322,6 +322,18 @@ public class GameTest extends junit.framework.TestCase
         game.useItem(trap);
         game.showMessage("Predator fact test!!!!!!!", "Predator test");
         assertEquals("Predator trap test", game.getPredatorsRemaining(), 6);
+    }
+    
+    /**
+     * Testing if a pop up box displays when a predator is trapped.
+     */
+    @Test
+    public void testUndefinedPredatorTrapMessage () {
+        Facts facts = new Facts();
+        Predator predator = new Predator(playerPosition,"Crow", "A scary looking crow");
+        String fact = facts.getFact(predator.getName());
+        game.showMessage(fact, "Testing undefined animal");
+        assertThat(fact, containsString(""));
     }
     
      /**
@@ -385,7 +397,7 @@ public class GameTest extends junit.framework.TestCase
  
     @Test
     public void testPlayerMoveValidNoHazards(){
-        double stamina = player.getStaminaLevel();  
+        int stamina = player.getStaminaLevel();  
 
         assertTrue("Move valid", game.playerMove(MoveDirection.SOUTH));
         //Stamina reduced by move
@@ -415,7 +427,7 @@ public class GameTest extends junit.framework.TestCase
     
     @Test
     public void testPlayerMoveNonFatalHazardNotDead(){
-        double stamina = player.getStaminaLevel(); 
+        int stamina = player.getStaminaLevel(); 
         Position hazardPosition = new Position(island, playerPosition.getRow()+1, playerPosition.getColumn());
         Hazard fatal = new Hazard(hazardPosition, "Cliff", "Not so steep cliff", 0.5);
         island.addOccupant(hazardPosition, fatal);
@@ -432,13 +444,13 @@ public class GameTest extends junit.framework.TestCase
         Position hazardPosition = new Position(island, playerPosition.getRow()+1, playerPosition.getColumn());
         Hazard fatal = new Hazard(hazardPosition, "Cliff", "Not so steep cliff", 0.5);
         island.addOccupant(hazardPosition, fatal);
-        player.reduceStamina(47.0);
+        player.reduceStamina(47);
         
         assertTrue("Move valid", game.playerMove(MoveDirection.SOUTH));
         //Non-fatal Hazard should reduce player stamina to less than zero
         assertFalse("Player should not be alive.", player.isAlive());
         assertTrue("Game should be over", game.getState()== GameState.LOST);
-        assertEquals("Wrong stamina", 0.0, player.getStaminaLevel());
+        assertEquals("Wrong stamina", 0, player.getStaminaLevel());
     }
     
     @Test
