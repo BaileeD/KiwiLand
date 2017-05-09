@@ -21,6 +21,7 @@ public class MainMenuPanel extends JPanel
 	{
 		theFrame = frame;
 		setOpaque(false);
+		setFocusable(false);
 
 		initPanel();
 		initButtons();
@@ -35,10 +36,10 @@ public class MainMenuPanel extends JPanel
 		btnHowToPlay = new JButton("HOW TO PLAY");
 		btnExit = new JButton("EXIT");
 
-		setButtonPropities(btnNewGame);
-		setButtonPropities(btnLoadGame);
-		setButtonPropities(btnHowToPlay);
-		setButtonPropities(btnExit);
+		setButtonProperties(btnNewGame);
+		setButtonProperties(btnLoadGame);
+		setButtonProperties(btnHowToPlay);
+		setButtonProperties(btnExit);
 
 		pnlButtons.setOpaque(false);
 		pnlButtons.setFocusable(false);
@@ -55,10 +56,9 @@ public class MainMenuPanel extends JPanel
 		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
 		pnlButtons.add(btnExit);
 		add(pnlButtons);
-		setLocation(20, 20);
 	}
 
-	private void setButtonPropities(JButton aButton)
+	private void setButtonProperties(JButton aButton)
 	{
 		aButton.setFocusable(false);
 		aButton.setToolTipText("");

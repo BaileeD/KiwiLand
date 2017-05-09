@@ -471,6 +471,9 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 				game.createNewGame();
 				update();
 				break;
+			case KeyEvent.VK_ESCAPE:
+				btnOpenOptionsActionPerformed();
+				break;
 		}
 	}
 
@@ -481,7 +484,9 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 
 	public void btnOpenOptionsActionPerformed()
 	{
-		System.out.println("You did it!");
+		GameMenuFrame menu = new GameMenuFrame(this);
+		setEnabled(false);
+		setFocusable(false);
 	}
 
 	private void btnCollectActionPerformed()

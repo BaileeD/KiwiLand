@@ -12,7 +12,7 @@ public class MainMenuFrame extends JFrame
 {
 	private final int    FRAME_WIDTH      = 900;
 	private final int    FRAME_HEIGHT     = 720;
-	private final String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
+	private       String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
 	private Game game;
 
 	private CardLayout cardLayout;
