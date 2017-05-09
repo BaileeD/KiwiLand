@@ -2,12 +2,8 @@ package nz.ac.aut.ense701.gui;
 
 import nz.ac.aut.ense701.gameModel.Game;
 
-import javax.imageio.ImageIO;
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import java.io.IOException;
 
 /**
  * Created by Scott Richards on 06-May-17.
@@ -16,7 +12,7 @@ public class MainMenuFrame extends JFrame
 {
 	private final int    FRAME_WIDTH      = 900;
 	private final int    FRAME_HEIGHT     = 720;
-	private final String BACKGROUND_IMAGE = "resources/Game_UI.jpg";
+	private final String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
 	private Game game;
 
 	private CardLayout cardLayout;
@@ -40,11 +36,12 @@ public class MainMenuFrame extends JFrame
 	{
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Kiwi Land - Main Menu");
+		setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+		setVisible(true);
+		setLayout(new FlowLayout());
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
 		setLocationRelativeTo(null); // centers it in the screen
 		setResizable(false); // so the screen size cant be changed
-		//setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
-		setVisible(true);
 
 		//pack(); // so the screen is as tight as it can be
 		add(pnlContents);
@@ -59,6 +56,7 @@ public class MainMenuFrame extends JFrame
 		pnlLoadGame = new LoadGamePanel(this);
 		pnlHowToPlay = new HowToPlayPanel(this);
 
+		pnlContents.setOpaque(false);
 		pnlContents.setLayout(cardLayout);
 
 		pnlContents.add(pnlMainMenu, "1");
@@ -81,8 +79,8 @@ public class MainMenuFrame extends JFrame
 
 	public void openNewGameMenu()
 	{
-		setVisible(false);
 		createGame();
+		setVisible(false);
 	}
 
 	public void openLoadMenu()

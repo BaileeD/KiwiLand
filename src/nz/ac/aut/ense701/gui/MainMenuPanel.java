@@ -20,6 +20,7 @@ public class MainMenuPanel extends JPanel
 	public MainMenuPanel(MainMenuFrame frame)
 	{
 		theFrame = frame;
+		setOpaque(false);
 
 		initPanel();
 		initButtons();
@@ -29,17 +30,42 @@ public class MainMenuPanel extends JPanel
 	{
 		pnlButtons = new JPanel();
 
-		btnNewGame = new JButton("New Game");
-		btnLoadGame = new JButton("Load Game");
-		btnHowToPlay = new JButton("How to Play");
-		btnExit = new JButton("Exit");
+		btnNewGame = new JButton("NEW GAME");
+		btnLoadGame = new JButton("LOAD GAME");
+		btnHowToPlay = new JButton("HOW TO PLAY");
+		btnExit = new JButton("EXIT");
 
+		setButtonPropities(btnNewGame);
+		setButtonPropities(btnLoadGame);
+		setButtonPropities(btnHowToPlay);
+		setButtonPropities(btnExit);
+
+		pnlButtons.setOpaque(false);
+		pnlButtons.setFocusable(false);
+		BoxLayout layout = new BoxLayout(pnlButtons, BoxLayout.Y_AXIS);
+		pnlButtons.setLayout(layout);
+
+		int buttonSpacing = 30;
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing*6)));
 		pnlButtons.add(btnNewGame);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
 		pnlButtons.add(btnLoadGame);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
 		pnlButtons.add(btnHowToPlay);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
 		pnlButtons.add(btnExit);
-
 		add(pnlButtons);
+		setLocation(20, 20);
+	}
+
+	private void setButtonPropities(JButton aButton)
+	{
+		aButton.setFocusable(false);
+		aButton.setToolTipText("");
+		aButton.setFont(new Font("Arial", Font.PLAIN, 25));
+		aButton.setMaximumSize(new Dimension(350, 80));
+		aButton.setMinimumSize(new Dimension(350, 80));
+		aButton.setPreferredSize(new Dimension(350, 80));
 	}
 
 	private void initButtons()
