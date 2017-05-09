@@ -9,9 +9,11 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Properties;
 
 /**
@@ -62,7 +64,7 @@ public class Database {
     /**
      * Opens a MySQL database connection
      */
-    public void openConnection()
+    private void openConnection()
     {
         try
         {
@@ -84,6 +86,7 @@ public class Database {
     public ArrayList<String> getFacts(String occupant)
     {
         ArrayList<String> facts = null;
+        openConnection();
         try
         {
            String sqlQuery = "SELECT fact FROM facts Where occupant='" + occupant +"'";
@@ -101,6 +104,10 @@ public class Database {
         {
             java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        finally
+        {
+            closeConnection();
+        }
         return facts;
     }
     
@@ -110,6 +117,7 @@ public class Database {
     public ArrayList<String> getOccupants()
     {
         ArrayList<String> occupants = null;
+        openConnection();
         try
         {
            String sqlQuery = "SELECT DISTINCT occupant FROM facts";
@@ -127,13 +135,153 @@ public class Database {
         {
             java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        finally
+        {
+            closeConnection();
+        }
         return occupants;
+    }
+    
+    /*
+    * Saves a user game to database
+    */
+    public boolean saveGame(String playerName, String saveName, int level, Date date)
+    {
+        boolean insert = false;
+        openConnection();
+        try
+        {
+            PreparedStatement st  = connection.prepareStatement("insert into gamesaves(playername, savename, level, date) values(?, ?, ?, ?)");
+            st.setString(1, playerName);
+            st.setString(2, saveName);
+            st.setInt(3, level);
+            st.setTimestamp(4, new java.sql.Timestamp(date.getTime()));
+
+            int result = st.executeUpdate();
+            if (result == 1) {
+                insert = true;
+            }
+            st.close();
+        }
+        catch(Exception ex)
+        {
+            ex.printStackTrace();
+            java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            closeConnection();
+        }
+        return insert;
+    }
+    
+    /*
+    * gets all game saves of a user ordered by last game saved date
+    */
+    public ArrayList<GameSave> getAllGameSaves(String playerName)
+    {
+        ArrayList<GameSave> gameSaves = null;
+        openConnection();
+        try
+        {
+            String sqlQuery = "SELECT * FROM gamesaves Where playername='" + playerName +"' ORDER BY gamesaves.date DESC";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            gameSaves = new ArrayList<GameSave>();
+            while(resultSet.next())
+            {
+                GameSave gameSave = new GameSave();
+                gameSave.setGameSaveId(resultSet.getInt(1));
+                gameSave.setPlayerName(resultSet.getString(2));
+                gameSave.setSaveName(resultSet.getString(3));
+                gameSave.setLevel(resultSet.getInt(4));
+                gameSave.setSaveDate(resultSet.getTimestamp(5));
+                gameSaves.add(gameSave);
+            }
+            resultSet.close();
+            statement.close();      
+        }
+        catch(Exception ex)
+        {
+            java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            closeConnection();
+        }
+        return gameSaves;
+    }
+    
+    /*
+    * gets last game saved date
+    */
+    public GameSave getLastGameSave(String playerName)
+    {
+        GameSave gameSave = null;
+        openConnection();
+        try
+        {
+            String sqlQuery = "SELECT * FROM gamesaves WHERE playername='" + playerName +"'";
+            sqlQuery += " ORDER BY gamesaves.date DESC LIMIT 1";
+
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            while(resultSet.next())
+            {
+                gameSave = new GameSave();
+                gameSave.setGameSaveId(resultSet.getInt(1));
+                gameSave.setPlayerName(resultSet.getString(2));
+                gameSave.setSaveName(resultSet.getString(3));
+                gameSave.setLevel(resultSet.getInt(4));
+                gameSave.setSaveDate(resultSet.getTimestamp(5));
+            }
+            resultSet.close();
+            statement.close();
+        }
+        catch(Exception ex)
+        {
+            java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            closeConnection();
+        }
+        return gameSave;
+    }
+    
+    /*
+    * deletes a game save
+    */
+    public boolean deleteGameSave(int save)
+    {
+        boolean delete = false;
+        openConnection();
+        try
+        {
+            String sqlQuery = "DELETE FROM gamesaves WHERE gamesaveid='" + save +"'";
+
+            Statement statement = connection.createStatement();
+            int result = statement.executeUpdate(sqlQuery);
+            if (result == 1) {
+                delete = true;
+            }
+            statement.close();
+        }
+        catch(Exception ex)
+        {
+            java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            closeConnection();
+        }
+        return delete;
     }
     
     /**
      * Closes database connection
      */
-    public void closeConnection()
+    private void closeConnection()
     {
         try
         {

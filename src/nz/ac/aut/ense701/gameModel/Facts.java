@@ -32,13 +32,11 @@ public class Facts {
          shownFacts = new HashMap<String, ArrayList<String>>();
          discoveredFacts = new HashMap<String, ArrayList<String>>();
          isAllFactsDiscovered = new HashMap<String, Boolean>();
-         db.openConnection();
          ArrayList<String> occupants = db.getOccupants();
          for(String occupant : occupants)
          {
             populateFacts(occupant);
          }
-         db.closeConnection();
      }
      
      /**
@@ -60,27 +58,34 @@ public class Facts {
      public String getFact(String occupant)
      {
          //Get a random fact from the list
-         int random = new Random().nextInt(facts.get(occupant).size());
-         String fact = facts.get(occupant).get(random);
-         
-         //add the fact to shownFacts list and remove from facts list
-         //so that next time it won't get the same fact from facts list again
-         shownFacts.get(occupant).add(fact);
-         facts.get(occupant).remove(random);
-         
-         if(!isAllFactsDiscovered.get(occupant))
-             discoveredFacts.get(occupant).add(fact);
-         
-         if(facts.get(occupant).isEmpty())
+         if(facts.containsKey(occupant))
          {
-            isAllFactsDiscovered.put(occupant, true);
-            for(String fa : shownFacts.get(occupant))
+            int random = new Random().nextInt(facts.get(occupant).size());
+            String fact = facts.get(occupant).get(random);
+
+            //add the fact to shownFacts list and remove from facts list
+            //so that next time it won't get the same fact from facts list again
+            shownFacts.get(occupant).add(fact);
+            facts.get(occupant).remove(random);
+
+            if(!isAllFactsDiscovered.get(occupant))
+                discoveredFacts.get(occupant).add(fact);
+
+            if(facts.get(occupant).isEmpty())
             {
-               facts.get(occupant).add(fa);
+               isAllFactsDiscovered.put(occupant, true);
+               for(String fa : shownFacts.get(occupant))
+               {
+                  facts.get(occupant).add(fa);
+               }
+               shownFacts.get(occupant).clear();
             }
-            shownFacts.get(occupant).clear();
+            return fact;
          }
-         return fact;
+         else
+         {
+             return "";
+         }
      }
      
      /**
