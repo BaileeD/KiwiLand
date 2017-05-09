@@ -128,25 +128,25 @@ public class PlayerTest extends junit.framework.TestCase
     }
     
     @Test 
-    public void testIncreaseStamina()
+    public void testAdjustStamina()
     {
         player.reduceStamina(7.0);
-        player.increaseStamina(4.0);
+        player.adjustStamina(4.0);
         assertEquals(22.0, player.getStaminaLevel(), 0.01);
     } 
     
     @Test
-    public void testIncreaseStaminaPastZero()
+    public void testAdjustStaminaPastZero()
     {
-        player.increaseStamina(4.0);
+        player.adjustStamina(4.0);
         assertEquals(25.0, player.getStaminaLevel(), 0.01);
     } 
     
     @Test
-    public void testIncreaseStaminaByNegative()
+    public void testAdjustStaminaByNegative()
     {
-        player.increaseStamina(-1.0);
-        assertEquals(25.0, player.getStaminaLevel(), 0.01);
+        player.adjustStamina(+1);
+        assertEquals(25, player.getStaminaLevel(), 0.01);
     }
 
     @Test
