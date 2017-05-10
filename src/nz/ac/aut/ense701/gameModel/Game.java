@@ -605,7 +605,18 @@ public class Game
 	{
 		// what terrain is the player moving on currently
 		boolean successfulMove = false;
-		if (isPlayerMovePossible(direction))
+		if (getOccupantStringRepresentation(player.getPosition().getNewPosition(direction).getRow(), player.getPosition().getNewPosition(direction).getColumn()).equals("D"))
+		{
+			if (state == GameState.WINNABLE)
+			{
+				System.out.println("At the Door!");
+				state = GameState.WON;
+				String message = "You win! You have done an excellent job.";
+				this.setWinMessage(message);
+				notifyGameEventListeners();
+			}
+		}
+		else if (isPlayerMovePossible(direction))
 		{
 			Position newPosition = player.getPosition().getNewPosition(direction);
 			Terrain terrain = island.getTerrain(newPosition);
@@ -667,18 +678,18 @@ public class Game
 			message = "Sorry, you have lost the game. You do not have sufficient stamina to move.";
 			this.setLoseMessage(message);
 		}
-		else if (predatorsTrapped == totalPredators)
+		else if (predatorsTrapped == 1)
 		{
-			state = GameState.WON;
-			message = "You win! You have done an excellent job and trapped all the predators.";
+			state = GameState.WINNABLE;
+			message = "You have done enough to proceed to the next level. Get to the door to proceed!";
 			this.setWinMessage(message);
 		}
 		else if (kiwiCount == totalKiwis)
 		{
 			if (predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH)
 			{
-				state = GameState.WON;
-				message = "You win! You have counted all the kiwi and trapped at least 80% of the predators.";
+				state = GameState.WINNABLE;
+				message = "You have done enough to proceed to the next level. Get to the door to proceed!";
 				this.setWinMessage(message);
 			}
 		}

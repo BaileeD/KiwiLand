@@ -25,6 +25,8 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 	private final int    FRAME_HEIGHT     = 720;
 	private final String BACKGROUND_IMAGE = "resources/Game_UI2.jpg";
 
+	private boolean goToDoorShown = false;
+
 	private JButton      btnCollect;
 	private JButton      btnCount;
 	private JButton      btnDrop;
@@ -415,11 +417,20 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 
 			game.createNewGame();
 		}
+		else if (game.getState() == GameState.WINNABLE)
+		{
+			if (!goToDoorShown)
+			{
+				JOptionPane.showMessageDialog(this, game.getWinMessage(), "Go to the Door!", JOptionPane.INFORMATION_MESSAGE);
+				goToDoorShown = true;
+			}
+		}
 		else if (game.getState() == GameState.WON)
 		{
 			JOptionPane.showMessageDialog(this, game.getWinMessage(), "Well Done!", JOptionPane.INFORMATION_MESSAGE);
 			game.nextLevel();
 			game.createNewGame();
+			goToDoorShown = false;
 			update();
 		}
 		else if (game.messageForPlayer())
