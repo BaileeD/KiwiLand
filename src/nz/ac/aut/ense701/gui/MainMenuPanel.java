@@ -47,7 +47,7 @@ public class MainMenuPanel extends JPanel
 		pnlButtons.setLayout(layout);
 
 		int buttonSpacing = 30;
-		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing*6)));
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing * 6)));
 		pnlButtons.add(btnNewGame);
 		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
 		pnlButtons.add(btnLoadGame);

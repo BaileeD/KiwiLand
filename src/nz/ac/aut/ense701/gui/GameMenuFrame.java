@@ -119,7 +119,7 @@ public class GameMenuFrame extends JFrame
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-                            
+
 			}
 		});
 

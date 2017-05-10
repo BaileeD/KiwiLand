@@ -1,15 +1,11 @@
 package nz.ac.aut.ense701.main;
 
 import nz.ac.aut.ense701.gameModel.Game;
-import nz.ac.aut.ense701.gui.GameScreenFrame;
 import nz.ac.aut.ense701.gui.MainMenuFrame;
 
-import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
-import javax.swing.*;
 import java.io.File;
-import java.net.URL;
 
 /**
  * Kiwi Count Project

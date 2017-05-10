@@ -55,7 +55,7 @@ public class HowToPlayPanel extends JPanel {
         JPanel instructions = new JPanel();
         String sep = System.lineSeparator();
         //String s = "How to play: <br> Test";
-        String str = "<html>How to play: <br>"
+        String str = "<html><br><br>How to play: <br>"
                 + "The aim of the game is to collect kiwis and trap the predators. To move around the playing map, <br>"
                 + "use the w,a,s,d keys on your keyboard. To move onto the next level you need to trap all of the predators <br>"
                 + "OR collect all the kiwis and trap 80% of the predators.<br><br>"

@@ -357,7 +357,7 @@ public class GameTest extends junit.framework.TestCase
     public void testUseItemTrapFinalPredator(){
         
         assertTrue("Check player moves", trapAllPredators());
-        assertTrue("Game should be won", game.getState()== GameState.WON);    
+        assertTrue("Game should be won", game.getState()== GameState.WINNABLE);    
     }
     
     @Test
@@ -389,12 +389,6 @@ public class GameTest extends junit.framework.TestCase
         assertFalse("Trap should be fixed", trap.isBroken());
     }
    
-    @Test
-    public void testPlayerMoveToInvalidPosition(){
-        //A move NORTH would be invalid from player's start position
-        assertFalse("Move not valid", game.playerMove(MoveDirection.NORTH));
-    }
- 
     @Test
     public void testPlayerMoveValidNoHazards(){
         int stamina = player.getStaminaLevel();  
