@@ -420,6 +420,7 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 		else if (game.getState() == GameState.WON)
 		{
 			JOptionPane.showMessageDialog(this, game.getWinMessage(), "Well Done!", JOptionPane.INFORMATION_MESSAGE);
+			game.answerQuestion();
 			game.nextLevel();
 			game.createNewGame();
 			update();
