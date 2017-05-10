@@ -26,7 +26,7 @@ import nz.ac.aut.ense701.gameModel.GameSave;
 
 /**
  *
- * @author KCV
+ * @author Chaitanya Varma
  */
 public class SaveGameDialog extends JDialog {
 
@@ -39,11 +39,11 @@ public class SaveGameDialog extends JDialog {
     private JLabel labelSaveName;
     private JButton btnSave;
     private JButton btnCancel;
-    private Game game;
+    GameScreenFrame gameFrame;
 
-    public SaveGameDialog(GameScreenFrame frame, Game game) {
-        super(frame);
-        this.game = game;
+    public SaveGameDialog(GameScreenFrame gameFrame) {
+        super(gameFrame);
+        this.gameFrame = gameFrame;
         initDialog();
     }
 
@@ -61,6 +61,7 @@ public class SaveGameDialog extends JDialog {
         cs.fill = GridBagConstraints.HORIZONTAL;
 
         labelPlayerName = new JLabel("Player Name: ");
+        labelPlayerName.setForeground(Color.WHITE);
         cs.gridx = 0;
         cs.gridy = 0;
         cs.gridwidth = 1;
@@ -74,6 +75,7 @@ public class SaveGameDialog extends JDialog {
         panel.add(textPlayerName, cs);
 
         labelSaveName = new JLabel("Save Name: ");
+        labelSaveName.setForeground(Color.WHITE);
         cs.gridx = 0;
         cs.gridy = 1;
         cs.gridwidth = 1;
@@ -136,7 +138,7 @@ public class SaveGameDialog extends JDialog {
         gameSave.setPlayerName(this.textPlayerName.getText().trim());
         gameSave.setSaveName(this.textSaveName.getText().trim());
         gameSave.setSaveDate(new Date());
-        gameSave.setLevel(this.game.getCurrentLevelNumber());
+        gameSave.setLevel(gameFrame.getGame().getCurrentLevelNumber());
         boolean save = gameSave.save();
         if (save) {
             JOptionPane.showMessageDialog(this, "Saved Game", "Save", JOptionPane.PLAIN_MESSAGE);

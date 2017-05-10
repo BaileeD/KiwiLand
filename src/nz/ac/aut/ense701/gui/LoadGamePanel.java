@@ -1,9 +1,9 @@
 package nz.ac.aut.ense701.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Dimension;
+import nz.ac.aut.ense701.gameModel.Game;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import javax.swing.table.DefaultTableModel;
@@ -27,6 +27,10 @@ public class LoadGamePanel extends JPanel {
 
     public LoadGamePanel(MainMenuFrame frame) {
         theFrame = frame;
+
+        setOpaque(false);
+        setFocusable(false);
+
         initPanel();
         enableButtons(false);
     }
@@ -34,7 +38,9 @@ public class LoadGamePanel extends JPanel {
     private void initPanel() {
         this.setLayout(new BorderLayout());
         JPanel panel = new JPanel();
+        panel.setOpaque(false);
         labelPlayerName = new JLabel("Player Name: ");
+        labelPlayerName.setForeground(Color.WHITE);
         panel.add(labelPlayerName);
 
         textPlayerName = new JTextField(15);
@@ -51,7 +57,7 @@ public class LoadGamePanel extends JPanel {
         this.add(panel, BorderLayout.PAGE_START);
 
         panel = new JPanel();
-        //tableData = new JTable();
+        panel.setOpaque(false);
         String[] columnNames = {"Save Name", "Date", "Level", "id"};
         model = new DefaultTableModel(0, 0);
         model.setColumnIdentifiers(columnNames);
@@ -76,6 +82,7 @@ public class LoadGamePanel extends JPanel {
             }
         });
         JPanel panelBottom = new JPanel();
+        panelBottom.setOpaque(false);
         panelBottom.add(btnBack);
 
         btnLoad = new JButton("Load Save");

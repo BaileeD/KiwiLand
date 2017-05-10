@@ -143,6 +143,16 @@ public class Game {
         return player;
     }
 
+    public Integer getCurrentLevelNumber()
+    {
+        return this.currentLevelNumber;
+    }
+    
+    public void setCurrentLevelNumber(int currentLevelNumber)
+    {
+        this.currentLevelNumber = currentLevelNumber;
+    }
+    
     /**
      * Checks if possible to move the player in the specified direction.
      *
@@ -272,17 +282,6 @@ public class Game {
         return player.getName();
     }
 
-    
-    public Integer getCurrentLevelNumber()
-    {
-        return this.currentLevelNumber;
-    }
-    
-    public void setCurrentLevelNumber(int currentLevelNumber)
-    {
-        this.currentLevelNumber = currentLevelNumber;
-    }
-            
     /**
      * Is player in this position?
      *
