@@ -1,7 +1,5 @@
 package nz.ac.aut.ense701.gui;
 
-import nz.ac.aut.ense701.gameModel.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
@@ -40,8 +38,7 @@ public class LoadGamePanel extends JPanel
 			}
 		});
 
-
-		btnBack.setLocation(50,50);
+		btnBack.setLocation(50, 50);
 
 		add(btnBack);
 

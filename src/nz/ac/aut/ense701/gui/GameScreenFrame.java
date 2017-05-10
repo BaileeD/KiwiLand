@@ -87,7 +87,6 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 		int panelWidth = 800;
 		int panelHeight = 400;
 
-
 		gameTilesPanel = new JPanel();
 		gameTilesPanel.setSize(panelWidth, panelHeight);
 		add(gameTilesPanel);

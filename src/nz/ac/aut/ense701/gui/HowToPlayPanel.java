@@ -1,7 +1,5 @@
 package nz.ac.aut.ense701.gui;
 
-import nz.ac.aut.ense701.gameModel.Game;
-
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
