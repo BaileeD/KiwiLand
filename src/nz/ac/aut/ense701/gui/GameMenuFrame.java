@@ -46,8 +46,6 @@ public class GameMenuFrame extends JFrame
 		setLocationRelativeTo(null); // centers it in the screen
 		setResizable(false); // so the screen size cant be changed
 
-		setAlwaysOnTop(true);
-
 		//pack(); // so the screen is as tight as it can be
 	}
 
@@ -103,7 +101,7 @@ public class GameMenuFrame extends JFrame
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-
+				btnSaveGameActionPerformed();
 			}
 		});
 
@@ -137,8 +135,26 @@ public class GameMenuFrame extends JFrame
 		{
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
-				System.exit(1);
+				System.exit(0);
 			}
 		});
+	}
+
+	private void btnSaveGameActionPerformed() {
+		JFrame loadFrame = new JFrame();
+
+		String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
+
+		loadFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		loadFrame.setTitle("Kiwi Land - Main Menu");
+		loadFrame.setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+		loadFrame.setVisible(true);
+		loadFrame.setLayout(new FlowLayout());
+		loadFrame.setSize(900, 720);
+		loadFrame.setLocationRelativeTo(null); // centers it in the screen
+		loadFrame.setResizable(false); // so the screen size cant be changed
+
+		loadFrame.add(new LoadGamePanel(this, loadFrame, gameFrame.getGame().getCurrentLevelNumber()));
+		loadFrame.setVisible(true);
 	}
 }

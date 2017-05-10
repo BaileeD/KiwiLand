@@ -32,16 +32,9 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 	private JButton      btnDrop;
 	private JButton      btnUse;
 	private JButton      btnExamine;
-	private JLabel       lblPredators;
 	private JList        listInventory;
 	private JList        listObjects;
 	private JPanel       gameTilesPanel;
-	private JProgressBar progBackpackSize;
-	private JProgressBar progBackpackWeight;
-	private JProgressBar progPlayerStamina;
-	private JLabel       lblKiwisCounted;
-	private JLabel       lblPlayerName;
-	private JLabel       lblPredatorsLeft;
 	private Game         game;
 
 	/**
@@ -489,6 +482,11 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 	@Override public void keyReleased(KeyEvent e)
 	{
 
+	}
+
+	public Game getGame()
+	{
+		return game;
 	}
 
 	public void btnOpenOptionsActionPerformed()

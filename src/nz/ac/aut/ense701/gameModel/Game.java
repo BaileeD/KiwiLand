@@ -92,6 +92,28 @@ public class Game
 		}
 	}
 
+	public int getCurrentLevelNumber()
+	{
+		return this.currentLevelNumber;
+	}
+
+	public void setCurrentLevelNumber(int currentLevelNumber)
+	{
+		this.currentLevelNumber = currentLevelNumber;
+		switch (currentLevelNumber)
+		{
+			case 1:
+				currentLevelName = LEVEL_1;
+				break;
+			case 2:
+				currentLevelName = LEVEL_2;
+				break;
+			case 3:
+				currentLevelName = LEVEL_3;
+				break;
+		}
+	}
+
 	/**
 	 * *********************************************************************************************************************
 	 * Accessor methods for game data
@@ -605,7 +627,8 @@ public class Game
 	{
 		// what terrain is the player moving on currently
 		boolean successfulMove = false;
-		if (getOccupantStringRepresentation(player.getPosition().getNewPosition(direction).getRow(), player.getPosition().getNewPosition(direction).getColumn()).equals("D"))
+		if (getOccupantStringRepresentation(player.getPosition().getNewPosition(direction).getRow(),
+				player.getPosition().getNewPosition(direction).getColumn()).equals("D"))
 		{
 			if (state == GameState.WINNABLE)
 			{
@@ -753,7 +776,7 @@ public class Game
 		{
 			Occupant occupant = island.getPredator(current);
 			/*Display a fact about a certain predator based off the name eg a stoat will have a fact
-            about a stoat. The islad.getPredator(current).getName() calls the name of the predator in
+			about a stoat. The islad.getPredator(current).getName() calls the name of the predator in
             the current position.*/
 			showMessage(fact.getFact(island.getPredator(current).getName()), "Predator Fact");
 			//Predator has been trapped so remove

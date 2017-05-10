@@ -79,7 +79,13 @@ public class MainMenuFrame extends JFrame
 
 	public void openNewGameMenu()
 	{
-		createGame();
+		createGame(1);
+		setVisible(false);
+	}
+
+	public void openSaveGameMenu(int level)
+	{
+		createGame(level);
 		setVisible(false);
 	}
 
@@ -97,18 +103,21 @@ public class MainMenuFrame extends JFrame
 
 	public void exitGame()
 	{
-		System.exit(1);
+		System.exit(0);
 	}
 
-	public void createGame()
+	public void createGame(int level)
 	{
 		final GameScreenFrame gui = new GameScreenFrame(game);
+		game.setCurrentLevelNumber(level);
+		game.createNewGame();
 
 		// make the GUI visible
 		java.awt.EventQueue.invokeLater(new Runnable()
 		{
 			@Override public void run()
 			{
+
 				gui.setVisible(true);
 			}
 		});
