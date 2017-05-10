@@ -3,6 +3,7 @@ package nz.ac.aut.ense701.gui;
 import nz.ac.aut.ense701.gameModel.Game;
 
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionListener;
 
 /**
@@ -18,12 +19,18 @@ public class LoadGamePanel extends JPanel
 	{
 		theFrame = frame;
 
+		setOpaque(false);
+		setFocusable(false);
+
 		initPanel();
 	}
 
 	private void initPanel()
 	{
-		btnBack = new JButton("Back");
+		btnBack = new JButton("BACK");
+		btnBack.setMaximumSize(new Dimension(150, 50));
+		btnBack.setMinimumSize(new Dimension(150, 50));
+		btnBack.setPreferredSize(new Dimension(150, 50));
 
 		btnBack.addActionListener(new ActionListener()
 		{
@@ -33,6 +40,10 @@ public class LoadGamePanel extends JPanel
 			}
 		});
 
+
+		btnBack.setLocation(50,50);
+
 		add(btnBack);
+
 	}
 }

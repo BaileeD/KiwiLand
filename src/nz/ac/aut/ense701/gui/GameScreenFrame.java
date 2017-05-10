@@ -23,7 +23,7 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 
 	private final int    FRAME_WIDTH      = 900;
 	private final int    FRAME_HEIGHT     = 720;
-	private final String BACKGROUND_IMAGE = "resources/Game_UI.jpg";
+	private final String BACKGROUND_IMAGE = "resources/Game_UI2.jpg";
 
 	private JButton      btnCollect;
 	private JButton      btnCount;
@@ -82,10 +82,11 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 	 */
 	private void initIslandGrid()
 	{
-		int panelWidth = 820;
-		int panelHeight = 420;
-		int panelxLocation = 40;
-		int panelyLocation = 80;
+		int panelxLocation = 50;
+		int panelyLocation = 88;
+		int panelWidth = 800;
+		int panelHeight = 400;
+
 
 		gameTilesPanel = new JPanel();
 		gameTilesPanel.setSize(panelWidth, panelHeight);
@@ -131,7 +132,6 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 	 */
 	private void initPlayerInterface()
 	{
-		Color backgrondColor = new Color(85, 79, 64);
 		int listRows = 5;
 		int listWidth = 160;
 		int panelxSize = 170;
@@ -195,7 +195,7 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 		JPanel pnlInventoryButtons = new JPanel(new FlowLayout());
 		pnlInventoryButtons.add(btnUse);
 		pnlInventoryButtons.add(btnDrop);
-		pnlInventoryButtons.setBackground(backgrondColor);
+		pnlInventoryButtons.setOpaque(false);
 
 		// Label
 		JLabel lblInventory = new JLabel("<html> <font color='white'>Inventory</font></html>");
@@ -266,8 +266,7 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 		JPanel pnlObjectButtons = new JPanel(new FlowLayout());
 		pnlObjectButtons.add(btnCollect);
 		pnlObjectButtons.add(btnCount);
-		pnlObjectButtons.setBackground(backgrondColor);
-
+		pnlObjectButtons.setOpaque(false);
 		// Label
 		JLabel objectLabel = new JLabel("<html> <font color='white'>Objects</font></html>");
 
@@ -420,8 +419,8 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 		else if (game.getState() == GameState.WON)
 		{
 			JOptionPane.showMessageDialog(this, game.getWinMessage(), "Well Done!", JOptionPane.INFORMATION_MESSAGE);
-			game.nextLevel();
-			game.createNewGame();
+			game.answerQuestion();
+                        game.createNewGame();
 			update();
 		}
 		else if (game.messageForPlayer())
@@ -471,6 +470,9 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 				game.createNewGame();
 				update();
 				break;
+			case KeyEvent.VK_ESCAPE:
+				btnOpenOptionsActionPerformed();
+				break;
 		}
 	}
 
@@ -481,7 +483,9 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 
 	public void btnOpenOptionsActionPerformed()
 	{
-		System.out.println("You did it!");
+		GameMenuFrame menu = new GameMenuFrame(this);
+		setEnabled(false);
+		setFocusable(false);
 	}
 
 	private void btnCollectActionPerformed()

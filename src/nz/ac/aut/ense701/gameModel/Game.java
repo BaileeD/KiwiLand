@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import javax.swing.JOptionPane;
@@ -599,11 +600,13 @@ public class Game {
             state = GameState.WON;
             message = "You win! You have done an excellent job and trapped all the predators.";
             this.setWinMessage(message);
+            this.getDiscoveredFacts();
         } else if (kiwiCount == totalKiwis) {
             if (predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH) {
                 state = GameState.WON;
                 message = "You win! You have counted all the kiwi and trapped at least 80% of the predators.";
                 this.setWinMessage(message);
+                this.getDiscoveredFacts();
             }
         }
         // notify listeners about changes
@@ -855,5 +858,51 @@ public class Game {
     private String winMessage = "";
     private String loseMessage = "";
     private String playerMessage = "";
+
+    public void answerQuestion() {
+        Random random = new Random();
+        int max = 4;
+        int min = 1;
+        int op = random.nextInt(max - min + 1) + min;
+        String question = "";
+        Object[] options = new Object[4];
+        
+        switch (op) {
+            case 1: question = "What do kiwis have at the end of their beaks to allow them to sense prey moving underground?";
+                    options[0] = "Eyes";
+                    options[1] = "Ears";
+                    options[2] = "Sensory Pits";
+                    break;
+            case 2: question = "Brown kiwi are known to eat bracket fungi and ________?";
+                    options[0] = "Leaves";
+                    options[1] = "Wetas";
+                    options[2] = "Frogs";
+                    break;
+            case 3: question = "Kiwis are omnivores, herbivores or carnivores?";
+                    options[0] = "Herbivores";
+                    options[1] = "Carnivores";
+                    options[2] = "Omnivores";
+                    break;
+            case 4: question = "An average of _____ kiwis are killed by predators every week?";
+                    options[0] = "13";
+                    options[1] = "5";
+                    options[2] = "27";
+                    break;         
+        }
+        Object[] value = {options[0], options[1], options[2]};     
+        int n = JOptionPane.showOptionDialog(null,
+                question,
+                "Please answer to continue",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, //do not use a custom Icon
+                value, //the titles of buttons
+                value[0]); //default button title
+        if (n == JOptionPane.CANCEL_OPTION) {
+            this.nextLevel();
+        } else {
+            this.showMessage("Incorrect", "Incorrect");
+        }
+    }
 
 }
