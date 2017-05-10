@@ -1,0 +1,8 @@
+#DB URL
+dburl=jdbc:mysql://localhost:3306/kiwiisland?useSSL=false
+
+#DB Host User Name
+username=root
+
+#DB Host Password
+password=root
