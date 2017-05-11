@@ -25,7 +25,7 @@ import nz.ac.aut.ense701.gameModel.Game;
 import nz.ac.aut.ense701.gameModel.GameSave;
 
 /**
- *
+ * This class is used to show save dialog to the user
  * @author Chaitanya Varma
  */
 public class SaveGameDialog extends JDialog {
@@ -39,14 +39,25 @@ public class SaveGameDialog extends JDialog {
     private JLabel labelSaveName;
     private JButton btnSave;
     private JButton btnCancel;
-    GameScreenFrame gameFrame;
-
-    public SaveGameDialog(GameScreenFrame gameFrame) {
-        super(gameFrame);
-        this.gameFrame = gameFrame;
+    LoadGamePanel loadGamePanel;
+    private int level;
+    
+    /**
+     * Initial SaveGameDialog constructor.
+     *
+     * @param loadGamePanel reference to LoadGamePanel class
+     * @param level game level
+     */
+    public SaveGameDialog(LoadGamePanel loadGamePanel, int level) {
+        this.loadGamePanel = loadGamePanel;
+        this.level = level;
         initDialog();
+        
     }
 
+    /**
+     * Initialize the dialog
+     */
     private void initDialog() {
         this.setDefaultCloseOperation(WindowConstants.DISPOSE_ON_CLOSE);
         this.setTitle("Kiwi Land - Save Game");
@@ -124,6 +135,9 @@ public class SaveGameDialog extends JDialog {
         pack();
     }
 
+    /**
+     * save a game
+     */
     private void saveGame() {
         if (this.textPlayerName.getText().trim().equals("")) {
             JOptionPane.showMessageDialog(this, "Please enter player name", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -138,10 +152,11 @@ public class SaveGameDialog extends JDialog {
         gameSave.setPlayerName(this.textPlayerName.getText().trim());
         gameSave.setSaveName(this.textSaveName.getText().trim());
         gameSave.setSaveDate(new Date());
-        gameSave.setLevel(gameFrame.getGame().getCurrentLevelNumber());
+        gameSave.setLevel(level);
         boolean save = gameSave.save();
         if (save) {
             JOptionPane.showMessageDialog(this, "Saved Game", "Save", JOptionPane.PLAIN_MESSAGE);
+            loadGamePanel.refreshGameSaves();
             this.dispose();
         }
     }
