@@ -1,39 +1,35 @@
 package nz.ac.aut.ense701.main;
 
-import java.util.ArrayList;
-import nz.ac.aut.ense701.gameModel.Facts;
 import nz.ac.aut.ense701.gameModel.Game;
-import nz.ac.aut.ense701.gui.KiwiCountUI;
+import nz.ac.aut.ense701.gui.MainMenuFrame;
+
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import java.io.File;
 
 /**
  * Kiwi Count Project
- * 
+ *
  * @author AS
  * @version 2011
  */
-public class Main 
+public class Main
 {
-    /**
-     * Main method of Kiwi Count.
-     * 
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) 
-    {
+	/**
+	 * Main method of Kiwi Count.
+	 *
+	 * @param args the command line arguments
+	 */
+	public static void main(String[] args) throws Exception
+	{
+		Clip clip = AudioSystem.getClip();
+		clip.open(AudioSystem.getAudioInputStream(new File("resources/Background_Music.wav")));
+		clip.loop(Clip.LOOP_CONTINUOUSLY);
 
-        // create the game object
-        final Game game = new Game();
-        // create the GUI for the game
-        final KiwiCountUI  gui  = new KiwiCountUI(game);
-        // make the GUI visible
-        java.awt.EventQueue.invokeLater(new Runnable() 
-        {
-            @Override
-            public void run() 
-            {
-                gui.setVisible(true);
-            }
-        });
-    }
+		// create the game object
+		final Game game = new Game();
+		// create the GUI for the game
+		final MainMenuFrame mainMenu = new MainMenuFrame(game);
+	}
 
 }

@@ -6,6 +6,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Locale;
+import java.util.Random;
 import java.util.Scanner;
 import java.util.Set;
 import javax.swing.JOptionPane;
@@ -72,7 +73,26 @@ public class Game {
         if (currentLevelNumber > LEVEL_MAX) {
             currentLevelNumber = 1;
         }
+        
+        switch (currentLevelNumber) {
+            case 1:
+                currentLevelName = LEVEL_1;
+                break;
+            case 2:
+                currentLevelName = LEVEL_2;
+                break;
+            case 3:
+                currentLevelName = LEVEL_3;
+                break;
+        }
+    }
 
+    public int getCurrentLevelNumber() {
+        return this.currentLevelNumber;
+    }
+
+    public void setCurrentLevelNumber(int currentLevelNumber) {
+        this.currentLevelNumber = currentLevelNumber;
         switch (currentLevelNumber) {
             case 1:
                 currentLevelName = LEVEL_1;
@@ -158,8 +178,7 @@ public class Game {
             // what is the terrain at that new position?
             Terrain newTerrain = island.getTerrain(newPosition);
             // can the playuer do it?
-            isMovePossible = player.hasStaminaToMove(newTerrain)
-                    && player.isAlive();
+            isMovePossible = player.hasStaminaToMove(newTerrain) && player.isAlive();
         }
         return isMovePossible;
     }
@@ -541,7 +560,16 @@ public class Game {
     public boolean playerMove(MoveDirection direction) {
         // what terrain is the player moving on currently
         boolean successfulMove = false;
-        if (isPlayerMovePossible(direction)) {
+        if (getOccupantStringRepresentation(player.getPosition().getNewPosition(direction).getRow(),
+                player.getPosition().getNewPosition(direction).getColumn()).equals("D")) {
+            if (state == GameState.WINNABLE) {
+                System.out.println("At the Door!");
+                state = GameState.WON;
+                String message = "You win! You have done an excellent job.";
+                this.setWinMessage(message);
+                notifyGameEventListeners();
+            }
+        } else if (isPlayerMovePossible(direction)) {
             Position newPosition = player.getPosition().getNewPosition(direction);
             Terrain terrain = island.getTerrain(newPosition);
 
@@ -595,14 +623,14 @@ public class Game {
             state = GameState.LOST;
             message = "Sorry, you have lost the game. You do not have sufficient stamina to move.";
             this.setLoseMessage(message);
-        } else if (predatorsTrapped == totalPredators) {
-            state = GameState.WON;
-            message = "You win! You have done an excellent job and trapped all the predators.";
+        } else if (predatorsTrapped == 1) {
+            state = GameState.WINNABLE;
+            message = "You have done enough to proceed to the next level. Get to the door to proceed!";
             this.setWinMessage(message);
         } else if (kiwiCount == totalKiwis) {
             if (predatorsTrapped >= totalPredators * MIN_REQUIRED_CATCH) {
-                state = GameState.WON;
-                message = "You win! You have counted all the kiwi and trapped at least 80% of the predators.";
+                state = GameState.WINNABLE;
+                message = "You have done enough to proceed to the next level. Get to the door to proceed!";
                 this.setWinMessage(message);
             }
         }
@@ -661,7 +689,7 @@ public class Game {
         {
             Occupant occupant = island.getPredator(current);
             /*Display a fact about a certain predator based off the name eg a stoat will have a fact
-            about a stoat. The islad.getPredator(current).getName() calls the name of the predator in
+			about a stoat. The islad.getPredator(current).getName() calls the name of the predator in
             the current position.*/
             showMessage(fact.getFact(island.getPredator(current).getName()), "Predator Fact");
             //Predator has been trapped so remove
@@ -697,7 +725,8 @@ public class Game {
             Tool trap = player.getTrap();
             if (trap != null) {
                 trap.setBroken();
-                this.setPlayerMessage("Sorry your predator trap is broken. You will need to find tools to fix it before you can use it again.");
+                this.setPlayerMessage(
+                        "Sorry your predator trap is broken. You will need to find tools to fix it before you can use it again.");
             }
         } else // hazard reduces player's stamina
         {
@@ -792,9 +821,7 @@ public class Game {
         double playerMaxBackpackSize = input.nextDouble();
 
         Position pos = new Position(island, playerPosRow, playerPosCol);
-        player = new Player(pos, playerName,
-                playerMaxStamina,
-                playerMaxBackpackWeight, playerMaxBackpackSize);
+        player = new Player(pos, playerName, playerMaxStamina, playerMaxBackpackWeight, playerMaxBackpackSize);
         island.updatePlayerPosition(player);
     }
 
@@ -834,7 +861,10 @@ public class Game {
                 totalPredators++;
             } else if (occType.equals("F")) {
                 occupant = new Fauna(occPos, occName, occDesc);
+            } else if (occType.equals("D")) {
+                occupant = new Door(occPos, occName, occDesc);
             }
+
             if (occupant != null) {
                 island.addOccupant(occPos, occupant);
             }
@@ -855,5 +885,55 @@ public class Game {
     private String winMessage = "";
     private String loseMessage = "";
     private String playerMessage = "";
+    
+    public void answerQuestion() {
+        Random random = new Random();
+        int max = 4;
+        int min = 1;
+        int op = random.nextInt(max - min + 1) + min;
+        String question = "";
+        Object[] options = new Object[4];
+
+        switch (op) {
+            case 1:
+                question = "What do kiwis have at the end of their beaks to allow them to sense prey moving underground?";
+                options[0] = "Eyes";
+                options[1] = "Ears";
+                options[2] = "Sensory Pits";
+                break;
+            case 2:
+                question = "Brown kiwi are known to eat bracket fungi and ________?";
+                options[0] = "Leaves";
+                options[1] = "Wetas";
+                options[2] = "Frogs";
+                break;
+            case 3:
+                question = "Kiwis are omnivores, herbivores or carnivores?";
+                options[0] = "Herbivores";
+                options[1] = "Carnivores";
+                options[2] = "Omnivores";
+                break;
+            case 4:
+                question = "An average of _____ kiwis are killed by predators every week?";
+                options[0] = "13";
+                options[1] = "5";
+                options[2] = "27";
+                break;
+        }
+        Object[] value = {options[0], options[1], options[2]};
+        int n = JOptionPane.showOptionDialog(null,
+                question,
+                "Please answer to continue",
+                JOptionPane.YES_NO_CANCEL_OPTION,
+                JOptionPane.QUESTION_MESSAGE,
+                null, //do not use a custom Icon
+                value, //the titles of buttons
+                value[0]); //default button title
+        if (n == JOptionPane.CANCEL_OPTION) {
+            this.nextLevel();
+        } else {
+            this.showMessage("Incorrect", "Incorrect");
+        }
+    }
 
 }
