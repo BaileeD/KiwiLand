@@ -38,7 +38,17 @@ public class GameSavesTest {
      */
     @Test
     public void testGetAllGameSaves() {
-        ArrayList<GameSave> gameSaves = GameSave.getAllGameSaves("John Doe");
+        ArrayList<GameSave> gameSaves = GameSave.getAllGameSaves();
+        assertTrue(gameSaves.size() > 0);
+    }
+    
+    
+    /**
+     * Test of getAllGameSaves method, of class GameSave with no player name.
+     */
+    @Test
+    public void testGetPlayerGameSaves() {
+        ArrayList<GameSave> gameSaves = GameSave.getPlayerGameSaves("John Doe");
         assertTrue(gameSaves.size() > 0);
     }
     
@@ -56,9 +66,10 @@ public class GameSavesTest {
      */
     @Test
     public void testAllGameSavesInvalidPlayer() {
-        ArrayList<GameSave> gameSaves = GameSave.getAllGameSaves("");
+        ArrayList<GameSave> gameSaves = GameSave.getPlayerGameSaves("John Doeeeee");
         assertTrue(gameSaves.isEmpty());
     }
+       
     
     /**
      * Test of getLastGameSave method, of class GameSave with no player name.
