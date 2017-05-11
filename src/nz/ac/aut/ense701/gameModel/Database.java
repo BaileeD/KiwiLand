@@ -144,6 +144,10 @@ public class Database {
     
     /*
     * Saves a user game to database
+    * @param playerName - player name
+    * @param saveName - player save name
+    * @param level - game level
+    * @param date - current date
     */
     public boolean saveGame(String playerName, String saveName, int level, Date date)
     {
@@ -177,8 +181,9 @@ public class Database {
     
     /*
     * gets all game saves of a user ordered by last game saved date
+    * @param playerName - player name
     */
-    public ArrayList<GameSave> getAllGameSaves(String playerName)
+    public ArrayList<GameSave> getPlayerGameSaves(String playerName)
     {
         ArrayList<GameSave> gameSaves = null;
         openConnection();
@@ -213,7 +218,45 @@ public class Database {
     }
     
     /*
+    * gets all game saves of a user ordered by last game saved date
+    */
+    public ArrayList<GameSave> getAllGameSaves()
+    {
+        ArrayList<GameSave> gameSaves = null;
+        openConnection();
+        try
+        {
+            String sqlQuery = "SELECT * FROM gamesaves ORDER BY gamesaves.date DESC";
+            Statement statement = connection.createStatement();
+            ResultSet resultSet = statement.executeQuery(sqlQuery);
+            gameSaves = new ArrayList<GameSave>();
+            while(resultSet.next())
+            {
+                GameSave gameSave = new GameSave();
+                gameSave.setGameSaveId(resultSet.getInt(1));
+                gameSave.setPlayerName(resultSet.getString(2));
+                gameSave.setSaveName(resultSet.getString(3));
+                gameSave.setLevel(resultSet.getInt(4));
+                gameSave.setSaveDate(resultSet.getTimestamp(5));
+                gameSaves.add(gameSave);
+            }
+            resultSet.close();
+            statement.close();      
+        }
+        catch(Exception ex)
+        {
+            java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            closeConnection();
+        }
+        return gameSaves;
+    }
+    
+    /*
     * gets last game saved date
+    * @param playerName - player name
     */
     public GameSave getLastGameSave(String playerName)
     {
@@ -251,14 +294,15 @@ public class Database {
     
     /*
     * deletes a game save
+    * @param id - gamesaveid in gamesaves table
     */
-    public boolean deleteGameSave(int save)
+    public boolean deleteGameSave(int id)
     {
         boolean delete = false;
         openConnection();
         try
         {
-            String sqlQuery = "DELETE FROM gamesaves WHERE gamesaveid='" + save +"'";
+            String sqlQuery = "DELETE FROM gamesaves WHERE gamesaveid='" + id +"'";
 
             Statement statement = connection.createStatement();
             int result = statement.executeUpdate(sqlQuery);
@@ -276,6 +320,40 @@ public class Database {
             closeConnection();
         }
         return delete;
+    }
+    
+    /*
+    * Updates a game save
+    * @param id - gamesaveid in gamesaves table
+    * @param level - game level
+    * @param date - current date
+    */
+    public boolean updateGame(int id, int level, Date date)
+    {
+        boolean insert = false;
+        openConnection();
+        try
+        {
+            PreparedStatement st  = connection.prepareStatement("update gamesaves set level=?, date=? where gamesaveid=?");
+            st.setInt(1, level);
+            st.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
+            st.setInt(3, id);
+            
+            int result = st.executeUpdate();
+            if (result == 1) {
+                insert = true;
+            }
+            st.close();
+        }
+        catch(Exception ex)
+        {
+            java.util.logging.Logger.getLogger(Database.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+        }
+        finally
+        {
+            closeConnection();
+        }
+        return insert;
     }
     
     /**

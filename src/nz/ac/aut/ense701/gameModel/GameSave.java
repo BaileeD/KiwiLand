@@ -87,9 +87,19 @@ public class GameSave {
      * gets all saved games of a player
      * @param playerName player name for which saved games will be returned
      */
-    public static ArrayList<GameSave> getAllGameSaves(String playerName)
+    public static ArrayList<GameSave> getPlayerGameSaves(String playerName)
     {
-        ArrayList<GameSave> gameSaves = db.getAllGameSaves(playerName);
+        ArrayList<GameSave> gameSaves = db.getPlayerGameSaves(playerName);
+        return gameSaves;
+    }
+    
+    /**
+     * gets all saved games of a player
+     * 
+     */
+    public static ArrayList<GameSave> getAllGameSaves()
+    {
+        ArrayList<GameSave> gameSaves = db.getAllGameSaves();
         return gameSaves;
     }
     
@@ -103,8 +113,24 @@ public class GameSave {
         return gameSave;
     }
     
-    public static boolean deleteSave(int save)
+    /**
+     * deletes a game save
+     * @param id save id 
+     */
+    public static boolean deleteSave(int id)
     {
-        return db.deleteGameSave(save);
+        return db.deleteGameSave(id);
+    }
+    
+    /**
+     * updates a game save
+     * @param id save id 
+     * @param level game level
+     * @date current date
+     */
+    public static boolean updateGame(int id, int level, Date date)
+    {
+        boolean saveStatus = db.updateGame(id, level, date);
+        return saveStatus;
     }
 }
