@@ -1,5 +1,8 @@
 package nz.ac.aut.ense701.gameModel;
 
+import nz.ac.aut.ense701.gameModel.Island;
+import nz.ac.aut.ense701.gameModel.Position;
+import nz.ac.aut.ense701.gameModel.gameTiles.Fauna;
 import org.junit.Test;
 import static org.junit.Assert.*;
 

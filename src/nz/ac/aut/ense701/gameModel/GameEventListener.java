@@ -8,6 +8,7 @@
 
 package nz.ac.aut.ense701.gameModel;
 
-public interface GameEventListener {
-    public void gameStateChanged();
+public interface GameEventListener
+{
+	public void gameStateChanged();
 }

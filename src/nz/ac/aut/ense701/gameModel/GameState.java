@@ -5,6 +5,7 @@ package nz.ac.aut.ense701.gameModel;
  *
  * @author AS
  */
-public enum GameState {
-    PLAYING, WINNABLE, WON, LOST;
+public enum GameState
+{
+	PLAYING, WINNABLE, WON, LOST;
 }

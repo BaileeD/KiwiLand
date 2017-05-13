@@ -3,165 +3,217 @@ package nz.ac.aut.ense701.gui;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 
 /**
  * Created by Scott Richards on 09-May-17.
  */
-public class GameMenuFrame extends JFrame {
+public class GameMenuFrame extends JFrame
+{
+	private final int FRAME_WIDTH  = 200;
+	private final int FRAME_HEIGHT = 270;
 
-    private final int FRAME_WIDTH = 200;
-    private final int FRAME_HEIGHT = 270;
+	GameScreenFrame gameFrame;
+	MainMenuFrame   mainMenuFrame;
 
-    GameScreenFrame gameFrame;
+	private JPanel  pnlButtons;
+	private JButton btnSaveGame;
+	private JButton btnLoadGame;
+	private JButton btnHowToPlay;
+	private JButton btnBack;
+	private JButton btnExit;
 
-    private JPanel pnlButtons;
-    private JButton btnSaveGame;
-    private JButton btnLoadGame;
-    private JButton btnHowToPlay;
-    private JButton btnBack;
+	public GameMenuFrame(GameScreenFrame theFrame, MainMenuFrame mainMenuFrame)
+	{
+		gameFrame = theFrame;
+		this.mainMenuFrame = mainMenuFrame;
 
-    private JButton btnExit;
+		initPanel();
+		initFrame();
+		initButtons();
+	}
 
-    public GameMenuFrame(GameScreenFrame theFrame) {
-        gameFrame = theFrame;
+	private void initFrame()
+	{
+		setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
+		setUndecorated(true); // removes the borders of the frame
+		getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
+		setTitle("Menu");
+		setVisible(true);
+		setLayout(new FlowLayout());
+		setSize(FRAME_WIDTH, FRAME_HEIGHT);
+		setLocationRelativeTo(null); // centers it in the screen
+		setResizable(false); // so the screen size cant be changed
 
-        initPanel();
-        initFrame();
-        initButtons();
-    }
+		//pack(); // so the screen is as tight as it can be
+	}
 
-    /**
-     * Initializes the frame
-     */
-    private void initFrame() {
-        setDefaultCloseOperation(WindowConstants.DO_NOTHING_ON_CLOSE);
-        setUndecorated(true); // removes the borders of the frame
-        getRootPane().setBorder(BorderFactory.createMatteBorder(2, 2, 2, 2, Color.BLACK));
-        setTitle("Menu");
-        setVisible(true);
-        setLayout(new FlowLayout());
-        setSize(FRAME_WIDTH, FRAME_HEIGHT);
-        setLocationRelativeTo(null); // centers it in the screen
-        setResizable(false); // so the screen size cant be changed
+	private void initPanel()
+	{
+		pnlButtons = new JPanel();
 
-        //pack(); // so the screen is as tight as it can be
-    }
+		btnSaveGame = new JButton("Save");
+		btnLoadGame = new JButton("Load");
+		btnHowToPlay = new JButton("How to Play");
+		btnBack = new JButton("Return to Game");
+		btnExit = new JButton("Main Menu");
 
-    private void initPanel() {
-        pnlButtons = new JPanel();
+		setButtonProperties(btnSaveGame);
+		setButtonProperties(btnLoadGame);
+		setButtonProperties(btnHowToPlay);
+		setButtonProperties(btnBack);
+		setButtonProperties(btnExit);
 
-        btnSaveGame = new JButton("Save");
-        btnLoadGame = new JButton("Load");
-        btnHowToPlay = new JButton("How to Play");
-        btnBack = new JButton("Return to Game");
-        btnExit = new JButton("Exit Game");
+		pnlButtons.setOpaque(false);
+		pnlButtons.setFocusable(false);
+		BoxLayout layout = new BoxLayout(pnlButtons, BoxLayout.Y_AXIS);
+		pnlButtons.setLayout(layout);
 
-        setButtonProperties(btnSaveGame);
-        setButtonProperties(btnLoadGame);
-        setButtonProperties(btnHowToPlay);
-        setButtonProperties(btnBack);
-        setButtonProperties(btnExit);
+		int buttonSpacing = 5;
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
+		pnlButtons.add(btnSaveGame);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
+		pnlButtons.add(btnLoadGame);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
+		pnlButtons.add(btnHowToPlay);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing * 11)));
+		pnlButtons.add(btnBack);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
+		pnlButtons.add(btnExit);
 
-        pnlButtons.setOpaque(false);
-        pnlButtons.setFocusable(false);
-        BoxLayout layout = new BoxLayout(pnlButtons, BoxLayout.Y_AXIS);
-        pnlButtons.setLayout(layout);
+		add(pnlButtons);
+	}
 
-        int buttonSpacing = 5;
-        pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
-        pnlButtons.add(btnSaveGame);
-        pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
-        pnlButtons.add(btnLoadGame);
-        pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
-        pnlButtons.add(btnHowToPlay);
-        pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing * 11)));
-        pnlButtons.add(btnBack);
-        pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
-        pnlButtons.add(btnExit);
+	private void setButtonProperties(JButton aButton)
+	{
+		aButton.setFocusable(false);
+		aButton.setToolTipText("");
+		aButton.setFont(new Font("Arial", Font.PLAIN, 15));
+		aButton.setMaximumSize(new Dimension(160, 35));
+		aButton.setMinimumSize(new Dimension(160, 35));
+		aButton.setPreferredSize(new Dimension(160, 35));
+	}
 
-        add(pnlButtons);
-    }
+	private void initButtons()
+	{
+		btnSaveGame.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				setupSaveGameButton();
+			}
+		});
 
-    private void setButtonProperties(JButton aButton) {
-        aButton.setFocusable(false);
-        aButton.setToolTipText("");
-        aButton.setFont(new Font("Arial", Font.PLAIN, 15));
-        aButton.setMaximumSize(new Dimension(160, 35));
-        aButton.setMinimumSize(new Dimension(160, 35));
-        aButton.setPreferredSize(new Dimension(160, 35));
-    }
+		btnLoadGame.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				setupLoadGameButton();
+			}
+		});
 
-    private void initButtons() {
-        btnSaveGame.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnSaveGameActionPerformed();
-            }
-        });
+		btnHowToPlay.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				setupHowToPlayButton();
+			}
+		});
 
-        btnLoadGame.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
+		btnBack.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				gameFrame.setEnabled(true);
+				gameFrame.setFocusable(true);
+				setVisible(false);
+			}
+		});
 
-            }
-        });
+		btnExit.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				int reply = JOptionPane
+						.showConfirmDialog(null, "Are you want to quit to Main Menu?\nAll Progress will be lost.",
+								"Quit?", JOptionPane.YES_NO_OPTION);
 
-        btnHowToPlay.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                setupUpHowToPlayFrame();
-            }
-        });
+				if (reply == JOptionPane.YES_OPTION)
+				{
+					gameFrame.dispose();
+					dispose();
+					mainMenuFrame.setVisible(true);
+				}
+			}
+		});
+	}
 
-        btnBack.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                gameFrame.setEnabled(true);
-                gameFrame.setFocusable(true);
-                dispose();
-            }
-        });
+	private void setupHowToPlayButton()
+	{
+		JFrame howToFrame = new JFrame();
 
-        btnExit.addActionListener(new ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                System.exit(0);
-            }
-        });
-    }
+		String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
 
-    private void setupUpHowToPlayFrame() {
+		howToFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		howToFrame.setTitle("Kiwi Land - Main Menu");
+		howToFrame.setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+		howToFrame.setVisible(true);
+		howToFrame.setLayout(new FlowLayout());
+		howToFrame.setSize(900, 720);
+		howToFrame.setLocationRelativeTo(null); // centers it in the screen
+		howToFrame.setResizable(false); // so the screen size cant be changed
+		howToFrame.setAlwaysOnTop(true);
 
-        JFrame howToFrame = new JFrame();
+		HowToPlayPanel howTo = new HowToPlayPanel(this);
 
-        String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
+		howToFrame.add(howTo);
+		howToFrame.setVisible(true);
+	}
 
-        howToFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        howToFrame.setTitle("Kiwi Land - Main Menu");
-        howToFrame.setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
-        howToFrame.setVisible(true);
-        howToFrame.setLayout(new FlowLayout());
-        howToFrame.setSize(900, 720);
-        howToFrame.setLocationRelativeTo(null); // centers it in the screen
-        howToFrame.setResizable(false); // so the screen size cant be changed
-        howToFrame.setAlwaysOnTop(true);
+	private void setupSaveGameButton()
+	{
+		JFrame saveFrame = new JFrame();
 
-        HowToPlayPanel howTo = new HowToPlayPanel(this);
+		String BACKGROUND_IMAGE = "resources/Menu_UI.jpg";
 
-        howToFrame.add(howTo);
-        howToFrame.setVisible(true);
-    }
+		saveFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		saveFrame.setTitle("Kiwi Land - Save Game");
+		saveFrame.setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+		saveFrame.setVisible(true);
+		saveFrame.setLayout(new FlowLayout());
+		saveFrame.setSize(900, 720);
+		saveFrame.setLocationRelativeTo(null); // centers it in the screen
+		saveFrame.setResizable(false); // so the screen size cant be changed
 
-    private void btnSaveGameActionPerformed() {
-        JFrame loadFrame = new JFrame();
+		saveFrame.add(new LoadGamePanel(this, saveFrame, gameFrame.getGame().getCurrentLevelNumber()));
+		saveFrame.setVisible(true);
+		this.setVisible(false);
+	}
 
-        String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
+	private void setupLoadGameButton()
+	{
+		JFrame loadFrame = new JFrame();
 
-        loadFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-        loadFrame.setTitle("Kiwi Land - Main Menu");
-        loadFrame.setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
-        loadFrame.setVisible(true);
-        loadFrame.setLayout(new FlowLayout());
-        loadFrame.setSize(900, 720);
-        loadFrame.setLocationRelativeTo(null); // centers it in the screen
-        loadFrame.setResizable(false); // so the screen size cant be changed
+		String BACKGROUND_IMAGE = "resources/Menu_UI.jpg";
 
-        loadFrame.add(new LoadGamePanel(this, loadFrame, gameFrame.getGame().getCurrentLevelNumber()));
-        loadFrame.setVisible(true);
-    }
+		loadFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+		loadFrame.setTitle("Kiwi Land - Load Game");
+		loadFrame.setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+		loadFrame.setVisible(true);
+		loadFrame.setLayout(new FlowLayout());
+		loadFrame.setSize(900, 720);
+		loadFrame.setLocationRelativeTo(null); // centers it in the screen
+		loadFrame.setResizable(false); // so the screen size cant be changed
+
+		loadFrame.add(new LoadGamePanel(this, loadFrame));
+		loadFrame.setVisible(true);
+		this.setVisible(false);
+	}
+
+	@Override public void setVisible(boolean visible)
+	{
+		super.setVisible(visible);
+		gameFrame.setVisible(visible);
+	}
 }

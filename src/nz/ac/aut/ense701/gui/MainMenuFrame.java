@@ -12,7 +12,10 @@ public class MainMenuFrame extends JFrame
 {
 	private final int    FRAME_WIDTH      = 900;
 	private final int    FRAME_HEIGHT     = 720;
-	private       String BACKGROUND_IMAGE = "resources/Main_Menu_UI.jpg";
+
+	private       String BACKGROUND_TEXT = "resources/Main_Menu_UI.jpg";
+	private       String BACKGROUND_PLAIN = "resources/Menu_UI.jpg";
+	private JLabel backgroundLbl;
 	private Game game;
 
 	private CardLayout cardLayout;
@@ -36,7 +39,9 @@ public class MainMenuFrame extends JFrame
 	{
 		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
 		setTitle("Kiwi Land - Main Menu");
-		setContentPane(new JLabel(new ImageIcon(BACKGROUND_IMAGE))); // sets the background image
+		backgroundLbl = new JLabel();
+		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_TEXT));
+		setContentPane(backgroundLbl); // sets the background image
 		setVisible(true);
 		setLayout(new FlowLayout());
 		setSize(FRAME_WIDTH, FRAME_HEIGHT);
@@ -73,30 +78,31 @@ public class MainMenuFrame extends JFrame
 
 	public void openMainMenu()
 	{
+		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_TEXT));
 		setTitle("Kiwi Land - Main Menu");
 		getCardLayout().show(pnlContents, "1");
 	}
 
 	public void openNewGameMenu()
 	{
-		createGame(1);
-		setVisible(false);
+		this.createGame(1);
 	}
 
 	public void openSaveGameMenu(int level)
 	{
-		createGame(level);
-		setVisible(false);
+		this.createGame(level);
 	}
 
 	public void openLoadMenu()
 	{
+		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_PLAIN));
 		setTitle("Kiwi Land - Load Game");
 		getCardLayout().show(pnlContents, "2");
 	}
 
 	public void openHowToPlayMenu()
 	{
+		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_PLAIN));
 		setTitle("Kiwi Land - How to Play");
 		getCardLayout().show(pnlContents, "3");
 	}
@@ -108,7 +114,8 @@ public class MainMenuFrame extends JFrame
 
 	public void createGame(int level)
 	{
-		final GameScreenFrame gui = new GameScreenFrame(game);
+		final GameScreenFrame gui = new GameScreenFrame(game, this);
+		setVisible(false);
 		game.setCurrentLevelNumber(level);
 		game.createNewGame();
 
@@ -117,25 +124,8 @@ public class MainMenuFrame extends JFrame
 		{
 			@Override public void run()
 			{
-
 				gui.setVisible(true);
 			}
 		});
-	}
-
-	class ImagePanel extends JComponent
-	{
-		private Image image;
-
-		public ImagePanel(Image image)
-		{
-			this.image = image;
-		}
-
-		@Override protected void paintComponent(Graphics g)
-		{
-			super.paintComponent(g);
-			g.drawImage(image, 0, 0, this);
-		}
 	}
 }

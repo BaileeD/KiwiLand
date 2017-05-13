@@ -6,6 +6,7 @@ package nz.ac.aut.ense701.gameModel;
  * @author AS
  * @version August 2011
  */
-public enum MoveDirection {
-    NORTH, EAST, SOUTH, WEST;
+public enum MoveDirection
+{
+	NORTH, EAST, SOUTH, WEST;
 }
