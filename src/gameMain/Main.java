@@ -1,11 +1,8 @@
 package gameMain;
 
-import gameGUI.MainMenuFrame;
+import gameGUI.gameMainMenu.MainMenuFrame;
 import gameModel.Game;
-
-import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import java.io.File;
+import gameModel.Sound;
 
 /**
  * Kiwi Count Project
@@ -22,9 +19,7 @@ public class Main
 	 */
 	public static void main(String[] args) throws Exception
 	{
-		Clip clip = AudioSystem.getClip();
-		clip.open(AudioSystem.getAudioInputStream(new File("resources/Background_Music.wav")));
-		clip.loop(Clip.LOOP_CONTINUOUSLY);
+		Sound.startMusic();
 
 		// create the game object
 		final Game game = new Game();

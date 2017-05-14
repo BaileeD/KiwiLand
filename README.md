@@ -1,2 +1,0 @@
-# KiwiLand
-KiwiLand Project

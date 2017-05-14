@@ -14,6 +14,7 @@ public class Kiwi extends Fauna
 
 	private boolean counted;
 	Facts fact = new Facts();
+	private String stringRepresentation;
 
 	/**
 	 * Constructor for objects of class Kiwi
@@ -26,6 +27,8 @@ public class Kiwi extends Fauna
 	{
 		super(pos, name, description);
 		counted = false;
+
+		stringRepresentation = "K";
 	}
 
 	/**
@@ -35,6 +38,8 @@ public class Kiwi extends Fauna
 	{
 		counted = true;
 		fact.getFact("Kiwi");
+
+		stringRepresentation = "k";
 	}
 
 	/**
@@ -49,6 +54,6 @@ public class Kiwi extends Fauna
 
 	@Override public String getStringRepresentation()
 	{
-		return "K";
+		return stringRepresentation;
 	}
 }

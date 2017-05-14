@@ -156,7 +156,7 @@ public class Database
 			st.setString(1, playerName);
 			st.setString(2, saveName);
 			st.setInt(3, level);
-			st.setTimestamp(4, new java.sql.Timestamp(date.getTime()));
+			st.setTimestamp(4, new Timestamp(date.getTime()));
 
 			int result = st.executeUpdate();
 			if (result == 1)
@@ -337,7 +337,7 @@ public class Database
 			PreparedStatement st = connection
 					.prepareStatement("update gamesaves set level=?, date=? where gamesaveid=?");
 			st.setInt(1, level);
-			st.setTimestamp(2, new java.sql.Timestamp(date.getTime()));
+			st.setTimestamp(2, new Timestamp(date.getTime()));
 			st.setInt(3, id);
 
 			int result = st.executeUpdate();

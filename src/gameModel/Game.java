@@ -1,14 +1,6 @@
 package gameModel;
 
-import gameModel.gameTiles.Kiwi;
-import gameModel.gameTiles.Predator;
-import gameModel.gameTiles.Tool;
-import gameModel.gameTiles.Occupant;
-import gameModel.gameTiles.Door;
-import gameModel.gameTiles.Food;
-import gameModel.gameTiles.Fauna;
-import gameModel.gameTiles.Item;
-import gameModel.gameTiles.Hazard;
+import gameModel.gameTiles.*;
 
 import javax.swing.*;
 import java.io.File;
@@ -34,9 +26,9 @@ public class Game
 	public static final int    WEIGHT_INDEX     = 3;
 	public static final int    MAXSIZE_INDEX    = 4;
 	public static final int    SIZE_INDEX       = 5;
-	private final       String LEVEL_1          = "IslandDataLvl1.txt";
-	private final       String LEVEL_2          = "IslandDataLvl2.txt";
-	private final       String LEVEL_3          = "IslandDataLvl3.txt";
+	private final       String LEVEL_1          = "resources/Levels/IslandDataLvl1.txt";
+	private final       String LEVEL_2          = "resources/Levels/IslandDataLvl2.txt";
+	private final       String LEVEL_3          = "resources/Levels/IslandDataLvl3.txt";
 	private final       int    LEVEL_MAX        = 3;
 
 	private int currentLevelNumber = 1;
@@ -585,6 +577,7 @@ public class Game
 				Kiwi kiwi = (Kiwi) occupant;
 				if (!kiwi.counted())
 				{
+					Sound.playCountKiwiSound();
 					kiwi.count();
 					kiwiCount++;
 				}
@@ -684,11 +677,6 @@ public class Game
 	}
 
 	/**
-	 * *******************************************************************************************************************************
-	 * Private methods
-	 * *******************************************************************************************************************************
-	 */
-	/**
 	 * Used after player actions to update game state. Applies the Win/Lose
 	 * rules.
 	 */
@@ -707,7 +695,7 @@ public class Game
 			message = "Sorry, you have lost the game. You do not have sufficient stamina to move.";
 			this.setLoseMessage(message);
 		}
-		else if (predatorsTrapped == 1)
+		else if (predatorsTrapped == totalPredators)
 		{
 			state = GameState.WINNABLE;
 			message = "You have done enough to proceed to the next level. Get to the door to proceed!";
@@ -780,6 +768,7 @@ public class Game
 		boolean hadPredator = island.hasPredator(current);
 		if (hadPredator) //can trap it
 		{
+			Sound.playCatchPredatorSound();
 			Occupant occupant = island.getPredator(current);
 			/*Display a fact about a certain predator based off the name eg a stoat will have a fact
 			about a stoat. The islad.getPredator(current).getName() calls the name of the predator in

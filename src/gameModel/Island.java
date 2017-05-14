@@ -217,7 +217,7 @@ public class Island
 			getGridSquare(previousPlayerPos).setPlayer(null);
 		}
 
-		// add visibility to all new adjacent squares
+		// add setVisibilityForGameAndMenu to all new adjacent squares
 		setVisible(position.getNewPosition(MoveDirection.NORTH));
 		setVisible(position.getNewPosition(MoveDirection.EAST));
 		setVisible(position.getNewPosition(MoveDirection.SOUTH));
@@ -375,7 +375,7 @@ public class Island
 	}
 
 	/**
-	 * Private convenience method to change the visibility of grid squares.
+	 * Private convenience method to change the setVisibilityForGameAndMenu of grid squares.
 	 *
 	 * @param position the position to change
 	 */
