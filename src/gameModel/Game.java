@@ -25,14 +25,21 @@ public class Game
 	public static final int    WEIGHT_INDEX     = 3;
 	public static final int    MAXSIZE_INDEX    = 4;
 	public static final int    SIZE_INDEX       = 5;
-	private final       String LEVEL_1          = "resources/Levels/IslandDataLvl1.txt";
-	private final       String LEVEL_2          = "resources/Levels/IslandDataLvl2.txt";
-	private final       String LEVEL_3          = "resources/Levels/IslandDataLvl3.txt";
-	private final       int    LEVEL_MAX        = 3;
+	private final       String LEVEL_01         = "resources/Levels/Island_Level_01.txt";
+	private final       String LEVEL_02         = "resources/Levels/Island_Level_02.txt";
+	private final       String LEVEL_03         = "resources/Levels/Island_Level_03.txt";
+	private final       String LEVEL_04         = "resources/Levels/Island_Level_04.txt";
+	private final       String LEVEL_05         = "resources/Levels/Island_Level_05.txt";
+	private final       String LEVEL_06         = "resources/Levels/Island_Level_06.txt";
+	private final       String LEVEL_07         = "resources/Levels/Island_Level_07.txt";
+	private final       String LEVEL_08         = "resources/Levels/Island_Level_08.txt";
+	private final       String LEVEL_09         = "resources/Levels/Island_Level_09.txt";
+	private final       String LEVEL_10         = "resources/Levels/Island_Level_10.txt";
+	private final       int    LEVEL_MAX        = 10;
 
 	private int currentLevelNumber = 1;
 
-	private String currentLevelName = LEVEL_1;
+	private String currentLevelName = LEVEL_01;
 
 	//Instantiate the facts class so that the respective facts will be displayed when kiwis are counted or
 	//predators are trapped.
@@ -59,7 +66,6 @@ public class Game
 		predatorsTrapped = 0;
 		kiwiCount = 0;
 		initialiseIslandFromFile(currentLevelName);
-
 		drawIsland();
 		state = GameState.PLAYING;
 		winMessage = "";
@@ -79,13 +85,34 @@ public class Game
 		switch (currentLevelNumber)
 		{
 			case 1:
-				currentLevelName = LEVEL_1;
+				currentLevelName = LEVEL_01;
 				break;
 			case 2:
-				currentLevelName = LEVEL_2;
+				currentLevelName = LEVEL_02;
 				break;
 			case 3:
-				currentLevelName = LEVEL_3;
+				currentLevelName = LEVEL_03;
+				break;
+			case 4:
+				currentLevelName = LEVEL_04;
+				break;
+			case 5:
+				currentLevelName = LEVEL_05;
+				break;
+			case 6:
+				currentLevelName = LEVEL_06;
+				break;
+			case 7:
+				currentLevelName = LEVEL_07;
+				break;
+			case 8:
+				currentLevelName = LEVEL_08;
+				break;
+			case 9:
+				currentLevelName = LEVEL_09;
+				break;
+			case 10:
+				currentLevelName = LEVEL_10;
 				break;
 		}
 	}
@@ -101,13 +128,34 @@ public class Game
 		switch (currentLevelNumber)
 		{
 			case 1:
-				currentLevelName = LEVEL_1;
+				currentLevelName = LEVEL_01;
 				break;
 			case 2:
-				currentLevelName = LEVEL_2;
+				currentLevelName = LEVEL_02;
 				break;
 			case 3:
-				currentLevelName = LEVEL_3;
+				currentLevelName = LEVEL_03;
+				break;
+			case 4:
+				currentLevelName = LEVEL_04;
+				break;
+			case 5:
+				currentLevelName = LEVEL_05;
+				break;
+			case 6:
+				currentLevelName = LEVEL_06;
+				break;
+			case 7:
+				currentLevelName = LEVEL_07;
+				break;
+			case 8:
+				currentLevelName = LEVEL_08;
+				break;
+			case 9:
+				currentLevelName = LEVEL_09;
+				break;
+			case 10:
+				currentLevelName = LEVEL_10;
 				break;
 		}
 	}
@@ -941,10 +989,10 @@ public class Game
 		for (int i = 0; i < numItems; i++)
 		{
 			String occType = input.next();
-			String occName = input.next();
-			String occDesc = input.next();
 			int occRow = input.nextInt();
 			int occCol = input.nextInt();
+			String occName = input.next();
+			String occDesc = input.next();
 			Position occPos = new Position(island, occRow, occCol);
 			Occupant occupant = null;
 

@@ -51,7 +51,7 @@ public class Position
 		{
 			throw new IllegalArgumentException("Invalid row for position (" + row + ")");
 		}
-		if ((column < 0) || (column >= island.getNumRows()))
+		if ((column < 0) || (column >= island.getNumColumns()))
 		{
 			throw new IllegalArgumentException("Invalid column for position (" + column + ")");
 		}

@@ -96,6 +96,7 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 
 		gameTilesPanel = new JPanel();
 		gameTilesPanel.setSize(panelWidth, panelHeight);
+		gameTilesPanel.setOpaque(false);
 		add(gameTilesPanel);
 		gameTilesPanel.setLocation(panelxLocation, panelyLocation);
 
