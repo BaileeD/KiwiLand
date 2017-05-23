@@ -127,5 +127,4 @@ public class GameScreenPanel extends JPanel
 		lblText.setHorizontalTextPosition(JLabel.CENTER);
 		add(lblText, BorderLayout.CENTER);
 	}
-
 }

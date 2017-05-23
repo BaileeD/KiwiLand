@@ -18,7 +18,6 @@ import java.util.*;
  */
 public class Game
 {
-
 	//Constants shared with UI to provide player data
 	public static final int    STAMINA_INDEX    = 0;
 	public static final int    MAXSTAMINA_INDEX = 1;
@@ -60,6 +59,7 @@ public class Game
 		predatorsTrapped = 0;
 		kiwiCount = 0;
 		initialiseIslandFromFile(currentLevelName);
+
 		drawIsland();
 		state = GameState.PLAYING;
 		winMessage = "";

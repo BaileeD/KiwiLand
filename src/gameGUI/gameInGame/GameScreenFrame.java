@@ -472,6 +472,8 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 	 */
 	@Override public void gameStateChanged()
 	{
+		remove(gameTilesPanel);
+		initIslandGrid();
 		update();
 
 		// check for "game over" or "game won"
