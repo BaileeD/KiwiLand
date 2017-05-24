@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package gameGUI.gameMainMenu;
 
 import gameModel.GameSave;
@@ -17,6 +12,7 @@ import java.util.Date;
  * This class is used to show save dialog to the user
  *
  * @author Chaitanya Varma
+ * @Version May 2017
  */
 public class SaveGameDialog extends JDialog
 {
@@ -24,14 +20,13 @@ public class SaveGameDialog extends JDialog
 	private final int FRAME_WIDTH  = 300;
 	private final int FRAME_HEIGHT = 300;
 
-	private JTextField textPlayerName;
 	private JTextField textSaveName;
-	private JLabel     labelPlayerName;
 	private JLabel     labelSaveName;
 	private JButton    btnSave;
 	private JButton    btnCancel;
 	LoadGamePanel loadGamePanel;
 	private int level;
+        private int userId;
 
 	/**
 	 * Initial SaveGameDialog constructor.
@@ -39,10 +34,11 @@ public class SaveGameDialog extends JDialog
 	 * @param loadGamePanel reference to LoadGamePanel class
 	 * @param level         game level
 	 */
-	public SaveGameDialog(LoadGamePanel loadGamePanel, int level)
+	public SaveGameDialog(LoadGamePanel loadGamePanel, int level, int userId)
 	{
 		this.loadGamePanel = loadGamePanel;
 		this.level = level;
+                this.userId = userId;
 		initDialog();
 
 	}
@@ -64,30 +60,17 @@ public class SaveGameDialog extends JDialog
 		GridBagConstraints cs = new GridBagConstraints();
 		cs.fill = GridBagConstraints.HORIZONTAL;
 
-		labelPlayerName = new JLabel("Player Name: ");
-		labelPlayerName.setForeground(Color.WHITE);
-		cs.gridx = 0;
-		cs.gridy = 0;
-		cs.gridwidth = 1;
-		cs.insets = new Insets(10, 10, 0, 10);  //top padding
-		panel.add(labelPlayerName, cs);
-
-		textPlayerName = new JTextField(15);
-		cs.gridx = 1;
-		cs.gridy = 0;
-		cs.gridwidth = 20;
-		panel.add(textPlayerName, cs);
-
 		labelSaveName = new JLabel("Save Name: ");
 		labelSaveName.setForeground(Color.WHITE);
 		cs.gridx = 0;
-		cs.gridy = 1;
+		cs.gridy = 0;
 		cs.gridwidth = 1;
+                cs.insets = new Insets(10, 10, 0, 10);  //top padding
 		panel.add(labelSaveName, cs);
 
 		textSaveName = new JTextField(15);
 		cs.gridx = 1;
-		cs.gridy = 1;
+		cs.gridy = 0;
 		cs.gridwidth = 2;
 		panel.add(textSaveName, cs);
 
@@ -137,11 +120,6 @@ public class SaveGameDialog extends JDialog
 	 */
 	private void saveGame()
 	{
-		if (this.textPlayerName.getText().trim().equals(""))
-		{
-			JOptionPane.showMessageDialog(this, "Please enter player name", "Invalid Input", JOptionPane.ERROR_MESSAGE);
-			return;
-		}
 		if (this.textSaveName.getText().trim().equals(""))
 		{
 			JOptionPane.showMessageDialog(this, "Please enter save name", "Invalid Input", JOptionPane.ERROR_MESSAGE);
@@ -149,7 +127,7 @@ public class SaveGameDialog extends JDialog
 		}
 
 		GameSave gameSave = new GameSave();
-		gameSave.setPlayerName(this.textPlayerName.getText().trim());
+		gameSave.setUserId(userId);
 		gameSave.setSaveName(this.textSaveName.getText().trim());
 		gameSave.setSaveDate(new Date());
 		gameSave.setLevel(level);

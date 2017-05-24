@@ -33,6 +33,10 @@ public class MainMenuFrame extends JFrame
 		initFrame();
 	}
 
+        public Game getGame()
+        {
+            return this.game;
+        }
 	/**
 	 * Initializes the frame
 	 */
@@ -59,7 +63,7 @@ public class MainMenuFrame extends JFrame
 		cardLayout = new CardLayout();
 
 		pnlMainMenu = new MainMenuPanel(this);
-		pnlLoadGame = new LoadGamePanel(this);
+		pnlLoadGame = new LoadGamePanel(this, this.game);
 		pnlHowToPlay = new HowToPlayPanel(this);
 
 		pnlContents.setOpaque(false);

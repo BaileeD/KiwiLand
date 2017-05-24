@@ -1,6 +1,7 @@
 package gameGUI.gameMainMenu;
 
 import gameGUI.gameInGame.GameMenuFrame;
+import gameModel.Game;
 import gameModel.GameSave;
 
 import javax.swing.*;
@@ -19,11 +20,10 @@ public class LoadGamePanel extends JPanel
 	private MainMenuFrame mainMenuFrame = null;
 	private GameMenuFrame gameMenuFrame;
 	private JFrame        loadFrame;
-	private int           gameLevel;
 
-	private JTextField        textPlayerName;
+	//private JTextField        textPlayerName;
 	private JLabel            labelPlayerName;
-	private JButton           btnRetrieveSaves;
+	//private JButton           btnRetrieveSaves;
 	private JTable            tableData;
 	private DefaultTableModel model;
 	private JScrollPane       scrollPane;
@@ -32,19 +32,18 @@ public class LoadGamePanel extends JPanel
 	private JButton           btnSave;
 	private JButton           btnSaveOver;
 	private JButton           btnDeleteSave;
-
+        private Game game;
 	/**
 	 * LoadGamePanel constructor, used when saving the game while playing it
 	 *
 	 * @param loadFrame parent loadFrame
 	 * @param level     game level
 	 */
-	public LoadGamePanel(GameMenuFrame gameMenuFrame, JFrame loadFrame, int level)
+	public LoadGamePanel(GameMenuFrame gameMenuFrame, JFrame loadFrame, Game game)
 	{
 		this.gameMenuFrame = gameMenuFrame;
 		this.loadFrame = loadFrame;
-
-		gameLevel = level;
+                this.game = game;
 		setOpaque(false);
 		setFocusable(false);
 		setLayout(new BorderLayout());
@@ -60,11 +59,12 @@ public class LoadGamePanel extends JPanel
 	 *
 	 * @param loadFrame parent loadFrame
 	 */
-	public LoadGamePanel(GameMenuFrame gameMenuFrame, JFrame loadFrame)
+	/*public LoadGamePanel(GameMenuFrame gameMenuFrame, JFrame loadFrame, Game game)
 	{
 		this.gameMenuFrame = gameMenuFrame;
 		this.loadFrame = loadFrame;
-
+                this.game = game;
+                
 		setOpaque(false);
 		setFocusable(false);
 		setLayout(new BorderLayout());
@@ -75,17 +75,18 @@ public class LoadGamePanel extends JPanel
 		btnSave.setVisible(false);
 		btnSaveOver.setVisible(false);
 		btnDeleteSave.setVisible(true);
-	}
+	}*/
 
 	/**
 	 * LoadGamePanel constructor, used when loading the game from the main menu
 	 *
 	 * @param loadFrame reference to MainMenuFrame class
 	 */
-	public LoadGamePanel(MainMenuFrame loadFrame)
+	public LoadGamePanel(MainMenuFrame loadFrame, Game game)
 	{
 		mainMenuFrame = loadFrame;
-
+                this.game = game;
+                
 		setOpaque(false);
 		setFocusable(false);
 		setLayout(new BorderLayout());
@@ -113,11 +114,11 @@ public class LoadGamePanel extends JPanel
 		JPanel pnlSearchPlayer = new JPanel();
 		pnlSearchPlayer.setOpaque(false);
 
-		labelPlayerName = new JLabel("Player Name: ");
-		labelPlayerName.setForeground(Color.WHITE);
+                labelPlayerName = new JLabel("Hello " + this.game.getUser().getPlayerName());
+                labelPlayerName.setForeground(Color.WHITE);
+                
 
-		textPlayerName = new JTextField(15);
-
+		/*textPlayerName = new JTextField(15);
 		btnRetrieveSaves = new JButton("Search");
 		btnRetrieveSaves.setPreferredSize(new Dimension(120, 25));
 		btnRetrieveSaves.addActionListener(new ActionListener()
@@ -126,11 +127,11 @@ public class LoadGamePanel extends JPanel
 			{
 				retrieveGameSaves();
 			}
-		});
+		});*/
 
 		pnlSearchPlayer.add(labelPlayerName);
-		pnlSearchPlayer.add(textPlayerName);
-		pnlSearchPlayer.add(btnRetrieveSaves);
+		//pnlSearchPlayer.add(textPlayerName);
+		//pnlSearchPlayer.add(btnRetrieveSaves);
 
 		add(pnlSearchPlayer, BorderLayout.PAGE_START);
 	}
@@ -140,7 +141,7 @@ public class LoadGamePanel extends JPanel
 		JPanel pnlGameSaves = new JPanel();
 		pnlGameSaves.setOpaque(false);
 
-		String[] columnNames = { "Player Name", "Save Name", "Date", "Level", "id" };
+		String[] columnNames = {"Save Name", "Date", "Level", "id" };
 		model = new DefaultTableModel(0, 0);
 		model.setColumnIdentifiers(columnNames);
 
@@ -152,7 +153,7 @@ public class LoadGamePanel extends JPanel
 			}
 		};
 		tableData.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-		tableData.removeColumn(tableData.getColumnModel().getColumn(4));
+		tableData.removeColumn(tableData.getColumnModel().getColumn(3));
 		tableData.setOpaque(false);
 		tableData.setShowGrid(false);
 		//((DefaultTableCellRenderer)tableData.getDefaultRenderer(Object.class)).setOpaque(false);
@@ -241,7 +242,7 @@ public class LoadGamePanel extends JPanel
 	/**
 	 * Retrieve game saves of a player
 	 */
-	private void retrieveGameSaves()
+	/*private void retrieveGameSaves()
 	{
 		if (this.textPlayerName.getText().trim().equals(""))
 		{
@@ -253,14 +254,14 @@ public class LoadGamePanel extends JPanel
 			ArrayList<GameSave> gameSaves = GameSave.getPlayerGameSaves(this.textPlayerName.getText().trim());
 			setTableData(gameSaves);
 		}
-	}
+	}*/
 
 	/**
 	 * Retrieve all game saves
 	 */
 	public void loadAllGameSaves()
 	{
-		ArrayList<GameSave> gameSaves = GameSave.getAllGameSaves();
+		ArrayList<GameSave> gameSaves = GameSave.getAllGameSaves(this.game.getUser().getUserId());
 		setTableData(gameSaves);
 	}
 
@@ -275,7 +276,7 @@ public class LoadGamePanel extends JPanel
 		{
 			for (GameSave gameSave : gameSaves)
 			{
-				model.addRow(new Object[] { gameSave.getPlayerName(), gameSave.getSaveName(), gameSave.getSaveDate(),
+				model.addRow(new Object[] {gameSave.getSaveName(), gameSave.getSaveDate(),
 						gameSave.getLevel(), gameSave.getGameSaveId() });
 			}
 		}
@@ -301,7 +302,7 @@ public class LoadGamePanel extends JPanel
 		int row = tableData.getSelectedRow();
 		if (row != -1)
 		{
-			Integer level = Integer.parseInt(tableData.getModel().getValueAt(row, 3).toString());
+			Integer level = Integer.parseInt(tableData.getModel().getValueAt(row, 2).toString());
 			mainMenuFrame.openSaveGameMenu(level);
 		}
 		else
@@ -324,7 +325,7 @@ public class LoadGamePanel extends JPanel
 
 			if (reply == JOptionPane.YES_OPTION)
 			{
-				Integer value = Integer.parseInt(tableData.getModel().getValueAt(row, 4).toString());
+				Integer value = Integer.parseInt(tableData.getModel().getValueAt(row, 3).toString());
 				GameSave.deleteSave(value);
 				model.removeRow(row);
 				enableButtons(model.getRowCount() > 0 ? true : false);
@@ -340,9 +341,9 @@ public class LoadGamePanel extends JPanel
 	 * Create a new save
 	 */
 	private void newSaveGame()
-	{
-		SaveGameDialog dialog = new SaveGameDialog(this, gameLevel);
-		dialog.setVisible(true);
+	{            
+            SaveGameDialog dialog = new SaveGameDialog(this, this.game.getCurrentLevelNumber(), this.game.getUser().getUserId());
+            dialog.setVisible(true);
 	}
 
 	/**
@@ -353,8 +354,8 @@ public class LoadGamePanel extends JPanel
 		int row = tableData.getSelectedRow();
 		if (row != -1)
 		{
-			Integer id = Integer.parseInt(tableData.getModel().getValueAt(row, 4).toString());
-			boolean save = GameSave.updateGame(id, gameLevel, new Date());
+			Integer id = Integer.parseInt(tableData.getModel().getValueAt(row, 3).toString());
+			boolean save = GameSave.updateGame(id, this.game.getCurrentLevelNumber(), new Date());
 			if (save)
 			{
 				refreshGameSaves();
