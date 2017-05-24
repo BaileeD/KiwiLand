@@ -34,19 +34,28 @@ public class Game
 	private int currentLevelNumber = 1;
 
 	private String currentLevelName = LEVEL_1;
-
+        private User user;
 	//Instantiate the facts class so that the respective facts will be displayed when kiwis are counted or
 	//predators are trapped.
 	Facts             fact            = new Facts();
 	ArrayList<String> discoveredFacts = fact.getDiscoveredFacts();
 
-	/**
+        /**
 	 * A new instance of Kiwi island that reads data from "IslandData.txt".
 	 */
 	public Game()
 	{
 		eventListeners = new HashSet<GameEventListener>();
-
+		createNewGame();
+	}
+        
+	/**
+	 * A new instance of Kiwi island that reads data from "IslandData.txt".
+	 */
+	public Game(User user)
+	{
+                this.user = user;
+		eventListeners = new HashSet<GameEventListener>();
 		createNewGame();
 	}
 
@@ -173,6 +182,16 @@ public class Game
 	public Player getPlayer()
 	{
 		return player;
+	}
+        
+        /**
+	 * Gets the user object.
+	 *
+	 * @return the user object
+	 */
+	public User getUser()
+	{
+            return this.user;
 	}
 
 	/**
