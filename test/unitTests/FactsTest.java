@@ -26,7 +26,7 @@ public class FactsTest
 	 */
 	@Test public void testGetFacts()
 	{
-		Facts facts = new Facts();
+		Facts facts = new Facts(1);
 		String fact = facts.getFact("Rat").trim();
 
 		assertThat(fact, anyOf(containsString(
@@ -39,7 +39,7 @@ public class FactsTest
 
 	@Test public void testGetFactsForUndefinedAnimal()
 	{
-		Facts facts = new Facts();
+		Facts facts = new Facts(1);
 		String fact = facts.getFact("Crow");
 
 		assertEquals(fact, "");
@@ -50,7 +50,7 @@ public class FactsTest
 	 */
 	@Test public void getDiscoveredFacts()
 	{
-		Facts facts = new Facts();
+		Facts facts = new Facts(1);
 		facts.getFact("Rat");
 		ArrayList<String> discoveredFacts = facts.getDiscoveredFacts();
 

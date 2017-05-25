@@ -323,7 +323,7 @@ public class GameTest extends junit.framework.TestCase
 	 */
 	@Test public void testUndefinedPredatorTrapMessage()
 	{
-		Facts facts = new Facts();
+		Facts facts = new Facts(1);
 		Predator predator = new Predator(playerPosition, "Crow", "A scary looking crow");
 		String fact = facts.getFact(predator.getName());
 		game.showMessage(fact, "Testing undefined animal");

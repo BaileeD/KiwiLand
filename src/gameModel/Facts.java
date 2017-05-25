@@ -27,16 +27,16 @@ public class Facts
 	/**
 	 * Constructor for populating facts for Kiwi or Predator
 	 */
-	public Facts()
+	public Facts(int level)
 	{
 		facts = new HashMap<String, ArrayList<String>>();
 		shownFacts = new HashMap<String, ArrayList<String>>();
 		discoveredFacts = new HashMap<String, ArrayList<String>>();
 		isAllFactsDiscovered = new HashMap<String, Boolean>();
-		ArrayList<String> occupants = db.getOccupants();
+		ArrayList<String> occupants = db.getOccupants(level);
 		for (String occupant : occupants)
 		{
-			populateFacts(occupant);
+                    populateFacts(occupant, level);
 		}
 	}
 
@@ -45,9 +45,9 @@ public class Facts
 	 *
 	 * @param occupant occupant type like Kiwi or Rat etc
 	 */
-	private void populateFacts(String occupant)
+	private void populateFacts(String occupant, int level)
 	{
-		facts.put(occupant, db.getFacts(occupant));
+		facts.put(occupant, db.getFacts(occupant, level));
 		shownFacts.put(occupant, new ArrayList<String>());
 		discoveredFacts.put(occupant, new ArrayList<String>());
 		isAllFactsDiscovered.put(occupant, false);

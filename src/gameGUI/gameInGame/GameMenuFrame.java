@@ -214,7 +214,7 @@ public class GameMenuFrame extends JFrame
 		saveFrame.setLocationRelativeTo(null); // centers it in the screen
 		saveFrame.setResizable(false); // so the screen size cant be changed
 
-		saveFrame.add(new LoadGamePanel(this, saveFrame, gameFrame.getGame().getCurrentLevelNumber()));
+		saveFrame.add(new LoadGamePanel(this, saveFrame, gameFrame.getGame()));
 		saveFrame.setVisible(true);
 
 		setVisibilityForGameAndMenu(false);
@@ -238,7 +238,7 @@ public class GameMenuFrame extends JFrame
 		loadFrame.setLocationRelativeTo(null); // centers it in the screen
 		loadFrame.setResizable(false); // so the screen size cant be changed
 
-		loadFrame.add(new LoadGamePanel(this, loadFrame));
+		loadFrame.add(new LoadGamePanel(this, loadFrame, gameFrame.getGame()));
 		loadFrame.setVisible(true);
 
 		setVisibilityForGameAndMenu(false);

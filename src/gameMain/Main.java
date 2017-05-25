@@ -1,5 +1,6 @@
 package gameMain;
 
+import gameGUI.gameMainMenu.LoginMenuFrame;
 import gameGUI.gameMainMenu.MainMenuFrame;
 import gameModel.Game;
 import gameModel.Sound;
@@ -22,9 +23,12 @@ public class Main
 		Sound.startMusic();
 
 		// create the game object
-		final Game game = new Game();
+		//final Game game = new Game();
 		// create the GUI for the game
-		final MainMenuFrame mainMenu = new MainMenuFrame(game);
+		//final MainMenuFrame mainMenu = new MainMenuFrame(game);
+
+		final LoginMenuFrame mainMenu = new LoginMenuFrame();
+
 	}
 
 }

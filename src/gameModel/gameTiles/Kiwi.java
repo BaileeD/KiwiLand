@@ -13,7 +13,6 @@ public class Kiwi extends Fauna
 {
 
 	private boolean counted;
-	Facts fact = new Facts();
 	private String stringRepresentation;
 
 	/**
@@ -37,7 +36,6 @@ public class Kiwi extends Fauna
 	public void count()
 	{
 		counted = true;
-		fact.getFact("Kiwi");
 
 		stringRepresentation = "k";
 	}

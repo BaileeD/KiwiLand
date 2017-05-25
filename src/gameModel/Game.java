@@ -33,25 +33,30 @@ public class Game
 	private final       String LEVEL_06         = "resources/Levels/Island_Level_06.txt";
 	private final       String LEVEL_07         = "resources/Levels/Island_Level_07.txt";
 	private final       String LEVEL_08         = "resources/Levels/Island_Level_08.txt";
-	private final       String LEVEL_09         = "resources/Levels/Island_Level_09.txt";
-	private final       String LEVEL_10         = "resources/Levels/Island_Level_10.txt";
-	private final       int    LEVEL_MAX        = 10;
+	private final       int    LEVEL_MAX        = 8;
 
+	private User user;
 	private int currentLevelNumber = 1;
 
 	private String currentLevelName = LEVEL_01;
 
 	//Instantiate the facts class so that the respective facts will be displayed when kiwis are counted or
 	//predators are trapped.
-	Facts             fact            = new Facts();
-	ArrayList<String> discoveredFacts = fact.getDiscoveredFacts();
+	Facts             fact            = null;
 
+	public Game()
+	{
+		eventListeners = new HashSet<>();
+
+		createNewGame();
+	}
 	/**
 	 * A new instance of Kiwi island that reads data from "IslandData.txt".
 	 */
-	public Game()
+	public Game(User user)
 	{
-		eventListeners = new HashSet<GameEventListener>();
+		this.user = user;
+		eventListeners = new HashSet<>();
 
 		createNewGame();
 	}
@@ -108,13 +113,9 @@ public class Game
 			case 8:
 				currentLevelName = LEVEL_08;
 				break;
-			case 9:
-				currentLevelName = LEVEL_09;
-				break;
-			case 10:
-				currentLevelName = LEVEL_10;
-				break;
 		}
+
+		fact = new Facts(currentLevelNumber);
 	}
 
 	public int getCurrentLevelNumber()
@@ -151,13 +152,9 @@ public class Game
 			case 8:
 				currentLevelName = LEVEL_08;
 				break;
-			case 9:
-				currentLevelName = LEVEL_09;
-				break;
-			case 10:
-				currentLevelName = LEVEL_10;
-				break;
 		}
+
+		fact = new Facts(currentLevelNumber);
 	}
 
 	/**
@@ -1107,4 +1104,8 @@ public class Game
 		}
 	}
 
+	public User getUser()
+	{
+		return user;
+	}
 }
