@@ -55,7 +55,7 @@ public class Game
 	 */
 	public Game(User user)
 	{
-		this.user = user;
+		this.user = user; // the user of the level
 		eventListeners = new HashSet<>();
 
 		createNewGame();
