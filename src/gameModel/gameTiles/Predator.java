@@ -17,9 +17,9 @@ import java.util.Random;
  */
 public class Predator extends Fauna implements Runnable {
 
-    //private Game game;
-    //private Island island;
-    //private long delay;
+    private Game game;
+    private Island island;
+    private long delay;
 
     /**
      * Constructor for objects of class Predator
@@ -28,11 +28,11 @@ public class Predator extends Fauna implements Runnable {
      * @param name the name of the predator object
      * @param description a longer description of the predator object
      */
-    public Predator(Position pos, String name, String description) {
+    public Predator(Position pos, String name, String description, Game game, Island island) {
         super(pos, name, description);
-        //this.game = game;
-        //this.island = island;
-        //delay = 10;
+        this.game = game;
+        this.island = island;
+        delay = 10;
     }
 
     @Override
@@ -40,7 +40,7 @@ public class Predator extends Fauna implements Runnable {
         return "P";
     }
 
-    /*private int randInt(int min, int max) {
+    private int randInt(int min, int max) {
         Random rand = new Random();
         int randomNum = rand.nextInt((max - min) + 1) + min;
         if (randomNum == 0) {
@@ -49,13 +49,13 @@ public class Predator extends Fauna implements Runnable {
         return randomNum;
     }
 
-    private boolean kiwiCanMove() {
-        return (isKiwiMovePossible(MoveDirection.NORTH) || isKiwiMovePossible(MoveDirection.SOUTH)
-                || isKiwiMovePossible(MoveDirection.EAST) || isKiwiMovePossible(MoveDirection.WEST));
+    private boolean predatorCanMove() {
+        return (isPredatorMovePossible(MoveDirection.NORTH) || isPredatorMovePossible(MoveDirection.SOUTH)
+                || isPredatorMovePossible(MoveDirection.EAST) || isPredatorMovePossible(MoveDirection.WEST));
 
     }
 
-    public boolean isKiwiMovePossible(MoveDirection direction) {
+    public boolean isPredatorMovePossible(MoveDirection direction) {
         boolean isMovePossible = false;
         // what position is the kiwi moving to?
         Position newPosition = this.getPosition().getNewPosition(direction);
@@ -68,9 +68,9 @@ public class Predator extends Fauna implements Runnable {
         return isMovePossible;
     }
 
-    public void kiwiMove(MoveDirection direction) {
+    public void predatorMove(MoveDirection direction) {
         // what terrain is the kiwi moving on currently
-        if (isKiwiMovePossible(direction)) {
+        if (isPredatorMovePossible(direction)) {
             Position newPosition = this.getPosition().getNewPosition(direction);
             Terrain terrain = island.getTerrain(newPosition);
             //if (terrain != Terrain.WATER) {
@@ -90,17 +90,17 @@ public class Predator extends Fauna implements Runnable {
         }
         switch (num) {
             case 1:
-                this.kiwiMove(MoveDirection.NORTH);
+                this.predatorMove(MoveDirection.NORTH);
                 break;
             case 2:
-                this.kiwiMove(MoveDirection.EAST);
+                this.predatorMove(MoveDirection.EAST);
                 break;
             case 3:
-                this.kiwiMove(MoveDirection.SOUTH);
+                this.predatorMove(MoveDirection.SOUTH);
                 break;
             case 4:
-                this.kiwiMove(MoveDirection.WEST);
+                this.predatorMove(MoveDirection.WEST);
                 break;
         }
-    }*/
+    }
 }

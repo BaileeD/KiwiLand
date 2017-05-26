@@ -226,7 +226,7 @@ public class Island {
         previousKiwiPos = position;
     }
     
-    /*public void updatePredatorPosition(Predator predator, Position newPosition) {
+    public void updatePredatorPosition(Predator predator, Position newPosition) {
 
         Position position = predator.getPosition();
 
@@ -238,7 +238,7 @@ public class Island {
         this.addOccupant(newPosition, predator);
         // remember the new kiwi position
         previousKiwiPos = position;
-    }*/
+    }
 
     /**
      * Attempts to add an occupant to a specified position on the island.

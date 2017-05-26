@@ -30,7 +30,7 @@ public class PredatorTest
 		island = new Island(5, 5);
                 game = new Game();
 		position = new Position(island, 4, 4);
-		rat = new Predator(position, "Rat", "A norway rat");
+		rat = new Predator(position, "Rat", "A norway rat", game, island);
 	}
 
 	@After public void tearDown()

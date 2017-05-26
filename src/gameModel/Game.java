@@ -856,10 +856,10 @@ public class Game {
                 Thread kiwiMove = new Thread(occupant);
                 kiwiMove.start();
             } else if (occType.equals("P")) {
-                occupant = new Predator(occPos, occName, occDesc);
+                occupant = new Predator(occPos, occName, occDesc, this, island);
                 totalPredators++;
-                //Thread predatorMove = new Thread(occupant);
-                //predatorMove.start();
+                Thread predatorMove = new Thread(occupant);
+                predatorMove.start();
             } else if (occType.equals("F")) {
                 occupant = new Fauna(occPos, occName, occDesc);
             } else if (occType.equals("D")) {
