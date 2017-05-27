@@ -15,7 +15,7 @@ import java.util.Random;
  * @author AS
  * @version July 2011
  */
-public class Kiwi extends Fauna implements Runnable {
+public class Kiwi extends Fauna  {
 
 	private boolean counted;
 	Facts fact = new Facts();
@@ -95,46 +95,4 @@ public class Kiwi extends Fauna implements Runnable {
 		return isMovePossible;
 	}
 
-	public boolean kiwiMove(MoveDirection direction) {
-		// what terrain is the kiwi moving on currently
-		boolean successfulMove = false;
-		if (isKiwiMovePossible(direction)) {
-			Position newPosition = this.getPosition().getNewPosition(direction);
-			Terrain terrain = island.getTerrain(newPosition);
-
-			// move the kiwi to new position
-			island.updateKiwiPosition(this);
-			successfulMove = true;
-
-			// Is there a hazard?
-			game.checkForHazard();
-
-			game.updateGameState();
-		}
-		return successfulMove;
 	}
-
-	@Override
-	public void run() {
-		int num = this.randInt(1, 4);
-		try {
-			Thread.sleep(delay);
-		} catch (InterruptedException e) {
-			System.out.println("interrupted");
-		}
-		switch (num) {
-		case 1:
-			this.kiwiMove(MoveDirection.NORTH);
-			break;
-		case 2:
-			this.kiwiMove(MoveDirection.EAST);
-			break;
-		case 3:
-			this.kiwiMove(MoveDirection.SOUTH);
-			break;
-		case 4:
-			this.kiwiMove(MoveDirection.WEST);
-			break;
-		}
-	}
-}
