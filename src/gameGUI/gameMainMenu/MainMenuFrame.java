@@ -130,4 +130,9 @@ public class MainMenuFrame extends JFrame
 			}
 		});
 	}
+
+	public Game getGame()
+	{
+		return game;
+	}
 }

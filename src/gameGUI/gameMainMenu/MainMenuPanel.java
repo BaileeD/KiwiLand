@@ -14,9 +14,11 @@ import java.awt.event.ItemListener;
 public class MainMenuPanel extends JPanel
 {
 	private MainMenuFrame theFrame;
+	private LevelSelectFrame levelSelectFrame;
 
 	private JPanel    pnlButtons;
 	private JButton   btnNewGame;
+	private JButton	  btnLevelSelect;
 	private JButton   btnLoadGame;
 	private JButton   btnHowToPlay;
 	private JButton   btnExit;
@@ -26,6 +28,7 @@ public class MainMenuPanel extends JPanel
 	public MainMenuPanel(MainMenuFrame frame)
 	{
 		theFrame = frame;
+		levelSelectFrame = new LevelSelectFrame(theFrame);
 		setOpaque(false);
 		setFocusable(false);
 
@@ -38,9 +41,11 @@ public class MainMenuPanel extends JPanel
 		pnlButtons = new JPanel();
 
 		btnNewGame = new JButton("NEW GAME");
+		btnLevelSelect = new JButton("LEVEL SELECT");
 		btnLoadGame = new JButton("LOAD GAME");
 		btnHowToPlay = new JButton("HOW TO PLAY");
 		btnExit = new JButton("EXIT");
+
 		cboxMusic = new JCheckBox("Music");
 		cboxMusic.setOpaque(false);
 		cboxMusic.setSelected(Sound.musicActive);
@@ -49,6 +54,7 @@ public class MainMenuPanel extends JPanel
 		cboxSoundEffects.setSelected(Sound.soundEffectsActive);
 
 		setButtonProperties(btnNewGame);
+		setButtonProperties(btnLevelSelect);
 		setButtonProperties(btnLoadGame);
 		setButtonProperties(btnHowToPlay);
 		setButtonProperties(btnExit);
@@ -58,9 +64,11 @@ public class MainMenuPanel extends JPanel
 		BoxLayout layout = new BoxLayout(pnlButtons, BoxLayout.Y_AXIS);
 		pnlButtons.setLayout(layout);
 
-		int buttonSpacing = 30;
-		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing * 6)));
+		int buttonSpacing = 20;
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing * 7)));
 		pnlButtons.add(btnNewGame);
+		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
+		pnlButtons.add(btnLevelSelect);
 		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
 		pnlButtons.add(btnLoadGame);
 		pnlButtons.add(Box.createRigidArea(new Dimension(1, buttonSpacing)));
@@ -95,6 +103,17 @@ public class MainMenuPanel extends JPanel
 			public void actionPerformed(java.awt.event.ActionEvent evt)
 			{
 				theFrame.openNewGameMenu();
+			}
+		});
+
+		btnLevelSelect.addActionListener(new ActionListener()
+		{
+			public void actionPerformed(java.awt.event.ActionEvent evt)
+			{
+				levelSelectFrame.disableUnreachedLevelButtons();
+				levelSelectFrame.setVisible(true);
+				theFrame.setEnabled(false);
+				theFrame.setFocusable(false);
 			}
 		});
 
