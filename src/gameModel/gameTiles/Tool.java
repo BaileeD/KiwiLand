@@ -9,77 +9,75 @@ import gameModel.Position;
  * @author AS
  * @version July 2011
  */
-public class Tool extends Item
-{
+public class Tool extends Item {
 
-	private boolean broken;
+    private boolean broken;
 
-	/**
-	 * Construct a tool with known attributes.
-	 *
-	 * @param pos         the position of the tool
-	 * @param name        the name of the tool
-	 * @param description a longer description of the tool
-	 * @param weight      the weight of the tool
-	 * @param size        the size of the tool
-	 */
-	public Tool(Position pos, String name, String description, double weight, double size)
-	{
-		super(pos, name, description, weight, size);
-		this.broken = false;
-	}
+    /**
+     * Construct a tool with known attributes.
+     *
+     * @param pos the position of the tool
+     * @param name the name of the tool
+     * @param description a longer description of the tool
+     * @param weight the weight of the tool
+     * @param size the size of the tool
+     */
+    public Tool(Position pos, String name, String description, double weight, double size) {
+        super(pos, name, description, weight, size);
+        this.broken = false;
+    }
 
-	/**
-	 * Break the tool
-	 */
-	public void setBroken()
-	{
-		broken = true;
-	}
+    /**
+     * Break the tool
+     */
+    public void setBroken() {
+        broken = true;
+    }
 
-	/**
-	 * Fix the tool
-	 */
-	public void fix()
-	{
-		broken = false;
-	}
+    /**
+     * Fix the tool
+     */
+    public void fix() {
+        broken = false;
+    }
 
-	/**
-	 * Is tool broken
-	 *
-	 * @return true if broken
-	 */
-	public boolean isBroken()
-	{
-		return this.broken;
-	}
+    /**
+     * Is tool broken
+     *
+     * @return true if broken
+     */
+    public boolean isBroken() {
+        return this.broken;
+    }
 
-	/**
-	 * Check if this tool is a predator trap
-	 *
-	 * @return true if trap
-	 */
-	public boolean isTrap()
-	{
-		String name = this.getName();
-		return name.equalsIgnoreCase("Trap");
-	}
+    /**
+     * Check if this tool is a predator trap
+     *
+     * @return true if trap
+     */
+    public boolean isTrap() {
+        String name = this.getName();
+        return name.equalsIgnoreCase("Trap");
+    }
 
-	/**
-	 * Check if this tool is a screwdriver
-	 *
-	 * @return true if screwdriver
-	 */
-	public boolean isScrewdriver()
-	{
-		String name = this.getName();
-		return name.equalsIgnoreCase("Screwdriver");
-	}
+    /**
+     * Check if this tool is a screwdriver
+     *
+     * @return true if screwdriver
+     */
+    public boolean isScrewdriver() {
+        String name = this.getName();
+        return name.equalsIgnoreCase("Screwdriver");
+    }
 
-	@Override public String getStringRepresentation()
-	{
-		return "T";
-	}
+    @Override
+    public String getStringRepresentation() {
+        return "T";
+    }
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

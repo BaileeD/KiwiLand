@@ -24,6 +24,7 @@ public class GridSquareTest extends junit.framework.TestCase
 	Island     island;
 	Position   position;
 	Food       apple;
+        Game       game;
 
 	/**
 	 * Default constructor for test class GridSquareTest
@@ -45,6 +46,7 @@ public class GridSquareTest extends junit.framework.TestCase
 		position = new Position(island, 0, 0);
 		apple = new Food(position, "apple", "A juicy red apple", 1.0, 2.0, 1.5);
 		occupiedSquare.addOccupant(apple);
+                game = new Game();
 	}
 
 	/**
@@ -137,7 +139,7 @@ public class GridSquareTest extends junit.framework.TestCase
 		Tool trap = new Tool(position, "Trap", "A predator trap", 1.0, 2.0);
 		occupiedSquare.addOccupant(trap);
 		// Add a third occupant
-		Predator possum = new Predator(position, "Possum", "A log tailed possum");
+		Predator possum = new Predator(position, "Possum", "A log tailed possum", game, island);
 		occupiedSquare.addOccupant(possum);
 		String stringRep = occupiedSquare.getOccupantStringRepresentation();
 		assertEquals(3, stringRep.length());
@@ -152,7 +154,7 @@ public class GridSquareTest extends junit.framework.TestCase
 		Tool trap = new Tool(position, "Trap", "A predator trap", 1.0, 2.0);
 		occupiedSquare.addOccupant(trap);
 		// Add a third occupant
-		Predator possum = new Predator(position, "Possum", "A log tailed possum");
+		Predator possum = new Predator(position, "Possum", "A log tailed possum", game, island);
 		occupiedSquare.addOccupant(possum);
 		Occupant[] occupants = occupiedSquare.getOccupants();
 		assertEquals(3, occupants.length);
@@ -180,10 +182,10 @@ public class GridSquareTest extends junit.framework.TestCase
 		Tool trap = new Tool(position, "Trap", "A predator trap", 1.0, 2.0);
 		occupiedSquare.addOccupant(trap);
 		// Add a third occupant
-		Predator possum = new Predator(position, "Possum", "A log tailed possum");
+		Predator possum = new Predator(position, "Possum", "A log tailed possum", game, island);
 		occupiedSquare.addOccupant(possum);
 		//Now the cave has three occupants it should not be possible to add another
-		Predator rat = new Predator(position, "Rat", "A  ship rat");
+		Predator rat = new Predator(position, "Rat", "A  ship rat", game, island);
 		assertFalse(occupiedSquare.addOccupant(rat));
 		assertFalse(occupiedSquare.hasOccupant(rat));
 	}

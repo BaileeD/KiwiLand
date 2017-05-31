@@ -19,7 +19,6 @@ public class LoadGamePanel extends JPanel {
     private MainMenuFrame mainMenuFrame = null;
     private GameMenuFrame gameMenuFrame;
     private JFrame loadFrame;
-
     private JLabel labelPlayerName;
     private JTable tableData;
     private DefaultTableModel model;
@@ -30,7 +29,7 @@ public class LoadGamePanel extends JPanel {
     private JButton btnSaveOver;
     private JButton btnDeleteSave;
     private Game game;
-
+    
     /**
      * LoadGamePanel constructor, used when saving the game while playing it
      *
@@ -40,6 +39,7 @@ public class LoadGamePanel extends JPanel {
     public LoadGamePanel(GameMenuFrame gameMenuFrame, JFrame loadFrame, Game game) {
         this.gameMenuFrame = gameMenuFrame;
         this.loadFrame = loadFrame;
+
         this.game = game;
         setOpaque(false);
         setFocusable(false);
@@ -88,9 +88,11 @@ public class LoadGamePanel extends JPanel {
         JPanel pnlSearchPlayer = new JPanel();
         pnlSearchPlayer.setOpaque(false);
 
-        labelPlayerName = new JLabel("Hello " + this.game.getUser().getPlayerName());
+        labelPlayerName = new JLabel("Hello "+this.game.getUser().getPlayerName());
         labelPlayerName.setForeground(Color.WHITE);
+        
         pnlSearchPlayer.add(labelPlayerName);
+
         add(pnlSearchPlayer, BorderLayout.PAGE_START);
     }
 
@@ -125,9 +127,9 @@ public class LoadGamePanel extends JPanel {
 
         add(pnlGameSaves, BorderLayout.CENTER);
     }
-
+    
     /**
-     * initialize the buttons
+     * Initialize the buttons
      */
     private void initButtonComponents() {
         JPanel pnlButtons = new JPanel();

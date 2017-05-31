@@ -1,5 +1,6 @@
 package unitTests;
 
+import gameModel.Game;
 import gameModel.Island;
 import gameModel.Position;
 import gameModel.gameTiles.Kiwi;
@@ -19,6 +20,7 @@ public class KiwiTest
 	private Kiwi     kiwi;
 	private Position position;
 	private Island   island;
+        private Game game;
 
 	public KiwiTest()
 	{
@@ -26,9 +28,10 @@ public class KiwiTest
 
 	@Before public void setUp()
 	{
+                game = new Game();
 		island = new Island(5, 5);
 		position = new Position(island, 4, 4);
-		kiwi = new Kiwi(position, "Kiwi", "A little spotted kiwi");
+		kiwi = new Kiwi(position, "Kiwi", "A little spotted kiwi", game, island);
 	}
 
 	@After public void tearDown()

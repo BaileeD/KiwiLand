@@ -9,130 +9,117 @@ import java.awt.*;
 /**
  * Created by Scott Richards on 06-May-17.
  */
-public class MainMenuFrame extends JFrame
-{
-	private final int FRAME_WIDTH  = 900;
-	private final int FRAME_HEIGHT = 720;
+public class MainMenuFrame extends JFrame {
 
-	private String BACKGROUND_TEXT  = "resources/Backgrounds/Main_Menu_UI.jpg";
-	private String BACKGROUND_PLAIN = "resources/Backgrounds/Menu_UI.jpg";
-	private JLabel backgroundLbl;
-	private Game   game;
+    private final int FRAME_WIDTH = 900;
+    private final int FRAME_HEIGHT = 720;
 
-	private CardLayout cardLayout;
+    private String BACKGROUND_TEXT = "resources/Backgrounds/Main_Menu_UI.jpg";
+    private String BACKGROUND_PLAIN = "resources/Backgrounds/Menu_UI.jpg";
+    private JLabel backgroundLbl;
+    private Game game;
 
-	private JPanel         pnlContents;
-	public  MainMenuPanel  pnlMainMenu;
-	private LoadGamePanel  pnlLoadGame;
-	private HowToPlayPanel pnlHowToPlay;
+    private CardLayout cardLayout;
 
-	public MainMenuFrame(Game aGame)
-	{
-		game = aGame;
-		initPanel();
-		initFrame();
-	}
+    private JPanel pnlContents;
+    public MainMenuPanel pnlMainMenu;
+    private LoadGamePanel pnlLoadGame;
+    private HowToPlayPanel pnlHowToPlay;
 
-	/**
-	 * Initializes the frame
-	 */
-	private void initFrame()
-	{
-		setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-		setTitle("Kiwi Land - Main Menu");
-		backgroundLbl = new JLabel();
-		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_TEXT));
-		setContentPane(backgroundLbl); // sets the background image
-		setVisible(true);
-		setLayout(new FlowLayout());
-		setSize(FRAME_WIDTH, FRAME_HEIGHT);
-		setLocationRelativeTo(null); // centers it in the screen
-		setResizable(false); // so the screen size cant be changed
+    public MainMenuFrame(Game aGame) {
+        game = aGame;
+        initPanel();
+        initFrame();
+    }
 
-		//pack(); // so the screen is as tight as it can be
-		add(pnlContents);
-	}
+    /**
+     * Initializes the frame
+     */
+    private void initFrame() {
+        setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Kiwi Land - Main Menu");
+        backgroundLbl = new JLabel();
+        backgroundLbl.setIcon(new ImageIcon(BACKGROUND_TEXT));
+        setContentPane(backgroundLbl); // sets the background image
+        setVisible(true);
+        setLayout(new FlowLayout());
+        setSize(FRAME_WIDTH, FRAME_HEIGHT);
+        setLocationRelativeTo(null); // centers it in the screen
+        setResizable(false); // so the screen size cant be changed
 
-	private void initPanel()
-	{
-		pnlContents = new JPanel();
-		cardLayout = new CardLayout();
+        //pack(); // so the screen is as tight as it can be
+        add(pnlContents);
+    }
 
-		pnlMainMenu = new MainMenuPanel(this);
-		pnlLoadGame = new LoadGamePanel(this, game);
-		pnlHowToPlay = new HowToPlayPanel(this);
+    private void initPanel() {
+        pnlContents = new JPanel();
+        cardLayout = new CardLayout();
 
-		pnlContents.setOpaque(false);
-		pnlContents.setLayout(cardLayout);
+        pnlMainMenu = new MainMenuPanel(this);
+        pnlLoadGame = new LoadGamePanel(this, game);
+        pnlHowToPlay = new HowToPlayPanel(this);
 
-		pnlContents.add(pnlMainMenu, "1");
-		pnlContents.add(pnlLoadGame, "2");
-		pnlContents.add(pnlHowToPlay, "3");
+        pnlContents.setOpaque(false);
+        pnlContents.setLayout(cardLayout);
 
-		cardLayout.show(pnlContents, "1");
-	}
+        pnlContents.add(pnlMainMenu, "1");
+        pnlContents.add(pnlLoadGame, "2");
+        pnlContents.add(pnlHowToPlay, "3");
 
-	public CardLayout getCardLayout()
-	{
-		return cardLayout;
-	}
+        cardLayout.show(pnlContents, "1");
+    }
 
-	public void openMainMenu()
-	{
-		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_TEXT));
-		setTitle("Kiwi Land - Main Menu");
-		getCardLayout().show(pnlContents, "1");
-	}
+    public CardLayout getCardLayout() {
+        return cardLayout;
+    }
 
-	public void openNewGameMenu()
-	{
-		this.createGame(1);
-	}
+    public void openMainMenu() {
+        backgroundLbl.setIcon(new ImageIcon(BACKGROUND_TEXT));
+        setTitle("Kiwi Land - Main Menu");
+        getCardLayout().show(pnlContents, "1");
+    }
 
-	public void openSaveGameMenu(int level)
-	{
-		this.createGame(level);
-	}
+    public void openNewGameMenu() {
+        this.createGame(1);
+    }
 
-	public void openLoadMenu()
-	{
-		pnlLoadGame.loadAllGameSaves();
-		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_PLAIN));
-		setTitle("Kiwi Land - Load Game");
-		getCardLayout().show(pnlContents, "2");
-	}
+    public void openSaveGameMenu(int level) {
+        this.createGame(level);
+    }
 
-	public void openHowToPlayMenu()
-	{
-		backgroundLbl.setIcon(new ImageIcon(BACKGROUND_PLAIN));
-		setTitle("Kiwi Land - How to Play");
-		getCardLayout().show(pnlContents, "3");
-	}
+    public void openLoadMenu() {
+        pnlLoadGame.loadAllGameSaves();
+        backgroundLbl.setIcon(new ImageIcon(BACKGROUND_PLAIN));
+        setTitle("Kiwi Land - Load Game");
+        getCardLayout().show(pnlContents, "2");
+    }
 
-	public void exitGame()
-	{
-		System.exit(0);
-	}
+    public void openHowToPlayMenu() {
+        backgroundLbl.setIcon(new ImageIcon(BACKGROUND_PLAIN));
+        setTitle("Kiwi Land - How to Play");
+        getCardLayout().show(pnlContents, "3");
+    }
 
-	public void createGame(int level)
-	{
-		final GameScreenFrame gui = new GameScreenFrame(game, this);
-		setVisible(false);
-		game.setCurrentLevelNumber(level);
-		game.createNewGame();
+    public void exitGame() {
+        System.exit(0);
+    }
 
-		// make the GUI visible
-		EventQueue.invokeLater(new Runnable()
-		{
-			@Override public void run()
-			{
-				gui.setVisible(true);
-			}
-		});
-	}
+    public void createGame(int level) {
+        final GameScreenFrame gui = new GameScreenFrame(game, this);
+        setVisible(false);
+        game.setCurrentLevelNumber(level);
+        game.createNewGame();
 
-	public Game getGame()
-	{
-		return game;
-	}
+        // make the GUI visible
+        EventQueue.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                gui.setVisible(true);
+            }
+        });
+    }
+
+    public Game getGame() {
+        return game;
+    }
 }

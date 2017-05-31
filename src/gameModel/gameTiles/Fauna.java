@@ -10,23 +10,26 @@ import gameModel.Position;
  * @author AS
  * @version July 2011
  */
-public class Fauna extends Occupant
-{
+public class Fauna extends Occupant {
 
-	/**
-	 * Constructor for objects of class Endangered
-	 *
-	 * @param pos         the position of the kiwi
-	 * @param name        the name of the kiwi
-	 * @param description a longer description of the kiwi
-	 */
-	public Fauna(Position pos, String name, String description)
-	{
-		super(pos, name, description);
-	}
+    /**
+     * Constructor for objects of class Endangered
+     *
+     * @param pos the position of the kiwi
+     * @param name the name of the kiwi
+     * @param description a longer description of the kiwi
+     */
+    public Fauna(Position pos, String name, String description) {
+        super(pos, name, description);
+    }
 
-	@Override public String getStringRepresentation()
-	{
-		return "F";
-	}
+    @Override
+    public String getStringRepresentation() {
+        return "F";
+    }
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 }

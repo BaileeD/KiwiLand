@@ -8,62 +8,62 @@ import gameModel.Position;
  * @author AS
  * @version July 2011
  */
-public class Hazard extends Occupant
-{
+public class Hazard extends Occupant {
 
-	private final double impact;
-	private final double FATAL_IMPACT = 1.0;
+    private final double impact;
+    private final double FATAL_IMPACT = 1.0;
 
-	/**
-	 * Create a hazard on the island
-	 *
-	 * @param position    where hazard is.
-	 * @param name        of hazard.
-	 * @param description a more detailed description of hazard
-	 * @param impact      on player
-	 */
-	public Hazard(Position position, String name, String description, double impact)
-	{
+    /**
+     * Create a hazard on the island
+     *
+     * @param position where hazard is.
+     * @param name of hazard.
+     * @param description a more detailed description of hazard
+     * @param impact on player
+     */
+    public Hazard(Position position, String name, String description, double impact) {
 
-		super(position, name, description);
-		this.impact = impact;
+        super(position, name, description);
+        this.impact = impact;
 
-	}
+    }
 
-	/**
-	 * What is impact of hazard
-	 *
-	 * @return impact
-	 */
-	public double getImpact()
-	{
-		return this.impact;
-	}
+    /**
+     * What is impact of hazard
+     *
+     * @return impact
+     */
+    public double getImpact() {
+        return this.impact;
+    }
 
-	/**
-	 * Checks if fatal impact
-	 *
-	 * @return true if fatal
-	 */
-	public boolean isFatal()
-	{
-		return impact == FATAL_IMPACT;
-	}
+    /**
+     * Checks if fatal impact
+     *
+     * @return true if fatal
+     */
+    public boolean isFatal() {
+        return impact == FATAL_IMPACT;
+    }
 
-	/**
-	 * Checks if this is broken trap hazard
-	 *
-	 * @return true if this is broken trap hazard
-	 */
-	public boolean isBreakTrap()
-	{
-		String name = this.getName();
-		return name.equalsIgnoreCase("Broken trap");
-	}
+    /**
+     * Checks if this is broken trap hazard
+     *
+     * @return true if this is broken trap hazard
+     */
+    public boolean isBreakTrap() {
+        String name = this.getName();
+        return name.equalsIgnoreCase("Broken trap");
+    }
 
-	@Override public String getStringRepresentation()
-	{
-		return "H";
-	}
+    @Override
+    public String getStringRepresentation() {
+        return "H";
+    }
+
+    @Override
+    public void run() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
 
 }

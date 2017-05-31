@@ -12,7 +12,7 @@ import java.util.Date;
  * This class is used to show save dialog to the user
  *
  * @author Chaitanya Varma
- * @Version May 2017
+ * @version May 2017
  */
 public class SaveGameDialog extends JDialog {
 
