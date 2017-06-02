@@ -825,7 +825,7 @@ public class Game {
             input.close();
         } catch (FileNotFoundException e) {
             System.err.println("Unable to find data file '" + fileName + "'");
-        } catch (IOException e) {
+        } catch (Exception e) {
             System.err.println("Problem encountered processing file.");
         }
     }
@@ -894,15 +894,11 @@ public class Game {
                 double impact = input.nextDouble();
                 occupant = new Hazard(occPos, occName, occDesc, impact);
             } else if (occType.equals("K")) {
-                occupant = new Kiwi(occPos, occName, occDesc, this, island);
+                occupant = new Kiwi(occPos, occName, occDesc);
                 totalKiwis++;
-                Thread kiwiMove = new Thread(occupant);
-                kiwiMove.start();
             } else if (occType.equals("P")) {
-                occupant = new Predator(occPos, occName, occDesc, this, island);
+                occupant = new Predator(occPos, occName, occDesc);
                 totalPredators++;
-                Thread predatorMove = new Thread(occupant);
-                predatorMove.start();
             } else if (occType.equals("F")) {
                 occupant = new Fauna(occPos, occName, occDesc);
             } else if (occType.equals("D")) {

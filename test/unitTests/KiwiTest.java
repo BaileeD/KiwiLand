@@ -31,7 +31,7 @@ public class KiwiTest
                 game = new Game();
 		island = new Island(5, 5);
 		position = new Position(island, 4, 4);
-		kiwi = new Kiwi(position, "Kiwi", "A little spotted kiwi", game, island);
+		kiwi = new Kiwi(position, "Kiwi", "A little spotted kiwi");
 	}
 
 	@After public void tearDown()

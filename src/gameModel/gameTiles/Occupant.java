@@ -8,7 +8,7 @@ import gameModel.Position;
  * @author AS
  * @version 2.0 - October 2011 - AS - added toString
  */
-public abstract class Occupant implements Runnable {
+public abstract class Occupant {
 
     private Position position;
     private final String name;

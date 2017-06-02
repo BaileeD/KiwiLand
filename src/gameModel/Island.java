@@ -214,34 +214,6 @@ public class Island {
         previousPlayerPos = position;
     }
 
-    public void updateKiwiPosition(Kiwi kiwi, Position newPosition) {
-
-        Position position = kiwi.getPosition();
-
-        // remove kiwi from previous square
-        if (previousKiwiPos != null) {
-            this.removeOccupant(position, kiwi);
-        }
-
-        this.addOccupant(newPosition, kiwi);
-        // remember the new kiwi position
-        previousKiwiPos = position;
-    }
-
-    public void updatePredatorPosition(Predator predator, Position newPosition) {
-
-        Position position = predator.getPosition();
-
-        // remove kiwi from previous square
-        if (previousPredatorPos != null) {
-            this.removeOccupant(position, predator);
-        }
-
-        this.addOccupant(newPosition, predator);
-        // remember the new kiwi position
-        previousPredatorPos = position;
-    }
-
     /**
      * Attempts to add an occupant to a specified position on the island.
      *

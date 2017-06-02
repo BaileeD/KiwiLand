@@ -139,7 +139,7 @@ public class GridSquareTest extends junit.framework.TestCase
 		Tool trap = new Tool(position, "Trap", "A predator trap", 1.0, 2.0);
 		occupiedSquare.addOccupant(trap);
 		// Add a third occupant
-		Predator possum = new Predator(position, "Possum", "A log tailed possum", game, island);
+		Predator possum = new Predator(position, "Possum", "A log tailed possum");
 		occupiedSquare.addOccupant(possum);
 		String stringRep = occupiedSquare.getOccupantStringRepresentation();
 		assertEquals(3, stringRep.length());
@@ -154,7 +154,7 @@ public class GridSquareTest extends junit.framework.TestCase
 		Tool trap = new Tool(position, "Trap", "A predator trap", 1.0, 2.0);
 		occupiedSquare.addOccupant(trap);
 		// Add a third occupant
-		Predator possum = new Predator(position, "Possum", "A log tailed possum", game, island);
+		Predator possum = new Predator(position, "Possum", "A log tailed possum");
 		occupiedSquare.addOccupant(possum);
 		Occupant[] occupants = occupiedSquare.getOccupants();
 		assertEquals(3, occupants.length);
@@ -182,10 +182,10 @@ public class GridSquareTest extends junit.framework.TestCase
 		Tool trap = new Tool(position, "Trap", "A predator trap", 1.0, 2.0);
 		occupiedSquare.addOccupant(trap);
 		// Add a third occupant
-		Predator possum = new Predator(position, "Possum", "A log tailed possum", game, island);
+		Predator possum = new Predator(position, "Possum", "A log tailed possum");
 		occupiedSquare.addOccupant(possum);
 		//Now the cave has three occupants it should not be possible to add another
-		Predator rat = new Predator(position, "Rat", "A  ship rat", game, island);
+		Predator rat = new Predator(position, "Rat", "A  ship rat");
 		assertFalse(occupiedSquare.addOccupant(rat));
 		assertFalse(occupiedSquare.hasOccupant(rat));
 	}

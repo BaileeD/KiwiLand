@@ -19,7 +19,6 @@ public class PredatorTest
 	private Predator rat;
 	private Position position;
 	private Island   island;
-        private Game     game;
 
 	public PredatorTest()
 	{
@@ -28,9 +27,8 @@ public class PredatorTest
 	@Before public void setUp()
 	{
 		island = new Island(5, 5);
-                game = new Game();
 		position = new Position(island, 4, 4);
-		rat = new Predator(position, "Rat", "A norway rat", game, island);
+		rat = new Predator(position, "Rat", "A norway rat");
 	}
 
 	@After public void tearDown()
