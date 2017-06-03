@@ -288,6 +288,7 @@ public class GameTest extends junit.framework.TestCase {
 
     @Test
     public void testUseItemTrap() {
+        game.setCurrentLevelNumber(1);
         Item trap = new Tool(playerPosition, "Trap", "Rat trap", 1.0, 1.0);
         player.collect(trap);
         assertTrue("Player should have trap", player.hasItem(trap));
@@ -305,6 +306,7 @@ public class GameTest extends junit.framework.TestCase {
      */
     @Test
     public void testPredatorTrapMessage() {
+        game.setCurrentLevelNumber(1);
         Item trap = new Tool(playerPosition, "Trap", "Rat trap", 1.0, 1.0);
         player.collect(trap);
         Predator predator = new Predator(playerPosition, "Rat", "Norway rat");
@@ -344,9 +346,9 @@ public class GameTest extends junit.framework.TestCase {
     }*/
     @Test
     public void testUseItemTrapFinalPredator() {
-
+        game.setCurrentLevelNumber(1);
         assertTrue("Check player moves", trapAllPredators());
-        assertTrue("Game should be won", game.getState() == GameState.WON);
+        assertTrue("Game should be won", game.getState() == GameState.WINNABLE);
     }
 
     @Test
@@ -449,6 +451,7 @@ public class GameTest extends junit.framework.TestCase {
     @Test
     public void testCountKiwi() {
         //Need to move to a place where there is a kiwi
+        game.setCurrentLevelNumber(1);
         assertTrue(" This move valid", playerMoveEast(5));
         game.countKiwi();
         assertEquals("Wrong count", game.getKiwiCount(), 1);
@@ -459,6 +462,7 @@ public class GameTest extends junit.framework.TestCase {
      */
     @Test
     public void testKiwiFact() {
+        game.setCurrentLevelNumber(1);
         assertTrue(" This move valid", playerMoveEast(5));
         game.countKiwi();
         game.showMessage("Kiwi fact test!!!!!!!", "Kiwi test");
@@ -467,6 +471,7 @@ public class GameTest extends junit.framework.TestCase {
 
     @Test
     public void testAnswerQuestionCorrect() {
+        game.setCurrentLevelNumber(1);
         assertTrue("Check player moves", trapAllPredators());
         assertTrue("Game should be won", game.getState() == GameState.WINNABLE);
         game.answerQuestion();
@@ -475,6 +480,7 @@ public class GameTest extends junit.framework.TestCase {
 
     @Test
     public void testAnswerQuestionIncorrect() {
+        game.setCurrentLevelNumber(1);
         assertTrue("Check player moves", trapAllPredators());
         assertTrue("Game should be won", game.getState() == GameState.WINNABLE);
         game.answerQuestion();
