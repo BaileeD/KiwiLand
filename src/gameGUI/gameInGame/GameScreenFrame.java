@@ -128,11 +128,12 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
 
         // Puts controls for the player to see how to play
         g.setColor(new Color(175, 101, 0));
-        g.drawString("Controls", 430, 670);
+        g.drawString("Controls", 430, 665);
         g.setColor(new Color(255, 148, 40));
-        g.drawString("W: Up    S: Down", 410, 685);
-        g.drawString("A:  Left   D: Right", 410, 700);
-        g.drawString("Esc: Menu", 410, 715);
+        g.drawString("W: Up    S: Down", 410, 680);
+        g.drawString("A:  Left   D: Right", 410, 695);
+        g.drawString("Arrow keys work too", 400, 710);
+        g.drawString("Esc: Menu", 420, 725);
     }
 
     /**
@@ -463,22 +464,26 @@ public class GameScreenFrame extends JFrame implements GameEventListener, KeyLis
         int key = e.getKeyCode();
 
         switch (key) {
+            case KeyEvent.VK_UP:
             case KeyEvent.VK_W: // upwards
                 if (game.isPlayerMovePossible(MoveDirection.NORTH)) {
                     game.playerMove(MoveDirection.NORTH);
                 }
                 break;
+            case KeyEvent.VK_LEFT:
             case KeyEvent.VK_A: // to the left
                 if (game.isPlayerMovePossible(MoveDirection.WEST)) {
                     game.playerMove(MoveDirection.WEST);
                 }
                 break;
+            case KeyEvent.VK_DOWN:
             case KeyEvent.VK_S: // downwards
                 if (game.isPlayerMovePossible(MoveDirection.SOUTH)) {
                     game.playerMove(MoveDirection.SOUTH);
 
                 }
                 break;
+            case KeyEvent.VK_RIGHT:
             case KeyEvent.VK_D: // to the right
                 if (game.isPlayerMovePossible(MoveDirection.EAST)) {
                     game.playerMove(MoveDirection.EAST);
